@@ -1,0 +1,237 @@
+#register {
+    background: whitesmoke;
+    padding: 0px 30px;
+    @media (max-width: 992px) {
+      padding: 30px 30px;
+    }
+    .register {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      gap: 50px;
+      align-items: center;
+      @media (max-width: 992px) {
+        flex-wrap: wrap-reverse;
+      }
+      .register_left {
+        .register_left_text {
+          max-width: 550px;
+          @keyframes textShine {
+            0% {
+              background-position: 0% 50%;
+            }
+            100% {
+              background-position: 100% 50%;
+            }
+          }
+  
+          h1 {
+            font-size: 70px;
+            font-weight: 800;
+            font-family: "Salsa", cursive;
+            color: #ad99da;
+            font-size: clamp(2.8rem, 1.5vw, 3rem);
+            font-weight: bold;
+            margin: 5px;
+            background: linear-gradient(
+              to right,
+              #ad99da 20%,
+              #98cca9 30%,
+              #c5f9d6 70%,
+              #ad99da 80%
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+            background-size: 500% auto;
+            animation: textShine 10s ease-in-out infinite alternate;
+          }
+  
+          p {
+            line-height: 2;
+          }
+        }
+      }
+      .register_box {
+        transition: 0.5s;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 450px;
+        padding: 60px 50px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        &:hover {
+          box-shadow: #ad99da 0px 54px 55px, #ad99da 0px -12px 30px,
+            #ad99da 0px 4px 6px, #ad99da 0px 12px 13px, #ad99da 0px -3px 5px;
+        }
+  
+        .apps {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 10px;
+          .google {
+            cursor: pointer;
+            max-width: 150px;
+            img {
+              width: 100%;
+            }
+          }
+          .apple {
+            cursor: pointer;
+            max-width: 150px;
+            img {
+              width: 100%;
+            }
+          }
+        }
+        p {
+          span {
+            cursor: pointer;
+            color: #ad99da;
+            font-weight: 900;
+          }
+        }
+        h1 {
+          font-size: 50px;
+          font-weight: 800;
+          color: #ad99da;
+          font-family: "Salsa", cursive;
+        }
+        .button {
+          background: #ab96db;
+          color: radial-gradient(ellipse at bottom, white 0%, white 100%);
+          font-weight: 900;
+        }
+        .reg_input {
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+          background: radial-gradient(ellipse at bottom, white 0%, white 100%);
+          border: none;
+          height: 44px;
+          border-radius: 4px;
+          outline: none;
+          padding-left: 10px;
+        }
+      }
+    }
+  
+    @mixin sp-layout {
+      @media screen and (max-width: 750px) {
+        @content;
+      }
+    }
+  
+    @function random_range($min, $max) {
+      $rand: random();
+      $random_range: $min + floor($rand * (($max - $min) + 1));
+      @return $random_range;
+    }
+  
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 10%;
+      transform: rotate(-45deg);
+    }
+  
+    .star {
+      $star-count: 50;
+      --star-color: #ab96db;
+      --star-tail-length: 6em;
+      --star-tail-height: 2px;
+      --star-width: calc(var(--star-tail-length) / 6);
+      --fall-duration: 9s;
+      --tail-fade-duration: var(--fall-duration);
+      position: absolute;
+      top: var(--top-offset);
+      left: 0;
+      width: var(--star-tail-length);
+      height: var(--star-tail-height);
+      color: var(--star-color);
+      background: linear-gradient(45deg, currentColor, transparent);
+      border-radius: 50%;
+      filter: drop-shadow(0 0 6px currentColor);
+      transform: translate3d(104em, 0, 0);
+      animation: fall var(--fall-duration) var(--fall-delay) linear infinite,
+        tail-fade var(--tail-fade-duration) var(--fall-delay) ease-out infinite;
+  
+      @include sp-layout {
+        // For mobile performance, tail-fade animation will be removed QAQ
+        animation: fall var(--fall-duration) var(--fall-delay) linear infinite;
+      }
+  
+      @for $i from 1 through $star-count {
+        &:nth-child(#{$i}) {
+          --star-tail-length: #{random_range(500em, 750em) / 100};
+          --top-offset: #{random_range(0vh, 10000vh) / 100};
+          --fall-duration: #{random_range(6000, 12000s) / 1000};
+          --fall-delay: #{random_range(0, 10000s) / 1000};
+        }
+      }
+  
+      &::before,
+      &::after {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: calc(var(--star-width) / -2);
+        width: var(--star-width);
+        height: 100%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          currentColor,
+          transparent
+        );
+        border-radius: inherit;
+        animation: blink 2s linear infinite;
+      }
+  
+      &::before {
+        transform: rotate(45deg);
+      }
+  
+      &::after {
+        transform: rotate(-45deg);
+      }
+    }
+  
+    @keyframes fall {
+      to {
+        transform: translate3d(-30em, 0, 0);
+      }
+    }
+  
+    @keyframes tail-fade {
+      0%,
+      50% {
+        width: var(--star-tail-length);
+        opacity: 1;
+      }
+  
+      70%,
+      80% {
+        width: 0;
+        opacity: 0.4;
+      }
+  
+      100% {
+        width: 0;
+        opacity: 0;
+      }
+    }
+  
+  }
+  

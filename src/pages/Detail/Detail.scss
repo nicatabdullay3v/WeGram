@@ -1,0 +1,90 @@
+.user_profile {
+    .private {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+      border: 1px solid black;
+      border-radius: 10px;
+      padding: 50px;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      p {
+        font-size: 40px;
+        font-weight: 700;
+      }
+      .icon {
+        max-width: 200px;
+        width: 100%;
+        height: 200px;
+        border: none;
+      }
+    }
+    .user_posts {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+  
+      .post_card {
+        .post {
+          width: 100%;
+          height: 400px;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+    }
+    .profile_up {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      gap: 120px;
+      .profile_up_follow{
+        button{
+            border: none;
+        }
+      }
+      .profile_bio {
+        margin-top: 20px;
+      }
+      .profile_up_img {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      .profile_name {
+        margin-top: 20px;
+        p {
+          font-size: 22px;
+          font-weight: 700;
+        }
+      }
+    }
+    .profile_up_posts_followers_followings_follow {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 80px;
+      .count {
+        text-align: center;
+        .add_icon {
+          font-size: 28px;
+          width: 50px;
+          height: 40px;
+          padding: 10px;
+          border-radius: 6px;
+          background-color: lightblue;
+        }
+      }
+    }
+  }

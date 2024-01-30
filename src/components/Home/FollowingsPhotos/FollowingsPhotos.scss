@@ -1,0 +1,62 @@
+#followings_photos {
+    padding: 0px 30px;
+    .followings_photos {
+      .card {
+        max-width: 700px;
+        width: 100%;
+        margin: 0 auto;
+        border: 1px solid black;
+        border-radius: 10px;
+        .card_down {
+          padding: 20px;
+          .card_like_comment_share {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            .like {
+              font-size: 30px;
+            }
+            .comment {
+              font-size: 24px;
+            }
+            .share {
+              font-size: 24px;
+            }
+          }
+        }
+        .card_center {
+          .card_post {
+            width: 100%;
+            height: 600px;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+        .card_up {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          padding: 20px;
+          .card_up_name {
+            span {
+              font-size: 22px;
+              font-weight: 700;
+            }
+          }
+          .card_up_profile_img {
+            width: 70px;
+            height: 70px;
+            overflow: hidden;
+            border-radius: 50%;
+            img {
+              object-fit: cover;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+  
