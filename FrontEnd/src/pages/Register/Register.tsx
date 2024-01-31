@@ -1,21 +1,21 @@
 import { useFormik } from 'formik';
 import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
-// import { useRouter } from 'next/navigation'
 import "./Register.scss"
-// import { infinity } from 'ldrs'
-// import 'ldrs/ring'
+import { infinity } from 'ldrs'
+import 'ldrs/ring'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Register = () => {
     const navigate = useNavigate()
-    const [loading, setloading] = useState(false)
+    infinity.register()
+    const [loading, setloading] = useState(true)
     useEffect(() => {
         localStorage.removeItem("user")
         setTimeout(() => {
             setloading(false)
-        }, 1000);
+        }, 660);
     }, [])
     // Formik--=-=-=-=-=-=-=-=-=-==
     const formik = useFormik({
@@ -70,14 +70,14 @@ const Register = () => {
     return (
         <>
             {loading ? <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }} className="loading">
-                {/* <l-infinity
+                <l-infinity
                     size="100"
                     stroke="6"
                     stroke-length="0.15"
                     bg-opacity="0.1"
                     speed="1.3"
                     color="#ad99da"
-                ></l-infinity> */}
+                ></l-infinity>
             </div> : <section id='register'>
                 <div className="stars">
                     <div className="star"></div>

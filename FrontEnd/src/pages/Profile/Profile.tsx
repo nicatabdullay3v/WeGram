@@ -7,12 +7,14 @@ import { jwtDecode } from "jwt-decode";
 import { FaRegPlusSquare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"
 import { getAllData } from "../../redux/Slices/usersSlice";
-import { AppDispatch,RootState } from "../../redux/store";
-import {  useEffect, useState } from "react"
+import { AppDispatch, RootState } from "../../redux/store";
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 const Profile = () => {
     const navigate = useNavigate()
     const [localUser, setuser] = useState<Users | undefined>();
+    const [file, setFile] = useState<File | undefined>()
     const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
     const users = useSelector((state: RootState) => state.users.users)
@@ -30,9 +32,18 @@ const Profile = () => {
         dispatch(getAllData())
     }, [])
     const LocalUser = users.find((x) => x._id == localUser?._id)
+    const handleUpload = ()=>{
+        const formdata = new FormData();
+        file && formdata.append('file', file);
+        axios.patch(`http://localhost:3001/users/${localUser?._id}/addPostImage`, formdata).then((res) => {
+          console.log(res.data);
+          dispatch(getAllData());
+        });
+        
+    }
     return (
         <>
-        <NavBar/>
+            <NavBar />
             {LocalUser && <div className="user_profile">
                 <div className="profile_up">
                     <div className="profile_up_img_name">
@@ -61,14 +72,15 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                    <div className="add_post">
-                    <FaRegPlusSquare className="icon" /><p>Add Photos</p>
-                    </div>
+                <div className="add_post">
+                    <FaRegPlusSquare onClick={handleUpload} className="icon" />
+                    <input onChange={(e) => e.target.files && setFile(e.target.files[0])} type="file" />
+                </div>
                 <div className="user_posts">
                     {LocalUser.posts.map((elem: any) => {
                         return <div className="post_card">
                             <div className="post">
-                                <img src={elem.img} alt="" />
+                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
                             </div>
                         </div>
                     })}

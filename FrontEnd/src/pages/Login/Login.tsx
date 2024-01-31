@@ -2,19 +2,20 @@ import { useFormik } from 'formik';
 import Swal from 'sweetalert2'
 import Button from '@mui/material/Button';
 import "./login.scss"
-// import { infinity } from 'ldrs'
-// import 'ldrs/ring'
+import { infinity } from 'ldrs'
+import 'ldrs/ring'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Login = () => {
+    infinity.register()
     const navigate = useNavigate()
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(true)
     useEffect(() => {
         localStorage.removeItem("user")
         setTimeout(() => {
             setloading(false)
-        }, 1000);
+        }, 660);
     }, [])
 
     // Formik--=-=-=-=-=-=-=-=-=-==
@@ -56,14 +57,14 @@ const Login = () => {
         <>
             {loading == true ?
                 <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }} className="loading">
-                    {/* <l-infinity
+                     <l-infinity
                         size="100"
                         stroke="6"
                         stroke-length="0.15"
                         bg-opacity="0.1"
                         speed="1.3"
                         color="#90EEAF"
-                    ></l-infinity> */}
+                    ></l-infinity> 
                 </div> : <section id='login'>
                     <div className="stars">
                         <div className="star"></div>

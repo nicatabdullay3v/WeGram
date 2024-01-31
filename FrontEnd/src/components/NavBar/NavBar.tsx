@@ -1,18 +1,20 @@
 "use client"
 import { LiaWeebly } from "react-icons/lia";
 import { jwtDecode } from "jwt-decode";
-import { Decode } from "../../pages/Home/Home"; 
+import { Decode } from "../../pages/Home/Home";
 import "./NavBar.scss"
+import { FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData } from "../../redux/Slices/usersSlice";
 import { BsSearch } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { FaUserPlus } from "react-icons/fa6";
-import { AppDispatch,RootState } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { Users } from "../../interfaces/UsersInterface";
 import { useNavigate } from "react-router-dom";
 const NavBar = () => {
+    const [openRequest, setOpenRequest] = useState(false)
     const [filteredData, setFilteredData] = useState<Users[]>([])
     const [inputValue, setInputValue] = useState("")
     const [searchOpen, setSearchOpen] = useState(false)
@@ -20,7 +22,7 @@ const NavBar = () => {
     const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
     const users = useSelector((state: RootState) => state.users.users)
-const navigate = useNavigate()
+    const navigate = useNavigate()
     useEffect(() => {
         if (token) {
             const decoded: Decode = jwtDecode(token);
@@ -30,16 +32,16 @@ const navigate = useNavigate()
         dispatch(getAllData())
     }, []);
     useEffect(() => {
-        setFilteredData(inputValue.trim() == "" ? [] : users.filter((x) =>{
-           return  x.name.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) &&  x.name != user?.name
-        } ))
+        setFilteredData(inputValue.trim() == "" ? [] : users.filter((x) => {
+            return x.name.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) && x.name != user?.name
+        }))
     }, [users, inputValue])
-    const LocalUser = users?.find((x)=>x._id == user?._id)
+    const LocalUser = users?.find((x) => x._id == user?._id)
     return (
         <nav>
             <div className="container">
                 <div className="nav">
-                    <div style={{cursor:"pointer"}} onClick={()=>{
+                    <div style={{ cursor: "pointer" }} onClick={() => {
                         navigate('/home')
                     }} className="nav_logo">
                         <LiaWeebly className="logo" />
@@ -75,18 +77,19 @@ const navigate = useNavigate()
                             })}
                         </div> : null}
                     </div>
-
                     <ul className="nav_right">
-                      <div onClick={()=>{
-                      }} style={{display:"flex",alignItems:"center",gap:"10px",cursor:"pointer"}} className="info">
-                      </div>
-                       <div className="requets">
-                       <FaUserPlus  onClick={()=>{
+                        <div onClick={() => {
+                        }} style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer" }} className="info">
+                        </div>
+                        <div className="requets">
+                            {openRequest ? <div className="requests_box">
 
-                       }} style={{width:"40px",cursor:"pointer"}} /> 
-                       <span className="request_count">{LocalUser?.requests.length}</span>
-                       </div>
-
+                            </div> : null}
+                            <FaRegHeart onClick={() => {
+                                setOpenRequest(openRequest == false ? true : false)
+                            }} style={{ width: "40px", cursor: "pointer" }} />
+                            <span className="request_count">{LocalUser?.requests.length}</span>
+                        </div>
                         <p style={{ marginLeft: "40px" }}>
                             <IoSettingsOutline style={{ fontSize: "25px" }} />
                         </p>

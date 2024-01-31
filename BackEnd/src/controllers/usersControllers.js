@@ -21,6 +21,24 @@ const login = async (req, res) => {
   }
 };
 
+// addPost--==-==-=-=-=-=-=-=-
+
+const addPostImage = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { filename } = req.file;
+    const updatedUser = await Users.findByIdAndUpdate(
+      userId,
+      { $push: { posts: { img: `images/${filename}` } } },
+      { new: true }
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 
 // getAllData=-=-=--=-=-=--=-=-=-=
 const getAllUsers = async (req, res) => {
@@ -67,4 +85,5 @@ module.exports = {
   postUsers,
   patchUsers,
   login,
+  addPostImage
 };
