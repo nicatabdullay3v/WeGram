@@ -128,7 +128,7 @@ const navigate = useNavigate()
                     {user.isPublic|| findID ? user.posts.map((elem: any) => {
                         return <div key={elem._id} className="post_card">
                             <div className="post">
-                                <img src={elem.img} alt="" />
+                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
                             </div>
                         </div>
                     }) :null}

@@ -17,6 +17,7 @@
     "@mui/material": "^5.15.6",
     "@mui/styled-engine-sc": "^6.0.0-alpha.13",
     "@reduxjs/toolkit": "^2.1.0",
+    "@types/uuid": "^9.0.8",
     "axios": "^1.6.7",
     "formik": "^2.4.5",
     "jwt-decode": "^4.0.0",
@@ -33,7 +34,8 @@
     "sort-by": "^1.2.0",
     "styled-components": "^6.1.8",
     "sweetalert2": "^11.10.4",
-    "swiper": "^11.0.5"
+    "swiper": "^11.0.5",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

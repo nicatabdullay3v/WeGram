@@ -18,6 +18,8 @@ const storage = multer.diskStorage({
     storage: storage,
   });
 UserRouter.get("/users",usersController.getAllUsers)
+UserRouter.get("/users/:id/posts/:postId", usersController.getPostById);
+UserRouter.patch("/users/:id/posts/:postId", usersController.patchPost);
 UserRouter.post("/users" ,usersController.postUsers)
 UserRouter.patch("/users/:id",usersController.patchUsers)
 UserRouter.post("/login",usersController.login)

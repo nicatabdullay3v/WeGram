@@ -3,7 +3,8 @@ export interface Users {
     img: string,
     name: string,
     isPublic: boolean,
-    posts: [],
+    posts: [
+    ],
     followers: [],
     followings: [],
     requests: []

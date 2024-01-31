@@ -9,6 +9,7 @@ import UsersStories from "../../components/Home/UsersStories/UsersStories";
 import FollowingsPhotos from "../../components/Home/FollowingsPhotos/FollowingsPhotos"
 import { useNavigate } from "react-router-dom";
 import SideBar from "../../components/Home/SideBar/SideBar";
+import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 export interface Decode {
     findUser: object
 }
@@ -47,9 +48,8 @@ export default function Home() {
                     color="#ad99da"
                 ></l-infinity>
             </div> : <>
-<SideBar/>
-                <UsersStories />
-                <FollowingsPhotos />
+                    <UsersStories />
+                    <FollowingsPhotos />
             </>}
 
         </>
