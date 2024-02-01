@@ -20,30 +20,22 @@ const login = async (req, res) => {
     console.error("Error logging in:", error);
   }
 };
-
 // PatchPosts--=-==-=-==--==--=---=
 const patchPost = async (req, res) => {
   try {
     const userId = req.params.id;
     const postId = req.params.postId;
     const updateFields = req.body;
-
     const user = await Users.findOne({ _id: userId });
-
     if (!user) {
       return res.status(404).send({ error: "User not found" });
     }
-
     const postIndex = user.posts.findIndex((p) => p.id === postId);
 
     if (postIndex === -1) {
       return res.status(404).send({ error: "Post not found" });
     }
-
-    // Update the post with the new fields
     user.posts[postIndex] = { ...user.posts[postIndex], ...updateFields };
-
-    // Save the updated user object
     await user.save();
 
     res.status(200).send({ message: "Post patched" });
@@ -93,7 +85,7 @@ const addPostImage = async (req, res) => {
             id: id || uuidv4(),
             title: title || "Default Title",
             time: time || new Date(),
-            likes: likes || [],
+            likes: JSON.parse(likes) || [],
             comments: comments || [],
           },
         },
@@ -134,7 +126,6 @@ const postUsers = async (req, res) => {
     res.status(400).send({ error: error });
   }
 };
-
 // PatchUsers==-=-=-=-=-=-=-=-=-=-==-=
 const patchUsers = async (req, res) => {
   try {
@@ -146,7 +137,6 @@ const patchUsers = async (req, res) => {
     res.status(400).send({ error: error });
   }
 };
-
 // exports-=-=-==-=-=-=-
 module.exports = {
   getAllUsers,

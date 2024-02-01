@@ -4,6 +4,13 @@ export interface Users {
     name: string,
     isPublic: boolean,
     posts: [
+        {
+            likes: [],
+            time: string,
+            img: File,
+            id: string,
+            userId: string
+        }
     ],
     followers: [],
     followings: [],

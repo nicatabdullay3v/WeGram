@@ -18,6 +18,7 @@ const Profile = () => {
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
     const [localUser, setuser] = useState<Users | undefined>();
+    const [likes, setlikes] = useState([])
     const [file, setFile] = useState<File | undefined>()
     const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
@@ -46,7 +47,7 @@ const Profile = () => {
         formdata.append('file', file);
         formdata.append('id', uuidv4());
         formdata.append('title', title);
-        formdata.append('likes', "");
+        formdata.append('likes', JSON.stringify(likes));
         axios.patch(`http://localhost:3001/users/${localUser?._id}/addPostImage`, formdata)
             .then((res) => {
                 console.log(res.data);

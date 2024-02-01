@@ -3,7 +3,10 @@ import { BsChat } from "react-icons/bs";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { LuLogOut } from "react-icons/lu";
 import { FaRegUser } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 const SideBar = () => {
+    const navigate = useNavigate()
     return (
         <>
             <aside id="side_bar">
@@ -15,7 +18,9 @@ const SideBar = () => {
                         <p>Eldar Memedov</p>
                     </div>
                     <div className="sections">
-                        <div className="profile_page section">
+                        <div onClick={() => {
+                            navigate("/profile")
+                        }} className="profile_page section">
                             <FaRegUser className="icon" /><span>Profile</span>
                         </div>
                         <div className="profile_chat section">

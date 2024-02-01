@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { Users } from '../../interfaces/UsersInterface'
 import { UsersState } from '../../interfaces/UsersInterface'
@@ -13,6 +13,7 @@ export const getAllData = createAsyncThunk(
 const initialState: UsersState = {
     users: [],
 }
+
 export const UsersSlice = createSlice({
     name: 'users',
     initialState,
@@ -24,6 +25,6 @@ export const UsersSlice = createSlice({
         })
     },
 })
-export const { } = UsersSlice.actions
+export const {  } = UsersSlice.actions
 
 export default UsersSlice.reducer
