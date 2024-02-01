@@ -7,13 +7,14 @@ import { FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData } from "../../redux/Slices/usersSlice";
 import { BsSearch } from "react-icons/bs";
-import { IoSettingsOutline } from "react-icons/io5";
+import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState } from "react";
-import { FaUserPlus } from "react-icons/fa6";
 import { AppDispatch, RootState } from "../../redux/store";
 import { Users } from "../../interfaces/UsersInterface";
 import { useNavigate } from "react-router-dom";
-const NavBar = () => {
+import SettingsBar from "../SetiingsBar/SettingsBar";
+const NavBar: React.FC = () => {
+    const [close, setClose] = useState<boolean>(false)
     const [openRequest, setOpenRequest] = useState(false)
     const [filteredData, setFilteredData] = useState<Users[]>([])
     const [inputValue, setInputValue] = useState("")
@@ -39,15 +40,15 @@ const NavBar = () => {
     const LocalUser = users?.find((x) => x._id == user?._id)
     return (
         <nav>
+            <SettingsBar close={close} setClose={setClose} />
             <div className="container">
                 <div className="nav">
                     <div style={{ cursor: "pointer" }} onClick={() => {
                         navigate('/home')
                     }} className="nav_logo">
-                        <LiaWeebly className="logo" />
-                        <span>eGram</span>
+                        <span>WeGram</span>
                     </div>
-                    <div style={{ borderRadius: searchOpen ? "20px 20px 0px 0px" : "40px" }} className="nav_search">
+                    <div style={{ borderRadius: searchOpen ? "20px 20px 0px 0px" : "10px" }} className="nav_search">
                         <input onChange={(e) => {
                             setInputValue(e.target.value)
                         }} onBlur={() => {
@@ -85,13 +86,15 @@ const NavBar = () => {
                             {openRequest ? <div className="requests_box">
 
                             </div> : null}
-                            <FaRegHeart onClick={() => {
+                            <FaRegHeart className="heart_icon" onClick={() => {
                                 setOpenRequest(openRequest == false ? true : false)
                             }} style={{ width: "40px", cursor: "pointer" }} />
                             <span className="request_count">{LocalUser?.requests.length}</span>
                         </div>
                         <p style={{ marginLeft: "40px" }}>
-                            <IoSettingsOutline style={{ fontSize: "25px" }} />
+                            <GiHamburgerMenu className="setting_icon" onClick={()=>{
+                                setClose(true)
+                            }} style={{ fontSize: "25px",cursor:"pointer" }} />
                         </p>
                     </ul>
                 </div>

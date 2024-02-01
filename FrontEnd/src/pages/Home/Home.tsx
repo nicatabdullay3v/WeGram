@@ -48,8 +48,8 @@ export default function Home() {
                     color="#ad99da"
                 ></l-infinity>
             </div> : <>
-                    <UsersStories />
-                    <FollowingsPhotos />
+                <SideBar />
+                <FollowingsPhotos />
             </>}
 
         </>

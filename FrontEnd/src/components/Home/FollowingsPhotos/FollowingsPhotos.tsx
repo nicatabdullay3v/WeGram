@@ -14,6 +14,7 @@ import { FaRegShareSquare } from "react-icons/fa";
 import SideBar from "../SideBar/SideBar"
 import RecomendedUsers from "../RecomendedUsers/RecomendedUsers"
 import axios from "axios"
+import UsersStories from "../UsersStories/UsersStories"
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
 
@@ -67,8 +68,9 @@ const FollowingsPhotos = () => {
     return (
         <section id='followings_photos'>
             <div className="container">
-                <SideBar />
+                <RecomendedUsers/>
                 <div className="followings_photos">
+                    <UsersStories/>
                     <div className="followings_photos">
                         {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [] }) => {
                             const followingUser = users.find((u) => u._id === element.userId);
@@ -115,8 +117,7 @@ const FollowingsPhotos = () => {
                         })}
                     </div>
                 </div>
-
-                <RecomendedUsers />
+                <RecomendedUsers/>
             </div>
         </section>
     )

@@ -1,6 +1,10 @@
 nav {
-  background-color: #ab96db7a;
+  background-color: #30305B;
   padding: 10px 30px;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  top: 0;
   .nav {
     display: flex;
     justify-content: space-between;
@@ -10,13 +14,12 @@ nav {
       margin-right: 10px;
       display: flex;
       align-items: center;
-      background-color: white;
+      background-color: #45456C;
       padding: 0px 10px;
-      height: 48px;
-      max-width: 600px;
+      height: 40px;
+      max-width: 500px;
       width: 100%;
       justify-content: space-between;
-      border-radius: 40px;
       position: relative;
       .nav_search_down {
         border-radius: 0px 0px 20px 20px;
@@ -25,7 +28,7 @@ nav {
         background-color: whitesmoke;
         position: absolute;
         width: 100%;
-        top: 48px;
+        top: 40px;
         right: 50%;
         transform: translateX(50%);
         z-index: 2;
@@ -36,6 +39,13 @@ nav {
           align-items: center;
           margin-bottom: 15px;
           gap: 10px;
+          transition: 0.5s;
+          border-radius: 10px;
+          cursor: pointer;
+          padding: 5px 10px;
+          &:hover{
+            background-color: #45456C;
+          }
           .users_profile_img {
             width: 55px;
             height: 55px;
@@ -50,29 +60,47 @@ nav {
         }
       }
       input {
-        border-radius: 40px;
         border: none;
+        border-radius: 10px;
         width: 100%;
         height: 100%;
         outline: none;
         padding-left: 10px;
+        background-color: #45456C
+        ;
       }
       .icon {
-        background-color: #d8ceee;
+        background-color: #30305B;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 40px;
-        height: 36px;
+        width: 34px;
+        height: 31px;
         border-radius: 50%;
+        color: white;
       }
     }
     .nav_right {
       display: flex;
       align-items: center;
       gap: 20px;
+      p {
+        .setting_icon {
+          transition: 0.5s;
+          &:hover {
+            transform: scale(1.2);
+            color: black;
+          }
+        }
+      }
       .requets {
         position: relative;
+        .heart_icon {
+          transition: 0.5s;
+          &:hover {
+            color: red;
+          }
+        }
         .requests_box {
           position: absolute;
           right: 20px;
@@ -109,6 +137,7 @@ nav {
       span {
         font-size: 20px;
         font-weight: 700;
+        color: white;
       }
       .logo {
         color: #60e38c;
@@ -131,7 +160,7 @@ nav {
 @media (max-width: 545px) {
   nav {
     .nav {
-      .nav_logo{
+      .nav_logo {
         display: none;
       }
       .nav_right {
@@ -140,4 +169,3 @@ nav {
     }
   }
 }
-

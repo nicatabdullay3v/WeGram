@@ -5,13 +5,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { getAllData } from '../../../redux/Slices/usersSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { jwtDecode } from "jwt-decode";
-import { Decode } from '../../../pages/Home/Home'; 
+import { Decode } from '../../../pages/Home/Home';
 import { Users } from "../../../interfaces/UsersInterface";
+import { PiShootingStarDuotone } from "react-icons/pi";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-import { AppDispatch,RootState } from '../../../redux/store';
+import { AppDispatch, RootState } from '../../../redux/store';
 import { useEffect, useState } from 'react';
 const UsersStories = () => {
     const dispatch = useDispatch<AppDispatch>()
@@ -30,29 +31,24 @@ const UsersStories = () => {
 
     return (
         <section id='stories'>
-            <div style={{ maxWidth: "1600px", margin: "0 auto" }} className="swiper_container">
+            <div style={{ maxWidth: "600px", margin: "0 auto" }} className="swiper_container">
                 <div className="stories">
+                    <div className="line"></div>
+                    <div className="stories_up">
+
+                        <PiShootingStarDuotone />  <p> Stories</p>
+
+                    </div>
                     <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
                         spaceBetween={0}
-                        slidesPerView={1}
+                        slidesPerView={4}
                         breakpoints={{
                             320: {
                                 width: 320,
                                 slidesPerView: 3,
                             },
-                            640: {
-                                width: 640,
-                                slidesPerView: 5,
-                            },
-                            768: {
-                                width: 768,
-                                slidesPerView: 7,
-                            },
-                            1200: {
-                                width: 1200,
-                                slidesPerView: 10,
-                            },
+
                         }}
                         onSwiper={(swiper) => console.log(swiper)}
                         onSlideChange={() => console.log('slide change')}

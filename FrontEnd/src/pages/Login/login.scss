@@ -141,7 +141,7 @@
       height: 10%;
       transform: rotate(-45deg);
     }
-  
+
     .star {
       $star-count: 50;
       --star-color: #90eeaf;
@@ -160,11 +160,12 @@
       border-radius: 50%;
       filter: drop-shadow(0 0 6px currentColor);
       transform: translate3d(104em, 0, 0);
-      animation: fall var(--fall-duration) var(--fall-delay) linear,
-        tail-fade var(--tail-fade-duration) var(--fall-delay) ease-out;
+      animation: fall var(--fall-duration) var(--fall-delay) linear infinite,
+        tail-fade var(--tail-fade-duration) var(--fall-delay) ease-out infinite;
+  
       @include sp-layout {
         // For mobile performance, tail-fade animation will be removed QAQ
-        animation: fall var(--fall-duration) var(--fall-delay) linear;
+        animation: fall var(--fall-duration) var(--fall-delay) linear infinite;
       }
   
       @for $i from 1 through $star-count {
@@ -188,7 +189,7 @@
           45deg,
           transparent,
           currentColor,
-          transparent
+          transparent,
         );
         border-radius: inherit;
         animation: blink 2s linear infinite;
@@ -207,6 +208,7 @@
       to {
         transform: translate3d(-30em, 0, 0);
       }
+      
     }
   
     @keyframes tail-fade {
@@ -215,15 +217,18 @@
         width: var(--star-tail-length);
         opacity: 1;
       }
+  
       70%,
       80% {
         width: 0;
         opacity: 0.4;
       }
+  
       100% {
         width: 0;
         opacity: 0;
       }
     }
+  
   }
   

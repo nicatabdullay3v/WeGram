@@ -1,10 +1,9 @@
 #followings_photos {
   padding: 0px 30px;
+  margin-top: 100px;
   .container {
-    display: flex;
+  display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
-
     .followings_photos {
       .card {
         background-color: white;

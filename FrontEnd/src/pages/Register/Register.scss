@@ -193,7 +193,7 @@
           45deg,
           transparent,
           currentColor,
-          transparent
+          transparent,
         );
         border-radius: inherit;
         animation: blink 2s linear infinite;
@@ -212,6 +212,7 @@
       to {
         transform: translate3d(-30em, 0, 0);
       }
+      
     }
   
     @keyframes tail-fade {
