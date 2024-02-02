@@ -15,6 +15,8 @@ import SideBar from "../SideBar/SideBar"
 import RecomendedUsers from "../RecomendedUsers/RecomendedUsers"
 import axios from "axios"
 import UsersStories from "../UsersStories/UsersStories"
+import Weather from "../Weather/Weather"
+import Followings from "../Followings/Followings"
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
 
@@ -68,7 +70,11 @@ const FollowingsPhotos = () => {
     return (
         <section id='followings_photos'>
             <div className="container">
-                <RecomendedUsers/>
+                <div className="left_side_bar">
+                    <Weather/>
+                    <Weather/>
+                    <Followings/>
+                </div>
                 <div className="followings_photos">
                     <UsersStories/>
                     <div className="followings_photos">

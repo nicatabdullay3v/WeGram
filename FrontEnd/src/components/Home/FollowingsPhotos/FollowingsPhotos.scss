@@ -2,8 +2,9 @@
   padding: 0px 30px;
   margin-top: 100px;
   .container {
-  display: flex;
-    justify-content: space-between;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
     .followings_photos {
       .card {
         background-color: white;
@@ -23,15 +24,15 @@
               display: flex;
               font-size: 30px;
               align-items: center;
-              .likes-count{
-                span{
+              .likes-count {
+                span {
                   font-size: 12px;
                 }
               }
-              .post-like{
+              .post-like {
                 transition: 0.5s;
                 cursor: pointer;
-                &:hover{
+                &:hover {
                   transform: scale(1.2);
                 }
               }
@@ -85,9 +86,29 @@
   }
 }
 // Responsivlik=-=-=--=--=-=-=--=-=-
+@media (max-width: 1289px) {
+  #followings_photos {
+    .container {
+      justify-content: center;
+      gap: 20px;
+      max-width: 1050px;
+    }
+    .followings_photos {
+      .card {
+        margin-bottom: 30px;
+        max-width: 450px;
+        .card_center {
+          .card_post {
+            max-height: 300px;
+          }
+        }
+      }
+    }
+  }
+}
 @media (max-width: 992px) {
   #followings_photos {
-    .container{
+    .container {
       justify-content: center;
       gap: 20px;
     }
@@ -122,6 +143,10 @@
 }
 @media (max-width: 545px) {
   #followings_photos {
+    .container{
+      display: block;
+
+    }
     .followings_photos {
       .card {
         margin-bottom: 15px;

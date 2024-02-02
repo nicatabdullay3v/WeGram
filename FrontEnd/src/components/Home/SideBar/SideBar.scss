@@ -5,6 +5,7 @@
   padding: 30px 10px;
   width: 100%;
   top: 60px;
+  left: 0;
   background-color: white;
   z-index: 2;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -64,6 +65,7 @@
   position: fixed;
   width: 100%;
   top: 60px;
+left: 0;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   .sections {
@@ -94,4 +96,11 @@
       }
     }
   }
+}
+// Responsive=-=--=-=--=-=-=-=-=-=-
+@media (max-width:767px) {
+  #side_bar_second{
+    display: none;
+  }
+  
 }

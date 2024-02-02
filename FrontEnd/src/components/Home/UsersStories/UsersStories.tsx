@@ -31,7 +31,7 @@ const UsersStories = () => {
 
     return (
         <section id='stories'>
-            <div style={{ maxWidth: "600px", margin: "0 auto" }} className="swiper_container">
+            <div style={{ maxWidth: "420px", margin: "0 auto" }} className="swiper_container">
                 <div className="stories">
                     <div className="line"></div>
                     <div className="stories_up">
@@ -42,11 +42,20 @@ const UsersStories = () => {
                     <Swiper
                         modules={[Navigation, Pagination, Scrollbar, A11y]}
                         spaceBetween={0}
-                        slidesPerView={4}
+                        slidesPerView={1}
                         breakpoints={{
                             320: {
                                 width: 320,
-                                slidesPerView: 3,
+                                slidesPerView: 5,
+                            },
+                            545: {
+                                width: 545,
+                                slidesPerView: 5,
+                            },
+
+                            640: {
+                                width: 640,
+                                slidesPerView: 6,
                             },
 
                         }}

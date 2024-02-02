@@ -1,0 +1,23 @@
+#weather {
+  width: 300px;
+  background-image: url(https://pitnik.wpkixx.com/pitnik/images/resources/weather.jpg);
+  height: 400px;
+  position: relative;
+  margin-bottom: 20px;
+  background-color: red;
+  &::before{
+    content: "";
+    position: absolute;
+    top: 0; 
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(135, 207, 235, 0.707);
+  }
+}
+@media (max-width:992px) {
+  #weather{
+      display: none;
+  }
+  
+}

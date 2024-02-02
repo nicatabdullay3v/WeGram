@@ -1,14 +1,12 @@
-#recomended_users{
-    max-width: 400px;
-    width: 100%;
-    border-radius: 8px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    height: 400px;
+#recomended_users {
+  width: 300px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  height: 400px;
 }
-@media (max-width:992px) {
-   #recomended_users{
+@media (max-width: 992px) {
+  #recomended_users {
     display: none;
-   }
-    
   }
+}
