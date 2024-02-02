@@ -116,6 +116,7 @@ nav {
       align-items: center;
       gap: 20px;
       .profile {
+        margin-left: 20px;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -232,7 +233,7 @@ nav {
     }
   }
 }
-@media (max-width: 767px) {
+@media (max-width: 1200px) {
   nav {
     .nav {
       .nav_logo {

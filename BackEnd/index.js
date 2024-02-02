@@ -1,20 +1,24 @@
-const express = require("express");
-const app = express();
-const UsersRouter = require("./src/router/usersRouter");
-const port = process.env.PORT || 3001;
-const dbConnect = require("./src/config/db");
-const cors = require("cors");
+import express from "express"
+import dotenv from "dotenv"
+import cookieParser from "cookie-parser"
+import authRoutes from "./routes/auth.routes.js"
+import messageRoute from "./routes/message.routes.js"
+import connectToMongoDb from "./db/connectToMongoDB.js"
 
-// Use your routes
+dotenv.config()
 
-dbConnect();
-app.use(cors());
-app.use(express.json());
-app.use("/", UsersRouter);
+const app = express()
+const port = process.env.PORT || 3000
+app.use(express.json()) 
+app.use(cookieParser())
+app.use("/api/auth",authRoutes)
+app.use("/api/messages",messageRoute)
+app.use("/api/users",messageRoute)
 
-app.use(express.static("./src/public"));
-
-app.listen(port, () => {
-  console.log(`Server Running on Port ${port}`);
-  console.log(`http://localhost:${port}/`);
-});
+// app.get("/",(req,res)=>{
+//     res.send("salam")
+// })
+app.listen(port,()=>{
+    connectToMongoDb()
+    console.log(`Server Running on port ${port} `);
+})

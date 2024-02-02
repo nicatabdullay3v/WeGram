@@ -10,7 +10,7 @@
   }
   
   .container{
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
   }
   button{
@@ -18,4 +18,8 @@
   }
 body{
   background-color: #EDF2F6;
+}
+
+::selection{
+  background-color: #8686a3;
 }

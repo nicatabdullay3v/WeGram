@@ -34,10 +34,10 @@
             margin: 5px;
             background: linear-gradient(
               to right,
-              #90eeaf 20%,
-              #ad99da 30%,
-              #ad99da 70%,
-              #90eeaf 80%
+              rgb(147, 144, 144) 20%,
+              #30305b 30%,
+              #30305b 70%,
+              rgb(172, 169, 169) 80%
             );
             -webkit-background-clip: text;
             background-clip: text;
@@ -68,8 +68,8 @@
         backdrop-filter: blur(6px);
         -webkit-backdrop-filter: blur(6px);
         &:hover {
-          box-shadow: #90eeaf 0px 54px 55px, #90eeaf 0px -12px 30px,
-            #90eeaf 0px 4px 6px, #90eeaf 0px 12px 13px, #90eeaf 0px -3px 5px;
+          box-shadow: #30305b 0px 54px 55px, #30305b 0px -12px 30px,
+            #30305b 0px 4px 6px, #30305b 0px 12px 13px, #30305b 0px -3px 5px;
         }
         .apps {
           display: flex;
@@ -94,18 +94,18 @@
         p {
           span {
             cursor: pointer;
-            color: #90eeaf;
+            color: #30305b;
             font-weight: 900;
           }
         }
         h1 {
           font-size: 50px;
           font-weight: 800;
-          color: #90eeaf;
+          color: #30305b;
           font-family: "Salsa", cursive;
         }
         .button {
-          background: #90eeaf;
+          background: #30305b;
           color: radial-gradient(ellipse at bottom, white 0%, white 100%);
           font-weight: 900;
         }
@@ -144,7 +144,7 @@
 
     .star {
       $star-count: 50;
-      --star-color: #90eeaf;
+      --star-color: #30305b;
       --star-tail-length: 6em;
       --star-tail-height: 2px;
       --star-width: calc(var(--star-tail-length) / 6);

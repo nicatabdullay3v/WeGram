@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getAllData } from "./../../redux/Slices/usersSlice"
-import { AppDispatch,RootState } from "../../redux/store"
+import { AppDispatch, RootState } from "../../redux/store"
 import { useEffect, useState } from "react"
 import { IoMdPersonAdd } from "react-icons/io";
 import "./Detail.scss"
@@ -13,8 +13,9 @@ import { jwtDecode } from "jwt-decode";
 import { WiTime9 } from "react-icons/wi";
 import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
+import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 const Detail = () => {
-const navigate = useNavigate()
+    const navigate = useNavigate()
     const [localUser, setuser] = useState<Users | undefined>();
     const { id } = useParams()
     const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
@@ -42,101 +43,108 @@ const navigate = useNavigate()
     return (
         <>
             <NavBar />
-            {user && <div className="user_profile">
-                <div className="profile_up">
-                    <div className="profile_up_img_name">
-                        <div className="profile_up_img">
-                            <img src={user.img} alt="" />
-                        </div>
-                        <div className="profile_name">
-                            <p>{user.name}</p>
-                        </div>
-                        <div className="profile_bio">
-                            <p>salam men eldaram</p>
-                        </div>
-                    </div>
-                    <div className="profile_up_posts_followers_followings_follow">
-                        <div className="profile_up_posts count">
-                            <p>{user.posts.length}</p>
-                            <span>posts</span>
-                        </div>
-                        <div className="profile_up_followers count">
-                            <p>{user.followers.length}</p>
-                            <span>followers</span>
-                        </div>
-                        <div className="profile_up_followings count">
-                            <p>{user.followings.length}</p>
-                            <span>followings</span>
-                        </div>
-                        <div className="profile_up_follow count">
-                            {findID == undefined && findrequest == undefined ?
-                                <button>
-                                    <IoMdPersonAdd onClick={() => {
-                                        if (user.isPublic) {
-                                            if (findID == undefined) {
-                                                axios.patch(`http://localhost:3001/users/${user._id}`, {
-                                                    followers: [...user.followers, { _id: localUser?._id }]
-                                                }).then(() => {
-                                                    alert("artirildim ayqam ayqam")
 
+            <div id="user_profile">
+
+                <div className="container">
+                    <div className="user_profile">
+                        <div className="user_profile_up">
+
+                            <div className="user_profile_back_img">
+                                <div className="user_profile_picture">
+                                    <img src={user?.img} alt="" />
+                                </div>
+                                <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
+                            </div>
+                            <ul className="user_profile_up_about">
+                                <li>{user?.name} {user?.username}</li>
+                                <li>Vidios</li>
+                                <li>Photos</li>
+                                <li>History</li>
+                                <li>Followers <sup>{user?.followers.length}</sup></li>
+                                <li>Followings <sup>{user?.followings.length}</sup></li>
+
+                                {findID == undefined && findrequest == undefined ?
+                                    <button>
+                                        <IoMdPersonAdd onClick={() => {
+                                            if (user?.isPublic) {
+                                                if (findID == undefined) {
+                                                    axios.patch(`http://localhost:3001/users/${user?._id}`, {
+                                                        followers: [...user.followers, { _id: localUser?._id }]
+                                                    }).then(() => {
+                                                        alert("artirildim ayqam ayqam")
+
+                                                        dispatch(getAllData())
+                                                    })
+                                                    axios.patch(`http://localhost:3001/users/${localUser?._id}`, {
+                                                        followings: [...LocalUser?.followings!, { _id: user?._id }]
+                                                    })
+                                                }
+                                            }
+                                            else {
+                                                axios.patch(`http://localhost:3001/users/${user?._id}`, {
+                                                    requests: [...user?.requests!, { _id: localUser?._id }]
+
+                                                }).then(() => {
+                                                    alert("request gonderildi")
+                                                    dispatch(getAllData())
+                                                })
+                                            }
+                                        }} className="add_icon" /></button> : findrequest != undefined ?
+                                        <>
+                                            <button >
+                                                <WiTime9 onClick={() => {
+                                                    axios.patch(`http://localhost:3001/users/${user?._id}`, {
+                                                        requests: user?.requests.filter((x: { _id: string }) => x._id != localUser?._id)
+                                                    }).then(() => {
+                                                        alert("request qaytarildi")
+                                                        dispatch(getAllData())
+                                                    })
+                                                }} className="add_icon" />
+                                            </button>
+                                        </> : <button className="unfollow" >
+                                            <AiOutlineUserDelete style={{ backgroundColor: "red" }} className="add_icon" onClick={() => {
+                                                axios.patch(`http://localhost:3001/users/${user?._id}`, {
+                                                    followers: user?.followers.filter((x: { _id: string }) => x._id != localUser?._id)
+                                                }).then(() => {
+                                                    alert("cixdian ayqam")
                                                     dispatch(getAllData())
                                                 })
                                                 axios.patch(`http://localhost:3001/users/${localUser?._id}`, {
-                                                    followings: [...LocalUser?.followings!, { _id: user?._id }]
+                                                    followings: LocalUser?.followings.filter((x: { _id: string }) => x._id != user?._id)
                                                 })
-                                            }
-                                        }
-                                        else {
-                                            axios.patch(`http://localhost:3001/users/${user._id}`, {
-                                                requests: [...user?.requests, { _id: localUser?._id }]
-
-                                            }).then(() => {
-                                                alert("request gonderildi")
-                                                dispatch(getAllData())
-                                            })
-                                        }
-                                    }} className="add_icon" /></button> : findrequest != undefined ?
-                                    <>
-                                        <button >
-                                            <WiTime9 onClick={() => {
-                                                axios.patch(`http://localhost:3001/users/${user?._id}`, {
-                                                    requests: user?.requests.filter((x: { _id: string }) => x._id != localUser?._id)
-                                                }).then(() => {
-                                                    alert("request qaytarildi")
-                                                    dispatch(getAllData())
-                                                })
-                                            }} className="add_icon" />
-                                        </button>
-                                    </> : <button className="unfollow" >
-                                        <AiOutlineUserDelete style={{ backgroundColor: "red" }} className="add_icon" onClick={() => {
-                                            axios.patch(`http://localhost:3001/users/${user._id}`, {
-                                                followers: user.followers.filter((x: { _id: string }) => x._id != localUser?._id)
-                                            }).then(() => {
-                                                alert("cixdian ayqam")
-                                                dispatch(getAllData())
-                                            })
-                                            axios.patch(`http://localhost:3001/users/${localUser?._id}`, {
-                                                followings: LocalUser?.followings.filter((x: { _id: string }) => x._id != user?._id)
-                                            })
-                                        }} />
-                                    </button>}
+                                            }} />
+                                        </button>}
+                            </ul>
                         </div>
-                    </div>
+                        <div className="user_profile_down">
+                            <RecomendedUsers />
 
-                </div>
-                <div className="user_posts">
-                    {user.isPublic|| findID ? user.posts.map((elem: any) => {
-                        return <div key={elem._id} className="post_card">
-                            <div className="post">
-                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                            <div className="posts">
+                                <div className="posts_length">
+                                    <p>Posts <sup>
+                                        {LocalUser?.posts.length}
+                                    </sup></p>
+                                </div>
+                                <div className="post-cards">
+                                    {user?.isPublic || findID ? user?.posts.map((elem: any) => {
+                                        return <div key={elem._id} className="post_card">
+                                            <div className="post">
+                                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                                            </div>
+                                        </div>
+                                    }) : null}
+                                    {user?.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div> : null}
+
+                                </div>
                             </div>
                         </div>
-                    }) :null}
+                    </div>
                 </div>
-                {user.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div>:null}
-            </div>}
+            </div>
         </>
     )
 }
 
 export default Detail
+

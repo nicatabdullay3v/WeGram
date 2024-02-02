@@ -3,6 +3,7 @@ export interface Users {
     img: string,
     name: string,
     isPublic: boolean,
+    username:string
     posts: [
         {
             likes: [],

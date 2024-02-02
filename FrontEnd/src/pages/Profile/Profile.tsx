@@ -13,6 +13,7 @@ import { useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
@@ -22,7 +23,7 @@ const Profile = () => {
     const [file, setFile] = useState<File | undefined>()
     const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
-    const users = useSelector((state: RootState) => state.users.users)    
+    const users = useSelector((state: RootState) => state.users.users)
     useEffect(() => {
         if (token) {
             const decoded: Decode = jwtDecode(token);
@@ -63,91 +64,84 @@ const Profile = () => {
     return (
         <>
             <NavBar />
-            {LocalUser &&
-                <div className="user_profile">
-                    {modal ? <div className="modal">
-                        <div style={{ textAlign: 'end' }} className="close">
-                            <AiOutlineClose onClick={() => {
-                                setModal(false)
-                            }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
+            <div id="user_profile">
+                {modal ? <div className="modal">
+                    <div style={{ textAlign: 'end' }} className="close">
+                        <AiOutlineClose onClick={() => {
+                            setModal(false)
+                        }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
 
-                        </div>
-                        <div className="file-input-container">
-                            <input
-                                onChange={(e) => e.target.files && setFile(e.target.files[0])}
-                                type="file"
-                                id="fileInput"
-                                className="input-file"
-                            />
-                            <label htmlFor="fileInput" className="file-label">
-                                Choose a File
-                            </label>
-                            {file && <p>Selected File: {file.name}</p>}
-                        </div>
-                        <div className="file_title">
-                            <input onChange={(e) => {
-                                setTitle(e.target.value)
-                            }} type="text" className="file-input-text" placeholder="Enter file title" />
-                        </div>
-                        <button onClick={handleUpload} className="add-button">Add Post</button>
-                    </div> : null}
-                    <div className="profile_up">
-                        <div className="profile_up_img_name">
-                            <div className="profile_up_img">
-                                <img src={LocalUser?.img} alt="" />
-                            </div>
-                            <div className="profile_name">
-                                <p>{LocalUser.name}</p>
-                            </div>
-                            <div className="add_photo response2">
-                                <FaRegPlusSquare onClick={() => {
-                                    setModal(true)
-                                }} className="icon" />
-                                <br />
-                                new post
-                            </div>
+                    </div>
+                    <div className="file-input-container">
+                        <input
+                            onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                            type="file"
+                            id="fileInput"
+                            className="input-file"
+                        />
+                        <label htmlFor="fileInput" className="file-label">
+                            Choose a File
+                        </label>
+                        {file && <p>Selected File: {file.name}</p>}
+                    </div>
+                    <div className="file_title">
+                        <input onChange={(e) => {
+                            setTitle(e.target.value)
+                        }} type="text" className="file-input-text" placeholder="Enter file title" />
+                    </div>
+                    <button onClick={handleUpload} className="add_button">Add Post</button>
+                </div> : null}
+                <div className="container">
+                    <div className="user_profile">
+                        <div className="user_profile_up">
 
+                            <div className="user_profile_back_img">
+                                <div className="user_profile_picture">
+                                    <img src={LocalUser?.img} alt="" />
+                                </div>
+                                <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
+                            </div>
+                            <ul className="user_profile_up_about">
+                                <li>{LocalUser?.name} {LocalUser?.username}</li>
+                                <li>Vidios</li>
+                                <li>Photos</li>
+                                <li>History</li>
+                                <li>Followers <sup>{LocalUser?.followers.length}</sup></li>
+                                <li>Followings <sup>{LocalUser?.followings.length}</sup></li>
+                            </ul>
                         </div>
-                        <div className="profile_up_posts_followers_followings_follow">
-                            <div className="profile_up_posts count">
-                                <p>{LocalUser.posts.length}</p>
-                                <span>posts</span>
-                            </div>
-                            <div className="profile_up_followers count">
-                                <p>{LocalUser.followers.length}</p>
-                                <span>followers</span>
-                            </div>
-                            <div className="profile_up_followings count">
-                                <p>{LocalUser.followings.length}</p>
-                                <span>followings</span>
-                            </div>
-                            <div className="add_photo response1">
-                                <FaRegPlusSquare onClick={() => {
-                                    setModal(true)
-                                }} className="icon" />
-                                <br />
-                                new post
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="profile_bio">
-                            <p>salam men eldaram</p>
-                        </div>
-                    <div className="add_post">
-                    </div>
-                    <div className="user_posts">
-                        {LocalUser.posts.map((elem: any) => {
-                            return <div className="post_card">
-                                <div className="post">
-                                    <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                        <div className="user_profile_down">
+                            <RecomendedUsers />
+
+                            <div className="posts">
+                                <div className="posts_length">
+                                    <p>Posts <sup>
+                                        {LocalUser?.posts.length}
+                                    </sup></p>
+                                    <p className="add" onClick={() => {
+                                        setModal(true)
+                                    }}>add new post</p>
+                                </div>
+                                <div className="post-cards">
+                                    {LocalUser?.posts.map((elem: any) => {
+                                        return <div className="post_card">
+                                            <div className="post">
+                                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                                            </div>
+                                        </div>
+                                    })}
+
                                 </div>
                             </div>
-                        })}
+                        </div>
                     </div>
-                </div>}
+                </div>
+            </div>
         </>
     )
 }
 
 export default Profile
+
+
+

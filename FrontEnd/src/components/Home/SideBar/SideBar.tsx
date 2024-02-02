@@ -15,7 +15,7 @@ interface SettingsBarProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     close: boolean;
 }
-const SideBar : React.FC<SettingsBarProps> = ({ setClose, close }) => {
+const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
     const navigate = useNavigate()
 
 
@@ -45,7 +45,9 @@ const SideBar : React.FC<SettingsBarProps> = ({ setClose, close }) => {
                         }} className="profile_page section">
                             <FaRegUser className="icon" /><span>Profile</span>
                         </div>
-                        <div className="profile_chat section">
+                        <div onClick={() => {
+                            navigate("/chat")
+                        }} className="profile_chat section">
                             <BsChat className="icon" /> <span>Chat</span>
                         </div>
                         <div className="profile_notifications section">
@@ -78,7 +80,9 @@ const SideBar : React.FC<SettingsBarProps> = ({ setClose, close }) => {
                     }} className="section">
                         <FaRegUser className="icon" />
                     </div>
-                    <div className="section">
+                    <div onClick={() => {
+                        navigate("/chat")
+                    }} className="section">
                         <IoChatbubbleOutline className="icon" />
 
                     </div>
