@@ -20,7 +20,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoute);
 app.use("/api/users", usersRoute);
-
+app.use(express.static("./public"));
 // app.get("/",(req,res)=>{
 //     res.send("salam")
 // })

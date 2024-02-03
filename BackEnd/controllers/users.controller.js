@@ -4,9 +4,7 @@ import jwt from "jsonwebtoken"
 export const getUsers = async(req,res)=>{
     try {
         const loggedUserId= req.user._id
-        const allUsers = await User.find({}).select("-password")
-        const token = req.cookies.jwt; 
-        console.log(token);
+        const allUsers = await User.find({ _id: { $ne: loggedUserId } }).select("-password")
         return res.status(200).json(allUsers)
 
     } catch (error) {
@@ -14,3 +12,79 @@ export const getUsers = async(req,res)=>{
         
     }
 }
+export const getUsersById = async(req,res)=>{
+    try {
+        console.log(req.params.id);
+        const UserByID = await User.findOne({ _id:req.params.id }).select("-password")
+        return res.status(200).json(UserByID)
+
+    } catch (error) {
+    res.status(500).json({ error: "Iternal Server Error" });
+        
+    }
+}
+export const patchUsers = async (req, res) => {
+    try {
+        console.log(req.params.id);
+
+      console.log(req.body);
+      const id = req.params.id;
+      const patchedUsers = await User.findOneAndUpdate({ _id: id }, req.body);
+      res.status(200).send({ message: "User patched" });
+    } catch (error) {
+      res.status(400).send({ error: error });
+    }
+  };
+
+  export const patchPost = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const postId = req.params.postId;
+      const updateFields = req.body;
+      const user = await User.findOne({ _id: userId });
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      const postIndex = user.posts.findIndex((p) => p.id === postId);
+  
+      if (postIndex === -1) {
+        return res.status(404).send({ error: "Post not found" });
+      }
+      user.posts[postIndex] = { ...user.posts[postIndex], ...updateFields };
+      await user.save();
+  
+      res.status(200).send({ message: "Post patched" });
+    } catch (error) {
+      res.status(400).send({ error: error.message });
+    }
+  };
+
+  export const addPostImage = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const { filename } = req.file;
+      const { title, id, time, likes, comments } = req.body;
+  
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: {
+            posts: {
+              img: `images/${filename}`,
+              id: id || uuidv4(),
+              title: title || "Default Title",
+              time: time || new Date(),
+              likes: JSON.parse(likes) || [],
+              comments: comments || [],
+            },
+          },
+        },
+        { new: true }
+      );
+  
+      res.json(updatedUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };

@@ -1,7 +1,6 @@
 export interface Users {
     _id: string,
     profilePicture: string,
-    name: string,
     isPublic: boolean,
     username:string
     posts: [
@@ -18,5 +17,6 @@ export interface Users {
     requests: []
 }
 export interface UsersState {
-    users: Users[]
+    users: Users[],
+    user:Users | null
 }

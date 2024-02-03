@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { getAllData } from "./../../redux/Slices/usersSlice"
+import { getAllData, getUserById } from "./../../redux/Slices/usersSlice"
 import { AppDispatch, RootState } from "../../redux/store"
 import { useEffect, useState } from "react"
 import { IoMdPersonAdd } from "react-icons/io";
@@ -16,29 +16,21 @@ import { useNavigate, useParams } from "react-router-dom"
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 const Detail = () => {
     const navigate = useNavigate()
-    const [localUser, setuser] = useState<Users | undefined>();
+
     const { id } = useParams()
-    const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
     const users = useSelector((state: RootState) => state.users.users)
-    useEffect(() => {
-        if (token) {
-            const decoded: Decode = jwtDecode(token);
-            const userData: any = decoded.findUser
-            setuser(userData);
-        }
-        if (token) {
-        }
-        else {
-            navigate("/")
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
+    const LocalUser = useSelector((state: RootState) => state.users.user)
 
-        }
+    useEffect(() => {
         dispatch(getAllData())
+        dispatch(getUserById(LocalUserID))
+
     }, [])
     const user = users.find((x) => x._id == id)
-    const LocalUser = users.find((x) => x._id == localUser?._id)
-    const findID = user?.followers.find((x: { _id: string }) => x._id == localUser?._id)
-    const findrequest = user?.requests.find((x: { _id: string }) => x._id == localUser?._id)
+    const findID = user?.followers.find((x: { _id: string }) => x._id == LocalUserID)
+    const findrequest = user?.requests.find((x: { _id: string }) => x._id == LocalUserID)
 
     return (
         <>
@@ -52,12 +44,12 @@ const Detail = () => {
 
                             <div className="user_profile_back_img">
                                 <div className="user_profile_picture">
-                                    <img src={user?.img} alt="" />
+                                    <img src={user?.profilePicture} alt="" />
                                 </div>
                                 <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
                             </div>
                             <ul className="user_profile_up_about">
-                                <li>{user?.name} {user?.username}</li>
+                                <li>{user?.username}</li>
                                 <li>Vidios</li>
                                 <li>Photos</li>
                                 <li>History</li>
@@ -67,23 +59,27 @@ const Detail = () => {
                                 {findID == undefined && findrequest == undefined ?
                                     <button>
                                         <IoMdPersonAdd onClick={() => {
+                                            axios.defaults.withCredentials = true;
                                             if (user?.isPublic) {
                                                 if (findID == undefined) {
-                                                    axios.patch(`http://localhost:3001/users/${user?._id}`, {
-                                                        followers: [...user.followers, { _id: localUser?._id }]
+                                                    axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
+                                                        withCredentials: true,
+                                                        followers: [...user.followers, { _id: LocalUserID }]
                                                     }).then(() => {
                                                         alert("artirildim ayqam ayqam")
 
                                                         dispatch(getAllData())
                                                     })
-                                                    axios.patch(`http://localhost:3001/users/${localUser?._id}`, {
+                                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                        withCredentials: true,
                                                         followings: [...LocalUser?.followings!, { _id: user?._id }]
                                                     })
                                                 }
                                             }
                                             else {
-                                                axios.patch(`http://localhost:3001/users/${user?._id}`, {
-                                                    requests: [...user?.requests!, { _id: localUser?._id }]
+                                                axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
+                                                    withCredentials: true,
+                                                    requests: [...user?.requests!, { _id: LocalUserID }]
 
                                                 }).then(() => {
                                                     alert("request gonderildi")
@@ -94,8 +90,8 @@ const Detail = () => {
                                         <>
                                             <button >
                                                 <WiTime9 onClick={() => {
-                                                    axios.patch(`http://localhost:3001/users/${user?._id}`, {
-                                                        requests: user?.requests.filter((x: { _id: string }) => x._id != localUser?._id)
+                                                    axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
+                                                        requests: user?.requests.filter((x: { _id: string }) => x._id != LocalUserID)
                                                     }).then(() => {
                                                         alert("request qaytarildi")
                                                         dispatch(getAllData())
@@ -104,13 +100,16 @@ const Detail = () => {
                                             </button>
                                         </> : <button className="unfollow" >
                                             <AiOutlineUserDelete style={{ backgroundColor: "red" }} className="add_icon" onClick={() => {
-                                                axios.patch(`http://localhost:3001/users/${user?._id}`, {
-                                                    followers: user?.followers.filter((x: { _id: string }) => x._id != localUser?._id)
+                                                axios.defaults.withCredentials = true;
+                                                axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
+                                                    withCredentials: true,
+                                                    followers: user?.followers.filter((x: { _id: string }) => x._id != LocalUserID)
                                                 }).then(() => {
                                                     alert("cixdian ayqam")
                                                     dispatch(getAllData())
                                                 })
-                                                axios.patch(`http://localhost:3001/users/${localUser?._id}`, {
+                                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                    withCredentials: true,
                                                     followings: LocalUser?.followings.filter((x: { _id: string }) => x._id != user?._id)
                                                 })
                                             }} />

@@ -24,14 +24,13 @@ const Register = () => {
     // Formik--=-=-=-=-=-=-=-=-=-==
     const formik = useFormik({
         initialValues: {
-            name: "",
             username: "",
             surname: "",
             password: "",
             isPublic: true,
             email: '',
             confirmPassword: '',
-            gender: "",
+            gender: "male",
 
         },
         onSubmit: (values, { resetForm }) => {
@@ -145,13 +144,6 @@ const Register = () => {
                             <form onSubmit={formik.handleSubmit}>
                                 <div className="register_box">
                                     <h1>WeGram Register</h1>
-                                    <input id="outlined-basic"
-                                        placeholder='name'
-                                        className='reg_input'
-                                        name="name"
-                                        type="text"
-                                        onChange={formik.handleChange}
-                                        value={formik.values.name} />
                                     <input id="outlined-basic"
                                         placeholder='username'
                                         className='reg_input'

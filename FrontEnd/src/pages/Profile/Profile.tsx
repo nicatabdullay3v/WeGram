@@ -1,12 +1,7 @@
-"use client"
 import "./Profile.scss"
-import { Decode } from "../Home/Home";
-import { Users } from "./../../interfaces/UsersInterface"
 import NavBar from "../../components/NavBar/NavBar"
-import { jwtDecode } from "jwt-decode";
-import { FaRegPlusSquare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux"
-import { getAllData } from "../../redux/Slices/usersSlice";
+import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react"
@@ -19,26 +14,24 @@ const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
-    const [localUser, setuser] = useState<Users | undefined>();
     const [likes, setlikes] = useState([])
     const [file, setFile] = useState<File | undefined>()
     const dispatch = useDispatch<AppDispatch>()
-    const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id
-    const users = useSelector((state: RootState) => state.users.users)
-
-    const user = users.find((x) => x._id == LocalUserID)
-
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
+    const user = useSelector((state: RootState) => state.users.user)
     useEffect(() => {
-    
+
         if (localStorage.getItem("user-info")) {
         }
         else {
             navigate("/")
         }
         dispatch(getAllData())
+        dispatch(getUserById(LocalUserID))
     }, [])
 
 
+    console.log(user);
 
 
     const handleUpload = () => {
@@ -46,20 +39,19 @@ const Profile = () => {
             console.error("Please select a file");
             return;
         }
-
         const formdata = new FormData();
         formdata.append('file', file);
         formdata.append('id', uuidv4());
         formdata.append('title', title);
         formdata.append('likes', JSON.stringify(likes));
-        axios.patch(`http://localhost:3001/users/${localUser?._id}/addPostImage`, formdata)
+        axios.patch(`http://localhost:3001/api/users/${LocalUserID}/addPostImage`, formdata)
             .then((res) => {
-                console.log(res.data);
-                dispatch(getAllData());
+                dispatch(getUserById(LocalUserID))
             })
             .catch((error) => {
                 console.error("Error uploading post:", error);
             });
+
         setModal(false)
         setTitle("")
         setFile(undefined)
@@ -67,7 +59,7 @@ const Profile = () => {
     return (
         <>
             <NavBar />
-            {/* <div id="user_profile">
+            <div id="user_profile">
                 {modal ? <div className="modal">
                     <div style={{ textAlign: 'end' }} className="close">
                         <AiOutlineClose onClick={() => {
@@ -100,17 +92,17 @@ const Profile = () => {
 
                             <div className="user_profile_back_img">
                                 <div className="user_profile_picture">
-                                    <img src={LocalUser?.img} alt="" />
+                                    <img src={user?.profilePicture} alt="" />
                                 </div>
                                 <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
                             </div>
                             <ul className="user_profile_up_about">
-                                <li>{LocalUser?.name} {LocalUser?.username}</li>
+                                <li>{user?.username}</li>
                                 <li>Vidios</li>
                                 <li>Photos</li>
                                 <li>History</li>
-                                <li>Followers <sup>{LocalUser?.followers.length}</sup></li>
-                                <li>Followings <sup>{LocalUser?.followings.length}</sup></li>
+                                <li>Followers <sup>{user?.followers.length}</sup></li>
+                                <li>Followings <sup>{user?.followings.length}</sup></li>
                             </ul>
                         </div>
                         <div className="user_profile_down">
@@ -119,15 +111,15 @@ const Profile = () => {
                             <div className="posts">
                                 <div className="posts_length">
                                     <p>Posts <sup>
-                                        {LocalUser?.posts.length}
+                                        {user?.posts.length}
                                     </sup></p>
                                     <p className="add" onClick={() => {
                                         setModal(true)
                                     }}>add new post</p>
                                 </div>
                                 <div className="post-cards">
-                                    {LocalUser?.posts.map((elem: any) => {
-                                        return <div className="post_card">
+                                    {user?.posts.map((elem: any) => {
+                                        return <div key={elem._id} className="post_card">
                                             <div className="post">
                                                 <img src={`http://localhost:3001/${elem.img}`} alt="" />
                                             </div>
@@ -139,7 +131,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-            </div> */}
+            </div>
         </>
     )
 }

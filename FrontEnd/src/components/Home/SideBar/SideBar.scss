@@ -25,7 +25,7 @@
     }
     .sections {
       .section {
-        span{
+        span {
           font-size: 14px;
         }
         .icon {
@@ -40,7 +40,7 @@
         border-bottom: 1px solid lightgray;
         transition: 0.5s;
         &:hover {
-          background-color: #45456C;
+          background-color: #45456c;
           color: white;
         }
       }
@@ -65,7 +65,7 @@
   position: fixed;
   width: 100%;
   top: 60px;
-left: 0;
+  left: 0;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   .sections {
@@ -90,7 +90,15 @@ left: 0;
       cursor: pointer;
       background-color: #edf2f6;
       border-radius: 50%;
+      transition: 0.5s;
+      &:hover {
+        background-color: #30305b;
+      }
+      &:hover .icon {
+        color: white;
+      }
       .icon {
+        transition: 0.5s;
         color: #30305b;
         font-size: 15px;
       }
@@ -98,9 +106,8 @@ left: 0;
   }
 }
 // Responsive=-=--=-=--=-=-=-=-=-=-
-@media (max-width:1200px) {
-  #side_bar_second{
+@media (max-width: 1200px) {
+  #side_bar_second {
     display: none;
   }
-  
 }

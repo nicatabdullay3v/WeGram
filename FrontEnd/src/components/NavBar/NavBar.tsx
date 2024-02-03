@@ -3,7 +3,7 @@ import { Decode } from "../../pages/Home/Home";
 import "./NavBar.scss"
 import { FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllData } from "../../redux/Slices/usersSlice";
+import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { BsSearch } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState } from "react";
@@ -23,10 +23,10 @@ const NavBar: React.FC = () => {
     const [filteredData, setFilteredData] = useState<Users[]>([])
     const [inputValue, setInputValue] = useState("")
     const [searchOpen, setSearchOpen] = useState(false)
-    const [user, setuser] = useState<Users | undefined>();
     const dispatch = useDispatch<AppDispatch>()
 
     const users = useSelector((state: RootState) => state.users.users)
+    const user = useSelector((state: RootState) => state.users.user)
 
     const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
 
@@ -34,6 +34,7 @@ const NavBar: React.FC = () => {
     const navigate = useNavigate()
     useEffect(() => {
         dispatch(getAllData())
+        dispatch(getUserById(LocalUserID))
 
     }, []);
     useEffect(() => {
@@ -119,10 +120,10 @@ console.log(LocalUser);
                     <ul className="nav_right">
                         <div className="profile">
                             <div className="profile_picture">
-                                <img src={LocalUser?.profilePicture} alt="" />
+                                <img src={user?.profilePicture} alt="" />
                             </div>
                             <div className="profile_name">
-                                <p>{LocalUser?.name}</p>
+                                <p>{user?.username}</p>
                             </div>
                         </div>
                         <div className="requets">
