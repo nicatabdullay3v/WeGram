@@ -11,6 +11,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import { GiPolarStar } from "react-icons/gi";
 import { motion } from "framer-motion"
+import axios from "axios";
 interface SettingsBarProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     close: boolean;
@@ -53,8 +54,14 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                         <div className="profile_notifications section">
                             <IoNotificationsOutline className="icon" /> <span>Notifications</span>
                         </div>
-                        <div className="profile_logout section">
-                            <LuLogOut className="icon" /><span>LogOut</span>
+                        <div onClick={() => {
+                            axios.post("http://localhost:3001/api/auth/logout")
+                            localStorage.removeItem("user-info")
+                            navigate("/")
+                        }} className="profile_logout section">
+                            <LuLogOut
+
+                                className="icon" /><span>LogOut</span>
                         </div>
                     </div>
                 </div>

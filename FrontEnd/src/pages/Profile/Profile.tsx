@@ -13,6 +13,7 @@ import { useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import 'cookie-store';
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 const Profile = () => {
     const navigate = useNavigate()
@@ -21,23 +22,25 @@ const Profile = () => {
     const [localUser, setuser] = useState<Users | undefined>();
     const [likes, setlikes] = useState([])
     const [file, setFile] = useState<File | undefined>()
-    const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
+    const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id
     const users = useSelector((state: RootState) => state.users.users)
+
+    const user = users.find((x) => x._id == LocalUserID)
+
     useEffect(() => {
-        if (token) {
-            const decoded: Decode = jwtDecode(token);
-            const userData: any = decoded.findUser
-            setuser(userData)
-        }
-        if (token) {
+    
+        if (localStorage.getItem("user-info")) {
         }
         else {
             navigate("/")
         }
         dispatch(getAllData())
     }, [])
-    const LocalUser = users.find((x) => x._id == localUser?._id)
+
+
+
+
     const handleUpload = () => {
         if (!file) {
             console.error("Please select a file");
@@ -64,7 +67,7 @@ const Profile = () => {
     return (
         <>
             <NavBar />
-            <div id="user_profile">
+            {/* <div id="user_profile">
                 {modal ? <div className="modal">
                     <div style={{ textAlign: 'end' }} className="close">
                         <AiOutlineClose onClick={() => {
@@ -136,7 +139,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </>
     )
 }

@@ -24,24 +24,32 @@ const NavBar: React.FC = () => {
     const [inputValue, setInputValue] = useState("")
     const [searchOpen, setSearchOpen] = useState(false)
     const [user, setuser] = useState<Users | undefined>();
-    const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const dispatch = useDispatch<AppDispatch>()
+
     const users = useSelector((state: RootState) => state.users.users)
+
+    const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
+
+
     const navigate = useNavigate()
     useEffect(() => {
-        if (token) {
-            const decoded: Decode = jwtDecode(token);
-            const userData: any = decoded.findUser
-            setuser(userData);
-        }
         dispatch(getAllData())
+
     }, []);
     useEffect(() => {
         setFilteredData(inputValue.trim() == "" ? [] : users.filter((x) => {
-            return x.name.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) && x.name != user?.name
+            return x.username.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) && x.username != user?.username
         }))
     }, [users, inputValue])
-    const LocalUser = users?.find((x) => x._id == user?._id)
+    console.log("65bd576654a640443a66b4af")
+    console.log(LocalUserID);
+    ;
+    
+    const LocalUser = users?.find((x) => x._id === LocalUserID);
+    
+console.log(LocalUser);
+
+
     return (
         <nav>
             <SideBar close={close} setClose={setClose} />
@@ -76,10 +84,10 @@ const NavBar: React.FC = () => {
                                         navigate(`/home/${elem._id}`)
                                     }} className="user">
                                         <div className="users_profile_img">
-                                            <img src={elem.img} alt="" />
+                                            <img src={elem.profilePicture} alt="" />
                                         </div>
                                         <div className="users_name">
-                                            {elem.name}
+                                            {elem.username}
                                         </div>
                                     </div>
                                 })}
@@ -111,7 +119,7 @@ const NavBar: React.FC = () => {
                     <ul className="nav_right">
                         <div className="profile">
                             <div className="profile_picture">
-                                <img src={LocalUser?.img} alt="" />
+                                <img src={LocalUser?.profilePicture} alt="" />
                             </div>
                             <div className="profile_name">
                                 <p>{LocalUser?.name}</p>
@@ -133,8 +141,8 @@ const NavBar: React.FC = () => {
                         </p> */}
                         <p style={{ marginLeft: "40px" }}>
                             <GiHamburgerMenu className="responsive_side_bar" onClick={() => {
-                                setClose(close?false:true)
-                            }} style={{ fontSize: "25px", cursor: "pointer",color:"white" }} />
+                                setClose(close ? false : true)
+                            }} style={{ fontSize: "25px", cursor: "pointer", color: "white" }} />
                         </p>
                     </ul>
                 </div>

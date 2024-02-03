@@ -25,8 +25,8 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // https://avatar.iran.liara.run/
-    const boyProfilePicture = `https://avatar.iran.liara.run/boy?username=${email}`;
-    const girlProfilePicture = `https://avatar.iran.liara.run/girl?username=${email}`;
+    const boyProfilePicture = `https://avatar.iran.liara.run/public/boy?username=${email}`;
+    const girlProfilePicture = `https://avatar.iran.liara.run/public/girl?username=${email}`;
 
     const newUser = new User({
       username,
@@ -36,6 +36,7 @@ export const signup = async (req, res) => {
       fullname,
       password: hashedPassword,
       email,
+      gender,
     });
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
@@ -45,6 +46,7 @@ export const signup = async (req, res) => {
         fullname: newUser.fullname,
         username: newUser.username,
         profilePicture: newUser.profilePicture,
+        email:newUser.email
       });
     } else {
       res.status(400).json({ error: "invalid user data" });
@@ -56,7 +58,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email:email });
+    const user = await User.findOne({ email: email });
     console.log(user);
     const isPasswordCorrect = await bcrypt.compare(
       password,
@@ -72,16 +74,17 @@ export const login = async (req, res) => {
       fullname: user.fullname,
       username: user.username,
       profilePicture: user.profilePicture,
+      email:user.email
     });
   } catch (error) {
     res.status(500).json({ error: "Iternal Server Error" });
   }
 };
-export const logout = async(req, res) => {
-try {
-  res.cookie("jwt","",{maxAge:0})
-  res.status(200).json({message:"Logged out successfully"})
-} catch (error) {
-  res.status(500).json({ error: "Iternal Server Error" });
-}
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Iternal Server Error" });
+  }
 };

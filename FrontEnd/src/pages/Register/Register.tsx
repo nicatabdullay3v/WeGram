@@ -8,11 +8,15 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Register = () => {
+
     const navigate = useNavigate()
     infinity.register()
     const [loading, setloading] = useState(true)
     useEffect(() => {
-        localStorage.removeItem("user")
+
+        if (localStorage.getItem("user-info")) {
+            navigate("/home")
+        }
         setTimeout(() => {
             setloading(false)
         }, 660);
@@ -27,9 +31,11 @@ const Register = () => {
             isPublic: true,
             email: '',
             confirmPassword: '',
+            gender: "",
 
         },
         onSubmit: (values, { resetForm }) => {
+
             axios.post("http://localhost:3001/api/auth/signup", values).then((res) => {
                 console.log(res);
 
@@ -44,6 +50,8 @@ const Register = () => {
                     setTimeout(() => {
                     }, 1000);
                     navigate('/')
+                    localStorage.setItem("user-info",JSON.stringify(res.data))
+                    
                 }
                 else {
                     Swal.fire({
@@ -158,6 +166,16 @@ const Register = () => {
                                         type="email"
                                         onChange={formik.handleChange}
                                         value={formik.values.email} />
+                                    <select
+                                        className='reg_input'
+                                        name="gender"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.gender}
+                                    >
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+
                                     <input id="outlined-basic"
                                         placeholder='password'
                                         className='reg_input'

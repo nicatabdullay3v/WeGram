@@ -1,6 +1,6 @@
 export interface Users {
     _id: string,
-    img: string,
+    profilePicture: string,
     name: string,
     isPublic: boolean,
     username:string

@@ -17,14 +17,10 @@ export default function Home() {
     const navigate = useNavigate()
     const [loading, setloading] = useState(true)
     infinity.register()
-
-    const token = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-    if (token) {
-        const decoded: Decode = jwtDecode(token);
-        const userData = decoded.findUser
-    }
     useEffect(() => {
-        if (token) {
+
+        if (localStorage.getItem("user-info")) {
+
         }
         else {
             navigate('/')

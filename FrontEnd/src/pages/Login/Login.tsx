@@ -12,7 +12,9 @@ const Login = () => {
     const navigate = useNavigate()
     const [loading, setloading] = useState(true)
     useEffect(() => {
-        localStorage.removeItem("user")
+      if (localStorage.getItem("user-info")) {
+        navigate('/home')
+      }
         setTimeout(() => {
             setloading(false)
         }, 660);
@@ -22,10 +24,13 @@ const Login = () => {
     const formik = useFormik({
         initialValues: {
             email: '',
-            password: ""
+            password: "",
+    
         },
         onSubmit: values => {
-            axios.post("http://localhost:3001/api/auth/login", values).then((res) => {
+            axios.post("http://localhost:3001/api/auth/login", values,{withCredentials:true,headers:{crossDomain:true,"Content-Type":"application/json"}}).then((res) => {
+                console.log(res);
+                
                 if (res.status === 201) {
                     Swal.fire({
                         position: "center",
@@ -34,7 +39,7 @@ const Login = () => {
                         showConfirmButton: false,
                         timer: 1500
                     });
-                    localStorage.setItem("user", res.data.message);
+                    localStorage.setItem("user-info", JSON.stringify(res.data));
             
                     setTimeout(() => {
                         navigate("/home");

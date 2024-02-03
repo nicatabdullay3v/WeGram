@@ -5,10 +5,19 @@ import { UsersState } from '../../interfaces/UsersInterface'
 export const getAllData = createAsyncThunk(
     'users/getData',
     async () => {
-        const response = await axios.get(`http://localhost:3001/users`)
-        return response.data as Users[]
+        try {
+            axios.defaults.withCredentials = true;
+            const response = await axios.get(`http://localhost:3001/api/users`, { withCredentials: true });
+            return response.data as Users[];
+        } catch (error: any) {
+            if (error.name == "AxiosError") {
+                localStorage.removeItem("user-info")
+            }
+            console.error('Error fetching data:', error.name);
+            throw error;
+        }
     }
-)
+);
 
 const initialState: UsersState = {
     users: [],
@@ -25,6 +34,6 @@ export const UsersSlice = createSlice({
         })
     },
 })
-export const {  } = UsersSlice.actions
+export const { } = UsersSlice.actions
 
 export default UsersSlice.reducer
