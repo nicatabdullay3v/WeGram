@@ -122,7 +122,7 @@ const Detail = () => {
                             <div className="posts">
                                 <div className="posts_length">
                                     <p>Posts <sup>
-                                        {LocalUser?.posts.length}
+                                        {user?.posts.length}
                                     </sup></p>
                                 </div>
                                 <div className="post-cards">

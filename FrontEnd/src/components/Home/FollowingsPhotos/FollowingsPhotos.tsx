@@ -1,6 +1,6 @@
 "use client"
 import { useDispatch, useSelector } from "react-redux"
-import { getAllData } from "../../../redux/Slices/usersSlice"
+import { getAllData, getUserById } from "../../../redux/Slices/usersSlice"
 import "./FollowingsPhotos.scss"
 import { AppDispatch, RootState } from "../../../redux/store"
 import { CiHeart } from "react-icons/ci";
@@ -8,10 +8,7 @@ import { useEffect, useState } from "react"
 import { Users } from "../../../interfaces/UsersInterface";
 import { FaRegComment } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import { Decode } from "../../../pages/Home/Home";
-import { jwtDecode } from "jwt-decode";
 import { FaRegShareSquare } from "react-icons/fa";
-import SideBar from "../SideBar/SideBar"
 import RecomendedUsers from "../RecomendedUsers/RecomendedUsers"
 import axios from "axios"
 import UsersStories from "../UsersStories/UsersStories"
@@ -19,20 +16,18 @@ import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
-
     const dispatch = useDispatch<AppDispatch>()
-    const [user, setuser] = useState<Users | undefined>();
-    const token: any = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     const users = useSelector((state: RootState) => state.users.users)
+    const LocalUser = useSelector((state: RootState) => state.users.user)
+
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
+
     useEffect(() => {
-        if (token) {
-            const decoded: Decode = jwtDecode(token);
-            const userData: any = decoded.findUser
-            setuser(userData);
-        }
         dispatch(getAllData())
+        dispatch(getUserById(LocalUserID))
+
     }, [])
-    const LocalUser = users?.find((x) => x._id == user?._id)
+
     // SortAll Posts-=-=-=-==-=-=--=-=-=
     const allPosts: { img: File; time: string; userId: string; id: string; likes: [] }[] = [];
     users.forEach((followingUser) => {
@@ -84,10 +79,10 @@ const FollowingsPhotos = () => {
                                 <div key={element.id} className="card" >
                                     <div className="card_up">
                                         <div className="card_up_profile_img">
-                                            <img src={followingUser.img} alt="" />
+                                            <img src={followingUser.profilePicture} alt="" />
                                         </div>
                                         <div className="card_up_name">
-                                            <span>{followingUser.name}</span>
+                                            <span>{followingUser.username}</span>
                                         </div>
                                     </div>
                                     <div className="card_center">

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Pagination from '@mui/material/Pagination';
 import 'cookie-store';
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 const Profile = () => {
@@ -15,6 +16,8 @@ const Profile = () => {
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
     const [likes, setlikes] = useState([])
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 8;
     const [file, setFile] = useState<File | undefined>()
     const dispatch = useDispatch<AppDispatch>()
     const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
@@ -56,6 +59,12 @@ const Profile = () => {
         setTitle("")
         setFile(undefined)
     }
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = user?.posts.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
     return (
         <>
             <NavBar />
@@ -118,7 +127,7 @@ const Profile = () => {
                                     }}>add new post</p>
                                 </div>
                                 <div className="post-cards">
-                                    {user?.posts.map((elem: any) => {
+                                    {currentPosts?.map((elem: any) => {
                                         return <div key={elem._id} className="post_card">
                                             <div className="post">
                                                 <img src={`http://localhost:3001/${elem.img}`} alt="" />
@@ -127,6 +136,16 @@ const Profile = () => {
                                     })}
 
                                 </div>
+
+                                <Pagination
+                                    style={{ position: "static", backgroundColor: "white" }}
+                                    count={Math.ceil(user?.posts.length! / postsPerPage)}
+                                    page={currentPage}
+                                    onChange={(_, page) => paginate(page)}
+                                    variant="outlined"
+                                    shape="rounded"
+                                />
+
                             </div>
                         </div>
                     </div>

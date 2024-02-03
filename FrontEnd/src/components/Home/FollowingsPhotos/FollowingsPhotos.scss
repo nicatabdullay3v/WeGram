@@ -160,3 +160,17 @@
     }
   }
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination div {
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination div.active {
+  font-weight: bold;
+}

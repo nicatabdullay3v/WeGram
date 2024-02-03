@@ -37,6 +37,7 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       email,
       gender,
+      isPublic:"true"
     });
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
