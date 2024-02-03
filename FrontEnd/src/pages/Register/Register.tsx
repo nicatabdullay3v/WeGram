@@ -22,26 +22,18 @@ const Register = () => {
         initialValues: {
             name: "",
             username: "",
-            img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTO7m4pK3zl2CogYw_9WbVJo4yxkb5wC8dDYf3VtgDv6w&s",
-            followers: [],
-            followings: [],
             surname: "",
-            blockList: [],
-            stories: [],
-            notifications: [],
             password: "",
-            bio: [],
             isPublic: true,
-            posts: [],
             email: '',
-            requests: []
+            confirmPassword: '',
 
         },
         onSubmit: (values, { resetForm }) => {
-            axios.post("http://localhost:3001/users", values).then((res) => {
+            axios.post("http://localhost:3001/api/auth/signup", values).then((res) => {
                 console.log(res);
 
-                if (res.status == 200) {
+                if (res.status == 201) {
                     Swal.fire({
                         position: "center",
                         icon: "success",
@@ -173,6 +165,13 @@ const Register = () => {
                                         type="password"
                                         onChange={formik.handleChange}
                                         value={formik.values.password} />
+                                    <input id="outlined-basic"
+                                        placeholder='password'
+                                        className='reg_input'
+                                        name="confirmPassword"
+                                        type="password"
+                                        onChange={formik.handleChange}
+                                        value={formik.values.confirmPassword} />
                                     <Button type='submit' className='button' variant="contained">Sign Up</Button>
                                     <p>Have an account? <span onClick={() => {
                                         navigate('/')

@@ -25,23 +25,21 @@ const Login = () => {
             password: ""
         },
         onSubmit: values => {
-            axios.post("http://localhost:3001/login", values).then((res) => {
-                if (res.status == 200) {
+            axios.post("http://localhost:3001/api/auth/login", values).then((res) => {
+                if (res.status === 201) {
                     Swal.fire({
                         position: "center",
                         icon: "success",
                         title: "Xos Geldiz",
                         showConfirmButton: false,
                         timer: 1500
-
                     });
-                    localStorage.setItem("user", res.data.message)
-
+                    localStorage.setItem("user", res.data.message);
+            
                     setTimeout(() => {
+                        navigate("/home");
                     }, 1000);
-                    navigate("/home")
-                }
-                else {
+                } else {
                     Swal.fire({
                         position: "center",
                         icon: "error",
