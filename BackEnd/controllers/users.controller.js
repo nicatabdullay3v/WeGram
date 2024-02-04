@@ -88,3 +88,28 @@ export const patchUsers = async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   };
+
+
+export const getPostById = async (req, res) => {
+  try {
+    const userId = req.params.id; 
+    const postId = req.params.postId; 
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const post = user.posts.find((p) => p.id === postId);
+
+    if (!post) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    console.log(post);
+    res.status(200).send(post);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};

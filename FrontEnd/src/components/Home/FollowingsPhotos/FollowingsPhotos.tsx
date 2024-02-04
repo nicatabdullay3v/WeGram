@@ -46,9 +46,7 @@ const FollowingsPhotos = () => {
     // HandleLike-=-=-=-=-=-=-=-=-=-=-=-=-
     const like = (followingUser: Users, element: { img: File; time: string; userId: string, id: string; likes: [] }) => {
         const findIndex = followingUser.posts.findIndex((x: { id: string }) => x.id == element.id)
-        setHeartCount(6); // You can adjust the number of hearts to display
-        setTimeout(() => setHeartCount(0), 1000);
-        axios.patch(`http://localhost:3001/users/${followingUser._id}/posts/${element.id}`, {
+        axios.patch(`http://localhost:3001/api/users/${followingUser._id}/posts/${element.id}`, {
             likes: [...followingUser.posts[findIndex].likes, { _id: LocalUser?._id }]
         }).then(() => {
             dispatch(getAllData())
@@ -56,7 +54,7 @@ const FollowingsPhotos = () => {
     }
     const unLike = (followingUser: Users, element: { img: File; time: string; userId: string, id: string; likes: [] }) => {
         const findIndex = followingUser.posts.findIndex((x: { id: string }) => x.id == element.id)
-        axios.patch(`http://localhost:3001/users/${followingUser._id}/posts/${element.id}`, {
+        axios.patch(`http://localhost:3001/api/users/${followingUser._id}/posts/${element.id}`, {
             likes: followingUser.posts[findIndex].likes.filter((x: { _id: string }) => x._id != LocalUser?._id)
         }).then(() => {
             dispatch(getAllData())

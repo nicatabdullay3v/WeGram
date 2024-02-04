@@ -1,6 +1,6 @@
 import express from "express"
 import protectRoute from "../middleware/protetcRoute.js"
-import { addPostImage, getUsers, getUsersById, patchPost, patchUsers } from "../controllers/users.controller.js"
+import { addPostImage, getPostById, getUsers, getUsersById, patchPost, patchUsers } from "../controllers/users.controller.js"
 import multer from "multer"
 import path from "path"
 const router = express.Router()
@@ -25,5 +25,7 @@ router.get("/",protectRoute,getUsers)
 router.get("/:id",protectRoute,getUsersById)
 router.patch("/:id",protectRoute,patchUsers)
 router.patch('/:id/addPostImage',protectRoute, upload.single('file'),addPostImage );
+router.get("/:id/posts/:postId",protectRoute, getPostById);
+router.patch("/:id/posts/:postId",protectRoute, patchPost);
 
 export default router
