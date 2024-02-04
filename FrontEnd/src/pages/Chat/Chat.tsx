@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import { AppDispatch, RootState } from "../../redux/store";
 import "./Chat.scss";
@@ -6,32 +6,63 @@ import { GoSearch } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import axios from "axios";
-import { getAllMessages } from "../../redux/Slices/MessagesSLice";
+import { getAllMessages, setMessages } from "../../redux/Slices/MessagesSLice";
+import { useSocketContext } from "../../context/SocketContext";
 
 const Chat = () => {
   const dispatch = useDispatch<AppDispatch>();
   const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
+const {onlineUsers} = useSocketContext()
+const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
+
+console.log(onlineUsers);
+
+
+const { socket } = useSocketContext();
+
+
+const messages = useSelector((state:RootState)=> state.messages.messages)
+	useEffect(() => {
+		socket?.on("newMessage", (newMessage) => {
+      console.log("salm");
+      
+			newMessage.shouldShake = true;
+      
+            dispatch(setMessages([...messages,newMessage]))
+
+		});
+
+		return () => socket?.off("newMessage");
+	}, [socket, setMessages,dispatch, messages]);
   const users = useSelector((state: RootState) => state.users.users);
   const user = useSelector((state: RootState) => state.users.user);
-  const messages = useSelector((state: RootState) => state.messages.messages);
 
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+
   const [inputValue, setInputValue] = useState("")
 
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     dispatch(getAllData());
     dispatch(getUserById(LocalUserID));
 
   }, []);
-
-  const handleUserClick = (userId: string) => {
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages])
+  const handleUserClick = async (userId: string) => {
     setSelectedUserId(userId);
-    dispatch(getAllMessages(selectedUserId!))
-
+    dispatch(getAllMessages(userId));
+console.log(messages);
 
   };
+
+
+
 
 
 
@@ -51,6 +82,7 @@ const Chat = () => {
               {user &&
                 user.followings.map((elem: { _id: string }) => {
                   const userElement = users.find((x) => x._id === elem._id);
+                  const isOnline = onlineUsers.includes(elem._id)
 
                   return (
                     userElement && (
@@ -61,9 +93,10 @@ const Chat = () => {
                       >
                         <div className="user_profile_pic">
                           <img src={userElement.profilePicture} alt="" />
+
                         </div>
                         <div className="user_name">
-                          <p>{userElement.username}</p>
+                          <p style={{color:isOnline?"red":"black"}}>{userElement.username}</p>
                         </div>
                       </div>
                     )
@@ -76,19 +109,27 @@ const Chat = () => {
           <div className="chat_right_up">
             <p>TO: {selectedUserId ? users.find((u) => u._id === selectedUserId)?.username : "Select a user"}</p>
           </div>
-          <div className="chat_right_center">
+          <div className="chat_right_center" ref={messagesContainerRef}>
             {selectedUserId ? <div className="messages">
-              {messages && messages.map((message:{senderId:string}) => {
-                
-                return <div style={{color:message.senderId == LocalUserID?"red":"blue"}} className="message">
-                  <p>{message.message}</p>
+              {messages && messages.map((message: { senderId: string, message: string }) => {
+                const timestampObj = new Date(message.createdAt);
+
+                timestampObj.setUTCHours(timestampObj.getUTCHours());
+
+                const formattedTime = timestampObj.toLocaleString('en-AZ', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Baku' });
+                console.log("sal");
+
+
+                return <div key={message._id} className={message.senderId == LocalUserID ? "my" : "his"}>
+                  <p> <sub style={{ fontSize: "10px", marginRight: "20px" }}>{formattedTime}</sub>{message.message}
+                  </p>
                 </div>
               })}
             </div> : <p>Hello qaqa</p>}
           </div>
           <div className="chat_right_down">
             <div className="message_input">
-              <input onChange={(e) => {
+              <input value={inputValue} onChange={(e) => {
                 setInputValue(e.target.value)
               }} placeholder="type" type="text" />
             </div>
@@ -100,11 +141,15 @@ const Chat = () => {
                 { withCredentials: true, headers: { crossDomain: true, "Content-Type": "application/json" } }
               )
                 .then(response => {
-                  console.log(response.data);
+                  dispatch(setMessages([...messages,response.data]))
+
                 })
                 .catch(error => {
                   console.error("Error sending message:", error);
                 });
+              setInputValue("")
+              console.log(messages);
+              
             }} className="message_send_button">send</div>
           </div>
         </div>

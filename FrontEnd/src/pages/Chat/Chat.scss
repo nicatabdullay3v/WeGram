@@ -60,6 +60,7 @@
     }
   }
   .chat_right {
+border: 1px solid gray;
     width: 100%;
     .chat_right_up {
       padding: 20px 20px;
@@ -72,16 +73,36 @@
       }
     }
     .chat_right_center {
+      overflow-y: scroll;
       padding: 40px;
-      min-height: 500px;
+      height: 500px;
       .messages {
-        .message {
-          p:nth-child(even) {
-            color: red;
-            display: flex;
-            justify-content: end;
+        .my {
+          margin-bottom: 10px;
+          display: flex;
+          justify-content: end;
+          p {
+            padding: 10px 12px;
+            background-color: #30305b;
+            color: white;
+            border-radius: 10px;
+            text-align: end;
           }
         }
+      }
+      .his {
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: start;
+        p {
+          padding: 10px 12px;
+          border-radius: 10px;
+          margin-bottom: 10px;
+          background-color: white;
+          color: #30305b;
+          text-align: end;
+        }
+        color: blue;
       }
     }
     .chat_right_down {

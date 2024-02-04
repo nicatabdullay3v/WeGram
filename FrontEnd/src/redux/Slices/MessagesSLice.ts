@@ -25,6 +25,9 @@ export const MessagesSlice = createSlice({
     name: 'conversations',
     initialState,
     reducers: {
+        setMessages: (state, action: PayloadAction<Messages[]>) => {
+            state.messages = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getAllMessages.fulfilled, (state: MessagesState, action) => {
@@ -32,6 +35,6 @@ export const MessagesSlice = createSlice({
         })
     },
 })
-export const { } = MessagesSlice.actions
+export const { setMessages} = MessagesSlice.actions
 
 export default MessagesSlice.reducer

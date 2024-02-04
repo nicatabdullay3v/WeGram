@@ -42,13 +42,10 @@ const NavBar: React.FC = () => {
             return x.username.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) && x.username != user?.username
         }))
     }, [users, inputValue])
-    console.log("65bd576654a640443a66b4af")
-    console.log(LocalUserID);
     ;
     
     const LocalUser = users?.find((x) => x._id === LocalUserID);
     
-console.log(LocalUser);
 
 
     return (

@@ -5,19 +5,29 @@ import { LuLogOut } from "react-icons/lu";
 import { FaRegUser } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineMenu } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoMdClose } from "react-icons/io";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoChatbubbleOutline } from "react-icons/io5";
+
 import { GiPolarStar } from "react-icons/gi";
 import { motion } from "framer-motion"
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllData, getUserById } from "../../../redux/Slices/usersSlice";
 interface SettingsBarProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     close: boolean;
 }
 const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
     const navigate = useNavigate()
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
+    const dispatch = useDispatch()
+    useEffect(() => {
+
+
+        dispatch(getUserById(LocalUserID))
+    }, [])
 
 
     return (
@@ -60,7 +70,6 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                             navigate("/")
                         }} className="profile_logout section">
                             <LuLogOut
-
                                 className="icon" /><span>LogOut</span>
                         </div>
                     </div>
