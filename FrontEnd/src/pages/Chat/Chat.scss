@@ -1,15 +1,20 @@
 .chat {
   padding: 100px;
   display: flex;
+  justify-content: center;
   .chat_left {
-    border: 1px solid gray;
+border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     padding: 40px;
+    max-width: 600px;
+    width: 100%;
     .chat_left_up {
       display: flex;
       align-items: center;
       gap: 20px;
       padding-bottom: 30px;
-      border-bottom: 1px solid red;
+      border-bottom: 1px solid gray;
       input {
         padding-left: 10px;
         height: 42px;
@@ -43,6 +48,7 @@
         overflow: scroll;
         height: 500px;
         .chat_user {
+          cursor: pointer;
           display: flex;
           align-items: center;
           gap: 20px;
@@ -51,11 +57,11 @@
             height: 70px;
             border-radius: 50%;
             position: relative;
-            .online{
+            .online {
               position: absolute;
               top: 5px;
               border-radius: 50%;
-              right:5px;
+              right: 5px;
               width: 13px;
               height: 13px;
               background-color: green;
@@ -70,9 +76,16 @@
     }
   }
   .chat_right {
-    border: 1px solid gray;
+border-radius: 10px;
+    overflow: hidden;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    max-width: 600px;
     width: 100%;
     .chat_right_up {
+      display: flex;
+      gap: 20px;
+      align-items: center;
       padding: 20px 20px;
       background-color: #30305b;
       p {
@@ -83,6 +96,7 @@
       }
     }
     .chat_right_center {
+      width: 100%;
       overflow-y: scroll;
       padding: 40px;
       height: 500px;
@@ -91,12 +105,13 @@
           margin-bottom: 10px;
           display: flex;
           justify-content: end;
+          width: 100%;
           p {
             padding: 10px 12px;
             background-color: #30305b;
             color: white;
+            word-break: break-all;
             border-radius: 10px;
-            text-align: end;
           }
         }
       }
@@ -107,10 +122,11 @@
         p {
           padding: 10px 12px;
           border-radius: 10px;
+          word-break: break-all;
+
           margin-bottom: 10px;
           background-color: white;
           color: #30305b;
-          text-align: end;
         }
         color: blue;
       }
@@ -118,25 +134,31 @@
     .chat_right_down {
       display: flex;
       gap: 20px;
+      margin-top: 50px;
+      margin-bottom: 10px;
       align-items: center;
       justify-content: center;
       .message_input {
-        input {
+        textarea {
           height: 40px;
-          max-width: 500px;
-          width: 100%;
+          width: 400px;
           padding-left: 10px;
           border-radius: 4px;
           border: none;
           outline: none;
           box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
             rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+          margin-right: 10px;
+          @media (max-width: 545px) {
+            width: 200px;
+          }
         }
       }
       .message_send_button {
         padding: 10px 12px;
         background-color: #30305b;
         color: white;
+        cursor: pointer;
         border-radius: 10px;
       }
     }
@@ -159,7 +181,15 @@
 // Responsive-=--=--=-=---==-=-=
 @media (max-width: 992px) {
   .chat {
+    padding: 100px 0px 0px 0px;
     .chat_left {
+      display: none;
     }
   }
+}
+#typing-indicator{
+  color: white;
+  background-color: #30305b;
+  padding: 10px 12px;
+  border-radius: 10px;
 }

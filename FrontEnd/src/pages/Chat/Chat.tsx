@@ -6,8 +6,11 @@ import { GoSearch } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import axios from "axios";
+import { motion } from "framer-motion"
 import { getAllMessages, setMessages } from "../../redux/Slices/MessagesSLice";
 import { useSocketContext } from "../../context/SocketContext";
+import { BsSend } from "react-icons/bs";
+import { GrReturn } from "react-icons/gr";
 
 interface Message {
   _id: string;
@@ -21,12 +24,14 @@ const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
   const { onlineUsers } = useSocketContext()!
+  const [display, setDisplay] = useState(true)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [chatLeft, setChatLeft] = useState(false)
   console.log(onlineUsers);
   const { socket } = useSocketContext() || {}
 
   const [isTyping, setIsTyping] = useState(false);
+  console.log(screenX);
 
   useEffect(() => {
     const handleTyping = (senderId: string) => {
@@ -100,8 +105,10 @@ const Chat: React.FC = () => {
 
   const handleUserClick = async (userId: string) => {
     setSelectedUserId(userId);
-
+    setDisplay(false)
     dispatch(getAllMessages(userId));
+    const sound = new Audio("/sounds/click-21156.mp3");
+    sound.play()
     console.log(messages);
   };
 
@@ -109,7 +116,7 @@ const Chat: React.FC = () => {
     <>
       <NavBar />
       <div className="chat">
-        <div className="chat_left">
+        <div style={{ display: display ? "block" : "none" }} className="chat_left">
           <div className="chat_left_up">
             <input placeholder="search" type="text" />
             <GoSearch onClick={() => { }} className="icon" />
@@ -120,7 +127,6 @@ const Chat: React.FC = () => {
                 user.followings.map((elem: { _id: string }) => {
                   const userElement = users.find((x) => x._id === elem._id);
                   const isOnline = onlineUsers.includes(elem._id);
-
                   return (
                     userElement && (
                       <div
@@ -130,7 +136,7 @@ const Chat: React.FC = () => {
                       >
                         <div className="user_profile_pic">
                           <img src={userElement.profilePicture} alt="" />
-                          <p className={isOnline? "online":"xexe"}></p>
+                          <p className={isOnline ? "online" : "xexe"}></p>
                         </div>
                         <div className="user_name">
                           <p >{userElement.username}</p>
@@ -142,10 +148,13 @@ const Chat: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className="chat_right">
+        <div style={{ display: display ? "none" : "block" }} className="chat_right">
           <div className="chat_right_up">
-            <p>TO: {selectedUserId ? users.find((u) => u._id === selectedUserId)?.username : "Select a user"}</p>
-            {isTyping && <span id="typing-indicator"> is typing...</span>}
+            <span onClick={() => {
+              setDisplay(true)
+              const sound = new Audio("/sounds/click-21156.mp3");
+              sound.play()
+            }} style={{ color: "white" }}><GrReturn style={{ padding: "5px", fontSize: "28px", backgroundColor: "white", color: "#30305b", borderRadius: "10px", cursor: "pointer" }} /></span><p>TO: {selectedUserId ? users.find((u) => u._id === selectedUserId)?.username : "Select a user"}</p>
           </div>
           <div className="chat_right_center" ref={messagesContainerRef}>
             {selectedUserId ? (
@@ -171,8 +180,21 @@ const Chat: React.FC = () => {
                           {message.message}
                         </p>
                       </div>
+
                     );
                   })}
+                <motion.span
+                  id="typing-indicator"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{
+                    opacity: isTyping ? 1 : 0,
+                    y: isTyping ? 0 : 10,
+                    transition: { duration: 0.3 },
+                  }}
+                  exit={{ opacity: 0 }}
+                >
+                   typing...
+                </motion.span>
               </div>
             ) : (
               <p>Hello qaqa</p>
@@ -180,7 +202,7 @@ const Chat: React.FC = () => {
           </div>
           <div className="chat_right_down">
             <div className="message_input">
-              <input
+              <textarea
                 onFocus={handleTyping}
                 onBlur={handleStopTyping}
                 value={inputValue}
@@ -188,7 +210,6 @@ const Chat: React.FC = () => {
                   setInputValue(e.target.value);
                 }}
                 placeholder="type"
-                type="text"
               />
             </div>
             <div
@@ -202,6 +223,8 @@ const Chat: React.FC = () => {
                   )
                   .then((response) => {
                     dispatch(setMessages([...messages, response.data]));
+                    const sound = new Audio("/sounds/happy-pop-2-185287.mp3");
+                    sound.play()
                   })
                   .catch((error) => {
                     console.error("Error sending message:", error);
@@ -211,7 +234,7 @@ const Chat: React.FC = () => {
               }}
               className="message_send_button"
             >
-              send
+              <BsSend />
             </div>
           </div>
         </div>
