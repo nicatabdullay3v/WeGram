@@ -3,15 +3,18 @@ import Button from '@mui/material/Button';
 import Swal from 'sweetalert2'
 import "./Register.scss"
 import { infinity } from 'ldrs'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'ldrs/ring'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const Register = () => {
-
     const navigate = useNavigate()
     infinity.register()
+    // useState=-==-=-=-=-=-=
     const [loading, setloading] = useState(true)
+    // useeffect=-=--=--=--=--
     useEffect(() => {
 
         if (localStorage.getItem("user-info")) {
@@ -34,35 +37,37 @@ const Register = () => {
 
         },
         onSubmit: (values, { resetForm }) => {
-
             axios.post("http://localhost:3001/api/auth/signup", values).then((res) => {
                 console.log(res);
-
-                if (res.status == 201) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Ugurla qediyyatdan kecdiz",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    setTimeout(() => {
-                    }, 1000);
+                toast.success('You have successfully registered', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                setTimeout(() => {
                     navigate('/')
-                    localStorage.setItem("user-info",JSON.stringify(res.data))
-                    
-                }
-                else {
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "Bele Email Var",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    resetForm()
-                }
+                }, 1000);
+                localStorage.setItem("user-info", JSON.stringify(res.data))
+            }).catch((err) => {
+                resetForm()
 
+                console.log(err);
+
+                toast.error('wrong email or password', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             })
         },
     });
@@ -78,6 +83,7 @@ const Register = () => {
                     color="#ad99da"
                 ></l-infinity>
             </div> : <section id='register'>
+                <ToastContainer />
                 <div className="stars">
                     <div className="star"></div>
                     <div className="star"></div>

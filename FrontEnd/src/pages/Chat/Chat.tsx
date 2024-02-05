@@ -14,7 +14,7 @@ interface Message {
   senderId: string;
   message: string;
   createdAt: string;
-  shouldShake:boolean
+  shouldShake: boolean
 }
 
 const Chat: React.FC = () => {
@@ -22,9 +22,8 @@ const Chat: React.FC = () => {
   const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
   const { onlineUsers } = useSocketContext()!
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-
+  const [chatLeft, setChatLeft] = useState(false)
   console.log(onlineUsers);
-
   const { socket } = useSocketContext() || {}
 
   const [isTyping, setIsTyping] = useState(false);
@@ -101,6 +100,7 @@ const Chat: React.FC = () => {
 
   const handleUserClick = async (userId: string) => {
     setSelectedUserId(userId);
+
     dispatch(getAllMessages(userId));
     console.log(messages);
   };
@@ -112,7 +112,7 @@ const Chat: React.FC = () => {
         <div className="chat_left">
           <div className="chat_left_up">
             <input placeholder="search" type="text" />
-            <GoSearch onClick={() => {}} className="icon" />
+            <GoSearch onClick={() => { }} className="icon" />
           </div>
           <div className="chat_left_down">
             <div className="chat_users">
@@ -130,9 +130,10 @@ const Chat: React.FC = () => {
                       >
                         <div className="user_profile_pic">
                           <img src={userElement.profilePicture} alt="" />
+                          <p className={isOnline? "online":"xexe"}></p>
                         </div>
                         <div className="user_name">
-                          <p style={{ color: isOnline ? "red" : "black" }}>{userElement.username}</p>
+                          <p >{userElement.username}</p>
                         </div>
                       </div>
                     )

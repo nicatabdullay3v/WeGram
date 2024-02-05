@@ -6,15 +6,19 @@ import { infinity } from 'ldrs'
 import 'ldrs/ring'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 const Login = () => {
     infinity.register()
     const navigate = useNavigate()
+    // useState=-=-=-=-
     const [loading, setloading] = useState(true)
+    // useEffect =--==-=---=
     useEffect(() => {
-      if (localStorage.getItem("user-info")) {
-        navigate('/home')
-      }
+        if (localStorage.getItem("user-info")) {
+            navigate('/home')
+        }
         setTimeout(() => {
             setloading(false)
         }, 660);
@@ -25,34 +29,37 @@ const Login = () => {
         initialValues: {
             email: '',
             password: "",
-    
+
         },
         onSubmit: values => {
-            axios.post("http://localhost:3001/api/auth/login", values,{withCredentials:true,headers:{crossDomain:true,"Content-Type":"application/json"}}).then((res) => {
+            axios.post("http://localhost:3001/api/auth/login", values, { withCredentials: true, headers: { crossDomain: true, "Content-Type": "application/json" } }).then((res) => {
                 console.log(res);
-                
-                if (res.status === 201) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: "Xos Geldiz",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    localStorage.setItem("user-info", JSON.stringify(res.data));
-            
-                    setTimeout(() => {
-                        navigate("/home");
-                    }, 1000);
-                } else {
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "Bele acc yoxdu",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }
+                toast.success('You entered successfully ', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+                localStorage.setItem("user-info", JSON.stringify(res.data));
+                setTimeout(() => {
+                    navigate("/home");
+                }, 1000);
+            }).catch((err) => {
+                console.log(err);
+                toast.error('wrong email or password', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             })
         },
     });
@@ -60,15 +67,16 @@ const Login = () => {
         <>
             {loading == true ?
                 <div style={{ height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }} className="loading">
-                     <l-infinity
+                    <l-infinity
                         size="100"
                         stroke="6"
                         stroke-length="0.15"
                         bg-opacity="0.1"
                         speed="1.3"
-                        color="#90EEAF"
-                    ></l-infinity> 
+                        color="#30305b"
+                    ></l-infinity>
                 </div> : <section id='login'>
+                    <ToastContainer />
                     <div className="stars">
                         <div className="star"></div>
                         <div className="star"></div>
@@ -169,9 +177,6 @@ const Login = () => {
                         </div>
                     </div>
                 </section>}
-
-
-
         </>
     )
 }
