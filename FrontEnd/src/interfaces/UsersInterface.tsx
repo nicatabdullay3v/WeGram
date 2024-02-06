@@ -2,14 +2,17 @@ export interface Users {
     _id: string,
     profilePicture: string,
     isPublic: boolean,
-    username:string
+    username: string
     posts: [
         {
             likes: [],
             time: string,
             img: File,
             id: string,
-            userId: string
+            userId: string,
+            comments: [
+
+            ]
         }
     ],
     followers: [],
@@ -18,5 +21,5 @@ export interface Users {
 }
 export interface UsersState {
     users: Users[],
-    user:Users | null
+    user: Users | null
 }

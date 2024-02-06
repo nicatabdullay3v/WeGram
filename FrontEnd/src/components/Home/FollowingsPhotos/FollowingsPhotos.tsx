@@ -2,6 +2,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { getAllData, getUserById } from "../../../redux/Slices/usersSlice"
 import "./FollowingsPhotos.scss"
+import { v4 as uuidv4 } from 'uuid';
 import { AppDispatch, RootState } from "../../../redux/store"
 import { CiHeart } from "react-icons/ci";
 import { useEffect, useState } from "react"
@@ -16,6 +17,10 @@ import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
+    const [comment, setcomment] = useState('')
+    const [selectedUserId, setselectedUserId] = useState<string>("")
+    const [postID, setpostID] = useState("")
+    const [modal, setmodal] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
     const users = useSelector((state: RootState) => state.users.users)
     const LocalUser = useSelector((state: RootState) => state.users.user)
@@ -25,15 +30,14 @@ const FollowingsPhotos = () => {
     useEffect(() => {
         dispatch(getAllData())
         dispatch(getUserById(LocalUserID))
-
     }, [])
 
     // SortAll Posts-=-=-=-==-=-=--=-=-=
-    const allPosts: { img: File; time: string; userId: string; id: string; likes: [] }[] = [];
+    const allPosts: { img: File; time: string; userId: string; comments: [], id: string; likes: [] }[] = [];
     users.forEach((followingUser) => {
         if (LocalUser?.followings.find((elem: { _id: string }) => elem._id === followingUser._id)) {
             allPosts.push(
-                ...followingUser.posts.map((post: { img: File; time: string; id: string, likes: [] }) => ({
+                ...followingUser.posts.map((post: { img: File; time: string; comments: []; id: string, likes: [] }) => ({
                     ...post,
                     userId: followingUser._id,
                 }))
@@ -60,16 +64,65 @@ const FollowingsPhotos = () => {
             dispatch(getAllData())
         })
     }
+    const FollowingUserForComments: any = users?.find((x) => x._id == selectedUserId)
+    console.log(FollowingUserForComments?.posts);
+    const findIndex = FollowingUserForComments?.posts.findIndex((x: { id: string }) => x.id == postID)
+
+
     return (
         <section id='followings_photos'>
+            {modal ? <div className="comment_modal">
+                <div className="modal_up">
+                    <p className="title">
+                        comments
+                    </p>                </div>
+                <div className="modal_center">
+                    {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string }) => {
+                        const CommentUser = users?.find((x) => x._id == comment._id)
+
+                        return <div className="comments">
+                            <div style={{ display: 'flex', alignItems: "center", gap: "10px" }}>
+                                <div className="user_profile_picture">
+                                    <img src={CommentUser ? CommentUser.profilePicture : LocalUser?.profilePicture} alt="" />
+                                </div>
+                                <div className="user_name">
+                                    <p> {CommentUser ? CommentUser.username : LocalUser?.username}</p>
+                                </div>
+                            </div>
+                            <div className="user_comment">
+                                <p>
+                                    comment: {comment.comment}
+
+                                </p>
+                            </div>
+                        </div>
+                    })}
+                </div>
+                <div className="modal_end">
+                    <input value={comment} onChange={(e) => {
+                        setcomment(e.target.value)
+                    }} type="text" />
+                    <button onClick={() => {
+                        const FollowingUserComments = FollowingUserForComments?.posts.find((x: { id: string }) => x.id == postID)?.comments
+                        const findIndex = FollowingUserForComments?.posts.findIndex((x: { id: string }) => x.id == postID)
+
+                        axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}`, {
+                            comments: [...FollowingUserForComments?.posts[findIndex].comments, { _id: LocalUser?._id, comment, commentID: uuidv4() }]
+                        }).then(() => {
+                            dispatch(getAllData())
+                        })
+                        setcomment('')
+                    }}>send</button>
+                </div>
+            </div> : null}
             <div className="container">
                 <div className="left_side_bar">
-                    <Weather/>
-                    <Weather/>
-                    <Followings/>
+                    <Weather />
+                    <Weather />
+                    <Followings />
                 </div>
                 <div className="followings_photos">
-                    <UsersStories/>
+                    <UsersStories />
                     <div className="followings_photos">
                         {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [] }) => {
                             const followingUser = users.find((u) => u._id === element.userId);
@@ -104,7 +157,16 @@ const FollowingsPhotos = () => {
                                                 </div>
                                             </div>
                                             <div className="comment">
-                                                <FaRegComment />
+                                                <FaRegComment onClick={() => {
+                                                    setselectedUserId(followingUser._id)
+                                                    setpostID(element.id)
+                                                    setmodal(true)
+                                                    dispatch(getAllData())
+
+                                                }} />
+                                                <sub style={{ fontSize: "14px" }}>
+                                                    {followingUser.posts[followingUser.posts.findIndex((x: { id: string }) => x.id == element.id)].comments.length}
+                                                </sub>
                                             </div>
                                             <div className="share">
                                                 <FaRegShareSquare />
@@ -116,7 +178,7 @@ const FollowingsPhotos = () => {
                         })}
                     </div>
                 </div>
-                <RecomendedUsers/>
+                <RecomendedUsers />
             </div>
         </section>
     )
