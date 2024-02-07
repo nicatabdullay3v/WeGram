@@ -15,14 +15,16 @@ import { motion } from "framer-motion"
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../../redux/Slices/usersSlice";
+import { AppDispatch } from "../../../redux/store";
 interface SettingsBarProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     close: boolean;
 }
 const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
     const navigate = useNavigate()
+    const [settingsDropDown, setSettingsDropDown] = useState(false)
     const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatch>()
     useEffect(() => {
 
 
@@ -129,9 +131,15 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                     <div className="section">
                         <GiPolarStar className="icon" />
 
-                    </div><div className="section">
+                    </div><div onClick={() => {
+                        setSettingsDropDown(settingsDropDown ? false : true)
+                    }} className="section">
                         <IoSettingsOutline className="icon" />
-
+                        <div style={{ display: settingsDropDown ? "block" : "none" }} className="settings_drop_down">
+                            <p onClick={() => {
+                                navigate("/settings")
+                            }}>profile settings</p>
+                        </div>
                     </div>
 
                 </div>

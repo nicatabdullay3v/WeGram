@@ -8,6 +8,7 @@ import Register from "../pages/Register/Register";
 import Detail from "../pages/Detail/Detail";
 import Profile from "../pages/Profile/Profile";
 import Chat from "../pages/Chat/Chat";
+import Settings from "../pages/settingsPage/Settings";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/chat",
     element: <Chat />
+  },
+  {
+    path: "/settings",
+    element: <Settings />
   },
 
 ]);

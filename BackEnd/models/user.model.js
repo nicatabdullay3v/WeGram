@@ -14,7 +14,7 @@ const usersSchema = new mongoose.Schema(
     notifications: Array,
     password: String,
     confirmPassword: String,
-    bio: Array,
+    bio: String,
     isPublic: Boolean,
     posts: Array,
     email: String,

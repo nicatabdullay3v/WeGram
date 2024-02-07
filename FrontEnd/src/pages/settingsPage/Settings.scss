@@ -1,0 +1,52 @@
+.settings {
+  margin-top: 100px;
+  padding: 0px 100px;
+  padding-top: 30px;
+  border-left: 1px solid lightgrey;
+  border-right: 1px solid lightgrey;
+  height: 100vh;
+  .user_settings {
+    .user_name_profile_picture {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap-reverse;
+      .edit {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+        input {
+          padding-left: 10px;
+        }
+        button {
+          padding: 5px 12px;
+          border: none;
+          background-color: #30305b;
+          color: white;
+          transition: 0.5s;
+          border-radius: 6px;
+          &:hover {
+            border: 1px solid #30305b;
+            background-color: white;
+            color: #30305b;
+          }
+        }
+        p {
+          font-family: "Salsa", cursive;
+          font-size: 24px;
+        }
+      }
+      .user_settings_profile_picture {
+
+        height: 400px;
+        overflow: hidden;
+        img {
+          border-radius: 50%;
+          object-fit: cover;
+width: 200px;
+          height: 200px;
+        }
+      }
+    }
+  }
+}

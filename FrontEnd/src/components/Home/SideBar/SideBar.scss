@@ -82,6 +82,7 @@
       }
     }
     .section {
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -96,6 +97,24 @@
       }
       &:hover .icon {
         color: white;
+      }
+      .settings_drop_down {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        display: none;
+        left: 55px;
+        background-color: white;
+        border: 1px solid #30305b;
+        p {
+          transition: 0.5s;
+          &:hover {
+            background-color: #30305b;
+            color: white;
+          }
+          border-bottom: 1px solid #30305b;
+          padding: 6px 10px;
+        }
       }
       .icon {
         transition: 0.5s;

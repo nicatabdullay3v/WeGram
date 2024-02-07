@@ -15,6 +15,7 @@ import axios from "axios"
 import UsersStories from "../UsersStories/UsersStories"
 import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
+import { FaX } from "react-icons/fa6";
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
     const [comment, setcomment] = useState('')
@@ -73,9 +74,13 @@ const FollowingsPhotos = () => {
         <section id='followings_photos'>
             {modal ? <div className="comment_modal">
                 <div className="modal_up">
-                    <p className="title">
-                        comments
-                    </p>                </div>
+                    <div className="title">
+                        <p>comments</p>
+                        <FaX onClick={() => {
+                            setmodal(false)
+                        }} className="close" />
+                    </div>
+                </div>
                 <div className="modal_center">
                     {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string }) => {
                         const CommentUser = users?.find((x) => x._id == comment._id)
@@ -91,7 +96,7 @@ const FollowingsPhotos = () => {
                             </div>
                             <div className="user_comment">
                                 <p>
-                                    comment: {comment.comment}
+                                    {comment.comment}
 
                                 </p>
                             </div>
@@ -99,18 +104,20 @@ const FollowingsPhotos = () => {
                     })}
                 </div>
                 <div className="modal_end">
-                    <input value={comment} onChange={(e) => {
+                    <textarea value={comment} onChange={(e) => {
                         setcomment(e.target.value)
-                    }} type="text" />
+                    }} />
                     <button onClick={() => {
                         const FollowingUserComments = FollowingUserForComments?.posts.find((x: { id: string }) => x.id == postID)?.comments
                         const findIndex = FollowingUserForComments?.posts.findIndex((x: { id: string }) => x.id == postID)
 
-                        axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}`, {
-                            comments: [...FollowingUserForComments?.posts[findIndex].comments, { _id: LocalUser?._id, comment, commentID: uuidv4() }]
-                        }).then(() => {
-                            dispatch(getAllData())
-                        })
+                        if (comment != " " && comment != "") {
+                            axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}`, {
+                                comments: [...FollowingUserForComments?.posts[findIndex].comments, { _id: LocalUser?._id, comment, commentID: uuidv4() }]
+                            }).then(() => {
+                                dispatch(getAllData())
+                            })
+                        }
                         setcomment('')
                     }}>send</button>
                 </div>
@@ -157,7 +164,7 @@ const FollowingsPhotos = () => {
                                                 </div>
                                             </div>
                                             <div className="comment">
-                                                <FaRegComment onClick={() => {
+                                                <FaRegComment style={{ cursor: 'pointer' }} onClick={() => {
                                                     setselectedUserId(followingUser._id)
                                                     setpostID(element.id)
                                                     setmodal(true)

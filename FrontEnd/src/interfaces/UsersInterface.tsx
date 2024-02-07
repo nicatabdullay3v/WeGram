@@ -17,7 +17,9 @@ export interface Users {
     ],
     followers: [],
     followings: [],
-    requests: []
+    requests: [],
+    surname:string,
+    bio:string
 }
 export interface UsersState {
     users: Users[],

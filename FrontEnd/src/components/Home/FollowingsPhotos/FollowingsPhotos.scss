@@ -15,8 +15,18 @@
     transform: translateX(-50%) translateY(-50%);
     position: fixed;
     .title {
-      font-size: 40px;
-      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      p {
+        font-family: "Salsa", cursive;
+        font-size: 40px;
+        margin-bottom: 30px;
+      }
+      .close {
+        cursor: pointer;
+        margin-bottom: 30px;
+      }
     }
     .user_profile_picture {
       width: 50px;
@@ -26,11 +36,39 @@
         height: 100%;
       }
     }
+    .modal_center {
+      max-height: 400px;
+      overflow-y: scroll;
+      .user_comment {
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 10px;
+        min-height: 30px;
+        background-color: rgb(226, 222, 222);
+      }
+    }
+    .modal_end {
+      display: flex;
+      margin-top: 20px;
+      textarea{
+        max-width: 500px;
+        width: 100%;
+
+      }
+      button{
+        padding: 10px 12px;
+        border: none;
+        background-color: black;
+        color: white;
+        transition: 0.5s;
+        &:hover{
+          background-color: rgb(68, 68, 68);
+          color: rgb(255, 255, 255);
+        }
+      }
+    }
     .comments {
       margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
       gap: 20px;
     }
   }
