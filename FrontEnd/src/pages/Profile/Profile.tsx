@@ -128,7 +128,9 @@ const Profile = () => {
                                 </div>
                                 <div className="post-cards">
                                     {currentPosts?.map((elem: any) => {
-                                        return <div key={elem._id} className="post_card">
+                                        return <div onClick={()=>{
+                                            navigate(`/user/${LocalUserID}/posts/${elem.id}`)
+                                        }} key={elem._id} className="post_card">
                                             <div className="post">
                                                 <img src={`http://localhost:3001/${elem.img}`} alt="" />
                                             </div>

@@ -19,7 +19,8 @@ export interface Users {
     followings: [],
     requests: [],
     surname:string,
-    bio:string
+    bio:string,
+    blockList:[]
 }
 export interface UsersState {
     users: Users[],

@@ -1,7 +1,4 @@
-import { jwtDecode } from "jwt-decode";
-import { Decode } from "../../pages/Home/Home";
 import "./NavBar.scss"
-import { FaRegHeart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { BsSearch } from "react-icons/bs";
@@ -12,11 +9,11 @@ import { GrLanguage } from "react-icons/gr";
 import { Users } from "../../interfaces/UsersInterface";
 import { useNavigate } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
-import { FaRegBell } from "react-icons/fa";
+import { FaRegBell, FaRegHeart } from "react-icons/fa";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { IoChatboxOutline } from "react-icons/io5";
-import SettingsBar from "../SetiingsBar/SettingsBar";
 import SideBar from "../Home/SideBar/SideBar";
+import axios from "axios";
 const NavBar: React.FC = () => {
     const [close, setClose] = useState<boolean>(false)
     const [openRequest, setOpenRequest] = useState(false)
@@ -42,10 +39,10 @@ const NavBar: React.FC = () => {
             return x.username.trim().toLowerCase().includes(inputValue.trim().toLowerCase()) && x.username != user?.username
         }))
     }, [users, inputValue])
-    ;
-    
+        ;
+
     const LocalUser = users?.find((x) => x._id === LocalUserID);
-    
+
 
 
     return (
@@ -75,19 +72,27 @@ const NavBar: React.FC = () => {
                                 <BsSearch />
                             </div>
                             {searchOpen ? <div className="nav_search_down">
+
                                 {filteredData.map((elem) => {
-                                    return <div key={elem._id} onClick={(e) => {
-                                        e.preventDefault()
-                                        e.stopPropagation()
-                                        navigate(`/home/${elem._id}`)
-                                    }} className="user">
-                                        <div className="users_profile_img">
-                                            <img src={elem.profilePicture} alt="" />
+                                    const findIfIBlock = elem?.blockList.find((x: { _id: string }) => x._id == LocalUserID)
+                                    if (findIfIBlock) {
+
+                                    }
+                                    else {
+                                        return <div key={elem._id} onClick={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            navigate(`/home/${elem._id}`)
+                                        }} className="user">
+                                            <div className="users_profile_img">
+                                                <img src={elem.profilePicture} alt="" />
+                                            </div>
+                                            <div className="users_name">
+                                                {elem.username}
+                                            </div>
                                         </div>
-                                        <div className="users_name">
-                                            {elem.username}
-                                        </div>
-                                    </div>
+                                    }
+
                                 })}
                             </div> : null}
                         </div>
@@ -103,7 +108,10 @@ const NavBar: React.FC = () => {
                             <IoChatboxOutline className="icon" />
                         </div>
                         <div className="sections">
-                            <FaRegBell className="icon" />
+                            <FaRegBell style={{ cursor: "pointer" }} onClick={() => {
+                                setOpenRequest(openRequest == false ? true : false)
+                            }} className="icon" />
+
                         </div>
 
                         <div className="sections">
@@ -125,18 +133,38 @@ const NavBar: React.FC = () => {
                         </div>
                         <div className="requets">
                             {openRequest ? <div className="requests_box">
+                                {user?.requests.map((x: { _id: string }) => {
 
+
+                                    return users.filter((elem) => elem._id == x._id).map((element) => {
+                                        return <li>{element.username} wanna be your friend <button onClick={() => {
+                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                followers: [...user.followers, { _id: element._id }],
+                                                requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                            }).then(() => {
+                                                dispatch(getAllData())
+                                                dispatch(getUserById(LocalUserID))
+                                            })
+                                            axios.patch(`http://localhost:3001/api/users/${element._id}`, {
+                                                followings: [...element.followings, { _id: user._id }]
+                                            }).then(() => {
+                                                dispatch(getAllData())
+                                                dispatch(getUserById(LocalUserID))
+                                            })
+                                        }}>accept</button><button onClick={() => {
+                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                            }).then(() => {
+                                                dispatch(getAllData())
+                                                dispatch(getUserById(LocalUserID))
+                                            })
+                                        }}>delete</button> </li>
+                                    })
+                                })}
                             </div> : null}
-                            {/* <FaRegHeart className="heart_icon" onClick={() => {
-                                setOpenRequest(openRequest == false ? true : false)
-                            }} style={{ width: "40px", cursor: "pointer" }} />
-                            <span className="request_count">{LocalUser?.requests.length}</span> */}
+                            <FaRegHeart className="heart_icon" style={{ width: "40px", cursor: "pointer" }} />
                         </div>
-                        {/* <p style={{ marginLeft: "40px" }}>
-                            <GiHamburgerMenu className="setting_icon" onClick={() => {
-                                setClose(true)
-                            }} style={{ fontSize: "25px", cursor: "pointer" }} />
-                        </p> */}
+
                         <p style={{ marginLeft: "40px" }}>
                             <GiHamburgerMenu className="responsive_side_bar" onClick={() => {
                                 setClose(close ? false : true)

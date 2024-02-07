@@ -2,15 +2,15 @@
   margin-top: 100px;
   padding: 0px 30px;
   position: relative;
-  button{
+  button {
     border: none;
     width: 40px;
     height: 40px;
     background-color: #65659a;
-border-radius: 10px;
+    border-radius: 10px;
   }
   .add_icon {
-font-size: 26px;
+    font-size: 26px;
     border-radius: 10px;
     color: white;
     border: none;
@@ -70,7 +70,6 @@ font-size: 26px;
       background-color: #c6b5e9;
     }
 
-    /* Additional styles for selected file display */
     p {
       margin-top: 10px;
     }
@@ -113,6 +112,14 @@ font-size: 26px;
           flex-wrap: wrap;
           gap: 50px;
           background-color: white;
+          .block {
+            font-size: 40px;
+            padding: 5px;
+            background-color: #65659a;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+          }
           li {
             sup {
               padding: 1px 12px;
