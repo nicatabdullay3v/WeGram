@@ -8,9 +8,13 @@ import { useEffect, useState } from "react"
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion"
 import Pagination from '@mui/material/Pagination';
 import 'cookie-store';
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
+import { BsHeart } from "react-icons/bs";
+import { FaComment } from "react-icons/fa";
+import { HiHeart } from "react-icons/hi2";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
@@ -128,15 +132,20 @@ const Profile = () => {
                                 </div>
                                 <div className="post-cards">
                                     {currentPosts?.map((elem: any) => {
-                                        return <div onClick={()=>{
-                                            navigate(`/user/${LocalUserID}/posts/${elem.id}`)
+                                        return <div onClick={() => {
+                                            // navigate(`/user/${LocalUserID}/posts/${elem.id}`)
                                         }} key={elem._id} className="post_card">
                                             <div className="post">
                                                 <img src={`http://localhost:3001/${elem.img}`} alt="" />
                                             </div>
-                                        </div>
-                                    })}
+                                            <div>
+                                                <div className="heart"> <HiHeart className="icon" /> <p>{elem.likes.length}</p></div>
+                                                <div className="comment"> <FaComment className="icon" /><p>{elem.comments.length}</p></div>
+                                            </div>
 
+                                        </div>
+
+                                    })}
                                 </div>
 
                                 <Pagination

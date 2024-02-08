@@ -22,7 +22,9 @@ const FollowingsPhotos = () => {
     const [selectedUserId, setselectedUserId] = useState<string>("")
     const [postID, setpostID] = useState("")
     const [modal, setmodal] = useState(false)
+    const [replyOpen, setReplyOpen] = useState(false)
     const dispatch = useDispatch<AppDispatch>()
+    const [commentId, setcommentId] = useState("")
     const users = useSelector((state: RootState) => state.users.users)
     const LocalUser = useSelector((state: RootState) => state.users.user)
 
@@ -82,7 +84,7 @@ const FollowingsPhotos = () => {
                     </div>
                 </div>
                 <div className="modal_center">
-                    {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string }) => {
+                    {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string,id:string }) => {
                         const CommentUser = users?.find((x) => x._id == comment._id)
 
                         return <div className="comments">
@@ -97,11 +99,21 @@ const FollowingsPhotos = () => {
                             <div className="user_comment">
                                 <p>
                                     {comment.comment}
-
                                 </p>
+                                <button onClick={()=>{
+                                    setReplyOpen(true)
+                                    setcommentId(comment.id)
+                                
+                                }}>reply</button>
                             </div>
                         </div>
                     })}
+                  { replyOpen? <div className="reply_modal">
+                        <input type="text" />
+                        <button onClick={()=>{
+                            axios.patch(``)
+                        }}>send</button>
+                    </div> :null}
                 </div>
                 <div className="modal_end">
                     <textarea value={comment} onChange={(e) => {
