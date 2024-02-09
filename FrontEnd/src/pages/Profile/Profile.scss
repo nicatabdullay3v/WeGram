@@ -18,11 +18,22 @@
     transform: translateX(-50%);
     background-color: white;
     padding: 30px;
-    .post_modal_right{
+    .post_modal_right {
       max-width: 500px;
       padding: 20px;
       width: 100%;
-      background-color: red;
+      background-color: lightgrey;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      input {
+        height: 32px;
+        width: 400px;
+      }
+      button {
+        height: 35px;
+        width: 50px;
+      }
     }
     .post_modal_down {
       margin-top: 100px;
@@ -31,11 +42,13 @@
       align-items: center;
       .post_heart {
         .icon {
+          cursor: pointer;
           font-size: 24px;
         }
       }
       .post_comment {
         .icon {
+          cursor: pointer;
           font-size: 24px;
         }
       }

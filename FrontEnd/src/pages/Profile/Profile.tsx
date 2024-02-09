@@ -18,6 +18,7 @@ const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
+    const [comment, setcomment] = useState('')
     const [postId, setpostId] = useState('')
     const [likes, setlikes] = useState([])
     const [postModal, setpostModal] = useState(false)
@@ -83,7 +84,16 @@ const Profile = () => {
                             <img src={`http://localhost:3001/${detailPost?.img}`} alt="" />
                         </div>
                         <div className="post_modal_down">
-                            <div onClick={() => {
+                            {detailPost?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
+                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
+                                    likes: detailPost.likes.filter((x: { _id: string }) => x._id != LocalUserID)
+                                }).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                })
+                            }} className="post_heart">
+                                <HiHeart style={{ color: "red", fontSize: "26px" }} className="icon" />
+                            </div> : <div onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
                                     likes: [...detailPost?.likes!, { _id: user?._id }]
                                 }).then(() => {
@@ -92,10 +102,7 @@ const Profile = () => {
                                 })
                             }} className="post_heart">
                                 <BsHeart className="icon" />
-                            </div>
-                            <div className="post_comment">
-                                <FaComment className="icon" />
-                            </div>
+                            </div>}
                         </div>
                     </div>
                     <div className="post_modal_right">
@@ -104,6 +111,21 @@ const Profile = () => {
                                 const commentUser = users.find((z) => z._id == x._id)
                                 return <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment}</li>
                             })}
+
+                        </div>
+                        <div className="posts_comments_down">
+                            <input value={comment} onChange={(e) => {
+                                setcomment(e.target.value)
+                            }} type="text" />
+                            <button onClick={() => {
+                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
+                                    comments: [...detailPost?.comments!, { _id: LocalUserID, commentID: uuidv4(), replys: [], comment: comment }]
+                                }).then(()=>{
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                    setcomment('')
+                                })
+                            }}>send</button>
                         </div>
                     </div>
                 </div> : null}
