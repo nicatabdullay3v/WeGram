@@ -2,9 +2,55 @@
   margin-top: 100px;
   padding: 0px 30px;
   position: relative;
-
+  .post_modal {
+    display: flex;
+    justify-content: space-between;
+    position: fixed;
+    max-width: 1200px;
+    width: 100%;
+    border-radius: 10px;
+    top: 100px;
+    height: 600px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 30px;
+    .post_modal_right{
+      max-width: 500px;
+      padding: 20px;
+      width: 100%;
+      background-color: red;
+    }
+    .post_modal_down {
+      margin-top: 100px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      .post_heart {
+        .icon {
+          font-size: 24px;
+        }
+      }
+      .post_comment {
+        .icon {
+          font-size: 24px;
+        }
+      }
+    }
+    .post {
+      width: 600px;
+      height: 400px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
   .modal {
-    position: absolute;
+    position: fixed;
     max-width: 800px;
     width: 100%;
     border-radius: 10px;
@@ -157,10 +203,10 @@
             grid-template-columns: 1fr 1fr;
           }
           @media (max-width: 463px) {
-display: flex;
-justify-content: center;
-flex-direction: column;
-align-items: center;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
           }
           .post_card {
             transition: 0.5s;
@@ -320,7 +366,7 @@ align-items: center;
     }
   }
 }
-.swiper{
+.swiper {
   top: 50%;
   left: 50%;
 
