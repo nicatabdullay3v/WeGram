@@ -18,7 +18,9 @@ import Followings from "../Followings/Followings"
 import { FaX } from "react-icons/fa6";
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
-    const [comment, setcomment] = useState('')
+    const [reply, setreply] = useState("")
+    const [comment, setcomment] = useState<any>()
+    const [AxiosComment, setAxiosComment] = useState<any>()
     const [selectedUserId, setselectedUserId] = useState<string>("")
     const [postID, setpostID] = useState("")
     const [modal, setmodal] = useState(false)
@@ -68,7 +70,6 @@ const FollowingsPhotos = () => {
         })
     }
     const FollowingUserForComments: any = users?.find((x) => x._id == selectedUserId)
-    console.log(FollowingUserForComments?.posts);
     const findIndex = FollowingUserForComments?.posts.findIndex((x: { id: string }) => x.id == postID)
 
 
@@ -84,7 +85,7 @@ const FollowingsPhotos = () => {
                     </div>
                 </div>
                 <div className="modal_center">
-                    {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string,id:string }) => {
+                    {FollowingUserForComments?.posts[findIndex].comments.map((comment: { _id: string, comment: string, commentID: string, replys: [] }) => {
                         const CommentUser = users?.find((x) => x._id == comment._id)
 
                         return <div className="comments">
@@ -100,20 +101,50 @@ const FollowingsPhotos = () => {
                                 <p>
                                     {comment.comment}
                                 </p>
-                                <button onClick={()=>{
+                                <button onClick={() => {
                                     setReplyOpen(true)
-                                    setcommentId(comment.id)
-                                
+                                    setcommentId(comment.commentID)
+                                    setAxiosComment(comment)
+                                    console.log(comment.replys);
+
                                 }}>reply</button>
+                            </div>
+                            <div className="replyss">
+                                <p>replys:</p>
+                                {comment.replys && comment.replys.map((x: { reply: string, _id: string }) => {
+                                    const replyUser = users?.find((z) => z._id == x._id)
+                                    return <li>{replyUser?.username ? replyUser.username : LocalUser?.username}: {x.reply}</li>
+                                })}
                             </div>
                         </div>
                     })}
-                  { replyOpen? <div className="reply_modal">
-                        <input type="text" />
-                        <button onClick={()=>{
-                            axios.patch(``)
+                    {replyOpen ? <div className="reply_modal">
+                        <FaX onClick={() => {
+                            setReplyOpen(false)
+                        }} className="x" />
+                        <input value={reply} onChange={(e) => {
+                            setreply(e.target.value)
+                        }} type="text" />
+                        <button onClick={() => {
+                            axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}/comments/${commentId}`, {
+                                comment: AxiosComment.comment,
+                                commentID: AxiosComment.commentID,
+                                _id: AxiosComment._id,
+                                replys: [...AxiosComment?.replys, { reply: reply, _id: LocalUserID, replyID: uuidv4() }]
+
+                            }).then((res) => {
+                                setreply('')
+                                dispatch(getAllData())
+                                dispatch(getUserById(LocalUserID))
+                                console.log("salam");
+                                console.log(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}/comments/${commentId}`);
+                                console.log(res.data);
+                                console.log(res.headers);
+
+
+                            })
                         }}>send</button>
-                    </div> :null}
+                    </div> : null}
                 </div>
                 <div className="modal_end">
                     <textarea value={comment} onChange={(e) => {
@@ -125,7 +156,7 @@ const FollowingsPhotos = () => {
 
                         if (comment != " " && comment != "") {
                             axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}`, {
-                                comments: [...FollowingUserForComments?.posts[findIndex].comments, { _id: LocalUser?._id, comment, commentID: uuidv4() }]
+                                comments: [...FollowingUserForComments?.posts[findIndex].comments, { _id: LocalUser?._id, comment, commentID: uuidv4(), replys: [] }]
                             }).then(() => {
                                 dispatch(getAllData())
                             })

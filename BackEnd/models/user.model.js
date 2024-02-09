@@ -20,7 +20,7 @@ const usersSchema = new mongoose.Schema(
     email: String,
     requests: Array,
   },
-  {timestamps: true }
+  { timestamps: true, strict: true }
 );
 
 const User = mongoose.model("User", usersSchema);
