@@ -5,15 +5,13 @@
   position: relative;
   margin-bottom: 20px;
   background-color: red;
-  &::before{
-    content: "";
-    position: absolute;
-    top: 0; 
-    right: 0;
-    left: 0;
-    bottom: 0;
-    background-color: rgba(135, 207, 235, 0.707);
-  }
+
+  border-radius: 4px;
+  overflow: hidden;
+img{
+  width: 100%;
+  height: 100%;
+}
 }
 @media (max-width:992px) {
   #weather{

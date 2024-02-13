@@ -246,7 +246,7 @@ const Profile = () => {
                                         }} key={elem._id} className="post_card">
                                             <div className="post">
                                                 {elem.img.includes("mp4") ?
-                                                    <video  width="100%" >
+                                                    <video width="100%" >
                                                         <source src={`http://localhost:3001/${elem.img}`} type="video/mp4" />
                                                     </video> : <img src={`http://localhost:3001/${elem.img}`} alt="" />}
                                             </div>

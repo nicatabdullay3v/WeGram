@@ -56,7 +56,10 @@ const Detail = () => {
                 {openModal ? <div className="post_modal">
                     <div className="post_modal_left">
                         <div className="post">
-                            <img src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} alt="" />
+                            {user?.posts.find((x) => x.id == DetailPost.id)?.img.toString().includes("mp4") ?
+                                <video controls width="100%" >
+                                    <source src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} type="video/mp4" />
+                                </video> : <img src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} alt="" />}
                         </div>
                         <div className="post_modal_down">
                             {user?.posts.find((x) => x.id == DetailPost.id)?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
@@ -294,8 +297,10 @@ const Detail = () => {
                                         {user?.posts.length}
                                     </sup></p>
                                 </div>
+                                {user?.posts.length! <= 0 ? <div style={{ fontSize: "40px" }}>no picture yet</div> : null}
                                 <div className="post-cards">
                                     {user?.isPublic || findID ? user?.posts.map((elem: any) => {
+
                                         return <div key={elem._id} className="post_card">
                                             <div onClick={() => {
                                                 setopenModal(true)
@@ -311,9 +316,13 @@ const Detail = () => {
                                                     <span>{elem.comments.length}</span>
 
                                                 </div>
-                                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                                                {elem.img.includes("mp4") ?
+                                                    <video width="100%" >
+                                                        <source src={`http://localhost:3001/${elem.img}`} type="video/mp4" />
+                                                    </video> : <img src={`http://localhost:3001/${elem.img}`} alt="" />}
                                             </div>
                                         </div>
+
                                     }) : null}
                                     {user?.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div> : null}
 
