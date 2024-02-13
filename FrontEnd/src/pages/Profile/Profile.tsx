@@ -14,16 +14,23 @@ import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUse
 import { FaComment } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
 import { BsHeart } from "react-icons/bs";
+import { Users } from "../../interfaces/UsersInterface";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
     const [comment, setcomment] = useState('')
+    const [replyComment, setreplyComment] = useState("")
+    const [replyCommentUsername, setreplyCommentUsername] = useState('')
+    const [replyModal, setreplyModal] = useState(false)
     const [postId, setpostId] = useState('')
+    const [reply, setreply] = useState('')
+    const [CommentUser, setCommentUser] = useState<Users>()
     const [likes, setlikes] = useState([])
     const [postModal, setpostModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 8;
+    const [AxiosComment, setAxiosComment] = useState<any>()
     const [file, setFile] = useState<File | undefined>()
     const dispatch = useDispatch<AppDispatch>()
     const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
@@ -77,11 +84,16 @@ const Profile = () => {
     return (
         <>
             <NavBar />
+
             <div id="user_profile">
+
                 {postModal ? <div className="post_modal">
                     <div className="post_modal_left">
                         <div className="post">
-                            <img src={`http://localhost:3001/${detailPost?.img}`} alt="" />
+                            {detailPost?.img.toString().includes("mp4") ?
+                                <video controls width="100%" height="100%">
+                                    <source src={`http://localhost:3001/${detailPost?.img}`} type="video/mp4" />
+                                </video> : <img src={`http://localhost:3001/${detailPost?.img}`} alt="" />}
                         </div>
                         <div className="post_modal_down">
                             {detailPost?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
@@ -92,7 +104,7 @@ const Profile = () => {
                                     dispatch(getUserById(LocalUserID))
                                 })
                             }} className="post_heart">
-                                <HiHeart style={{ color: "red", fontSize: "26px" }} className="icon" />
+                                <HiHeart style={{ color: "red", fontSize: "26px" }} className="icon" /> <sub>{detailPost.likes.length}</sub>
                             </div> : <div onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
                                     likes: [...detailPost?.likes!, { _id: user?._id }]
@@ -101,15 +113,54 @@ const Profile = () => {
                                     dispatch(getUserById(LocalUserID))
                                 })
                             }} className="post_heart">
-                                <BsHeart className="icon" />
+                                <BsHeart className="icon" /> <sub>{detailPost?.likes.length}</sub>
                             </div>}
                         </div>
                     </div>
                     <div className="post_modal_right">
                         <div className="post_comments">
-                            {detailPost?.comments.map((x: { comment: string, _id: string }) => {
+                            {replyModal ? <div className="reply">
+                                <div>
+                                    <span>{replyCommentUsername ? replyCommentUsername : user?.username}: </span>
+
+                                    <div>
+                                        <p>{replyComment} </p>
+
+                                    </div>
+                                </div>
+                                <div>           <input value={reply} onChange={(e) => {
+                                    setreply(e.target.value)
+                                }} type="text" /><span><button onClick={() => {
+                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}/comments/${AxiosComment.commentID}`, {
+                                        comment: AxiosComment.comment,
+                                        commentID: AxiosComment.commentID,
+                                        _id: AxiosComment._id,
+                                        replys: [...AxiosComment?.replys, { reply: reply, _id: LocalUserID, replyID: uuidv4() }]
+
+                                    }).then(() => {
+                                        dispatch(getAllData())
+                                        dispatch(getUserById(LocalUserID))
+                                        setreply('')
+                                    })
+                                }}>send</button></span></div>
+                            </div> : null}
+                            {detailPost?.comments.map((x: { comment: string, _id: string, replys: any }) => {
                                 const commentUser = users.find((z) => z._id == x._id)
-                                return <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment}</li>
+                                return <div>
+                                    <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment} <button onClick={() => {
+                                        setreplyComment(x.comment)
+                                        setreplyCommentUsername(commentUser?.username!)
+                                        setreplyModal(true)
+                                        setAxiosComment(x)
+                                        setCommentUser(commentUser)
+
+                                    }}>reply</button></li>
+                                    <div className="replys">
+                                        {x.replys.map((elem: any) => {
+                                            return <li>{elem.reply}</li>
+                                        })}
+                                    </div>
+                                </div>
                             })}
 
                         </div>
@@ -120,7 +171,7 @@ const Profile = () => {
                             <button onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
                                     comments: [...detailPost?.comments!, { _id: LocalUserID, commentID: uuidv4(), replys: [], comment: comment }]
-                                }).then(()=>{
+                                }).then(() => {
                                     dispatch(getAllData())
                                     dispatch(getUserById(LocalUserID))
                                     setcomment('')
@@ -194,7 +245,10 @@ const Profile = () => {
 
                                         }} key={elem._id} className="post_card">
                                             <div className="post">
-                                                <img src={`http://localhost:3001/${elem.img}`} alt="" />
+                                                {elem.img.includes("mp4") ?
+                                                    <video  width="100%" >
+                                                        <source src={`http://localhost:3001/${elem.img}`} type="video/mp4" />
+                                                    </video> : <img src={`http://localhost:3001/${elem.img}`} alt="" />}
                                             </div>
                                             <div>
                                                 <div className="heart"> <HiHeart className="icon" /> <p>{elem.likes.length}</p></div>

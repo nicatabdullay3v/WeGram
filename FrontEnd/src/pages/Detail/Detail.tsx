@@ -13,34 +13,136 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 import { GoBlocked } from "react-icons/go";
+import { FaComment, FaHeart } from "react-icons/fa";
+import { HiHeart } from "react-icons/hi2";
+import { BsHeart } from "react-icons/bs";
+import { v4 as uuidv4 } from 'uuid';
 const Detail = () => {
     const navigate = useNavigate()
-
+    const [openModal, setopenModal] = useState(false)
+    const [DetailPost, setDetailPost] = useState<any>()
+    const [reply, setreply] = useState('')
+    const [replyModal, setreplyModal] = useState(false)
+    const [comment, setcomment] = useState('')
+    const [commentAll, setcommentAll] = useState<any>()
     const { id } = useParams()
     const dispatch = useDispatch<AppDispatch>()
     const users = useSelector((state: RootState) => state.users.users)
-    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
     const LocalUser = useSelector((state: RootState) => state.users.user)
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
     const user = users.find((x) => x._id == id)
     const findID = user?.followers.find((x: { _id: string }) => x._id == LocalUserID)
     const findrequest = user?.requests.find((x: { _id: string }) => x._id == LocalUserID)
     const findBlockUser = LocalUser?.blockList.find((x: { _id: string }) => x._id == user?._id)
     const findIfIBlock = user?.blockList.find((x: { _id: string }) => x._id == LocalUserID)
 
+
+
     useEffect(() => {
-        dispatch(getAllData())
-        dispatch(getUserById(LocalUserID))
         if (findIfIBlock) {
             navigate("/home")
         }
+        console.log("salam");
+
+        dispatch(getAllData())
+        dispatch(getUserById(LocalUserID))
+
     }, [])
 
     return (
         <>
             <NavBar />
-
             <div id="user_profile">
+                {openModal ? <div className="post_modal">
+                    <div className="post_modal_left">
+                        <div className="post">
+                            <img src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} alt="" />
+                        </div>
+                        <div className="post_modal_down">
+                            {user?.posts.find((x) => x.id == DetailPost.id)?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
+                                axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
+                                    likes: user?.posts.find((x) => x.id == DetailPost.id)!.likes.filter((x: { _id: string }) => x._id != LocalUserID)
+                                }).then((res) => {
 
+                                    dispatch(getUserById(LocalUserID))
+                                    dispatch(getAllData())
+                                })
+                            }} className="post_heart">
+                                <HiHeart style={{ color: "red", fontSize: "26px" }} className="icon" /> <sub>{user?.posts.find((x) => x.id == DetailPost.id)?.likes.length}</sub>
+                            </div> : <div onClick={() => {
+                                console.log(DetailPost);
+
+                                axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
+                                    likes: [...user?.posts.find((x) => x.id == DetailPost.id)?.likes!, { _id: LocalUserID }]
+                                }).then(() => {
+                                    dispatch(getUserById(LocalUserID))
+
+                                    dispatch(getAllData())
+
+
+                                })
+                            }} className="post_heart">
+                                <BsHeart className="icon" /> <sub>{user?.posts.find((x) => x.id == DetailPost.id)?.likes.length}</sub>
+                            </div>}
+                        </div>
+                    </div>     <div className="post_modal_right">
+                        <div className="post_comments">
+                            {replyModal ? <div className="reply">
+                                <div>
+
+                                    <div>
+                                    </div>
+                                </div>
+                                <div>           <input onChange={(e) => {
+                                    setreply(e.target.value)
+                                }} type="text" /><span><button onClick={() => {
+                                    axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}/comments/${commentAll.commentID}`, {
+                                        comment: commentAll.comment,
+                                        commentID: commentAll.commentID,
+                                        _id: commentAll._id,
+                                        replys: [...commentAll?.replys, { reply: reply, _id: LocalUserID, replyID: uuidv4() }]
+
+                                    }).then(() => {
+                                        dispatch(getAllData())
+                                        dispatch(getUserById(LocalUserID))
+                                        setreply('')
+                                    })
+                                }}>send</button></span></div>
+                            </div> : null}
+
+                            {user?.posts.find((x) => x.id == DetailPost.id)?.comments.map((x: { comment: string, _id: string, commentID: string, replys: any }) => {
+                                const commentUser = users.find((z) => z._id == x._id)
+                                return <div>
+                                    <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment} <button onClick={() => {
+                                        setcommentAll(x)
+                                        setreplyModal(true)
+                                    }}>reply</button></li>
+
+                                    <div className="relpy">
+                                        {x.replys.map((elem: any) => {
+                                            return <li>{elem.reply}</li>
+                                        })}
+                                    </div>
+                                </div>
+                            })}
+                        </div>
+
+                        <div className="posts_comments_down">
+                            <input onChange={(e) => {
+                                setcomment(e.target.value)
+                            }} type="text" />
+                            <button onClick={() => {
+                                axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
+                                    comments: [...user?.posts.find((x) => x.id == DetailPost.id)?.comments!, { _id: LocalUserID, commentID: uuidv4(), replys: [], comment: comment }]
+                                }).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                    setcomment('')
+                                })
+                            }}>send</button>
+                        </div>
+                    </div>
+                </div> : null}
                 <div className="container">
                     <div className="user_profile">
                         <div className="user_profile_up">
@@ -195,7 +297,20 @@ const Detail = () => {
                                 <div className="post-cards">
                                     {user?.isPublic || findID ? user?.posts.map((elem: any) => {
                                         return <div key={elem._id} className="post_card">
-                                            <div className="post">
+                                            <div onClick={() => {
+                                                setopenModal(true)
+                                                setDetailPost(elem)
+                                            }} className="post">
+                                                <div className="icons">
+                                                    <FaHeart className="icon" />
+
+                                                    <span>{elem.likes.length}</span>
+
+                                                    <FaComment className="icon" />
+
+                                                    <span>{elem.comments.length}</span>
+
+                                                </div>
                                                 <img src={`http://localhost:3001/${elem.img}`} alt="" />
                                             </div>
                                         </div>

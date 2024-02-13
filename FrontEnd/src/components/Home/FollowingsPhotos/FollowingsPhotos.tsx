@@ -16,6 +16,7 @@ import UsersStories from "../UsersStories/UsersStories"
 import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 import { FaX } from "react-icons/fa6";
+import MyFollowers from "../myFollowers/MyFollowers";
 const FollowingsPhotos = () => {
     const [heartCount, setHeartCount] = useState(0);
     const [reply, setreply] = useState("")
@@ -167,7 +168,7 @@ const FollowingsPhotos = () => {
             </div> : null}
             <div className="container">
                 <div className="left_side_bar">
-                    <Weather />
+                    <MyFollowers />
                     <Weather />
                     <Followings />
                 </div>
@@ -188,7 +189,10 @@ const FollowingsPhotos = () => {
                                     </div>
                                     <div className="card_center">
                                         <div className="card_post">
-                                            <img src={`http://localhost:3001/${element.img}`} alt="" />
+                                            {element?.img.toString().includes("mp4") ?
+                                                <video controls width="100%" height="100%">
+                                                    <source src={`http://localhost:3001/${element?.img}`} type="video/mp4" />
+                                                </video> : <img src={`http://localhost:3001/${element?.img}`} alt="" />}
                                         </div>
                                     </div>
                                     <div className="card_down">
