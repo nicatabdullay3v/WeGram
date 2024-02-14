@@ -67,7 +67,7 @@ const NavBar: React.FC = () => {
                                 }, 300);
                             }} onFocus={() => {
                                 setSearchOpen(true)
-                            }} placeholder="Search" type="text" />
+                            }} placeholder="Search..." type="text" />
                             <div className="icon">
                                 <BsSearch />
                             </div>

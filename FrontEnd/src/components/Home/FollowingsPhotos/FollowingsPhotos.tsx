@@ -17,8 +17,29 @@ import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 import { FaX } from "react-icons/fa6";
 import MyFollowers from "../myFollowers/MyFollowers";
+const calculateTimeElapsed = (postTime:any) => {
+    const currentTime = new Date();
+    const postDate = new Date(postTime);
+    const timeDifference = Number(currentTime) - Number(postDate);
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+        return `${days}d ago`;
+    } else if (hours > 0) {
+        return `${hours}h ago`;
+    } else if (minutes > 0) {
+        return `${minutes}m ago`;
+    } else {
+        return `${seconds}s ago`;
+    }
+};
 const FollowingsPhotos = () => {
+
     const [heartCount, setHeartCount] = useState(0);
+    const [timeElapsed, setTimeElapsed] = useState('');
     const [reply, setreply] = useState("")
     const [comment, setcomment] = useState<any>()
     const [AxiosComment, setAxiosComment] = useState<any>()
@@ -39,11 +60,11 @@ const FollowingsPhotos = () => {
     }, [])
 
     // SortAll Posts-=-=-=-==-=-=--=-=-=
-    const allPosts: { img: File; time: string; userId: string; comments: [], id: string; likes: [] }[] = [];
+    const allPosts: { img: File; time: string; userId: string; comments: [], id: string; likes: [],title:string  }[] = [];
     users.forEach((followingUser) => {
         if (LocalUser?.followings.find((elem: { _id: string }) => elem._id === followingUser._id)) {
             allPosts.push(
-                ...followingUser.posts.map((post: { img: File; time: string; comments: []; id: string, likes: [] }) => ({
+                ...followingUser.posts.map((post: { img: File; time: string; comments: []; id: string, likes: [],title:string  }) => ({
                     ...post,
                     userId: followingUser._id,
                 }))
@@ -102,27 +123,38 @@ const FollowingsPhotos = () => {
                                 <p>
                                     {comment.comment}
                                 </p>
-                                <button onClick={() => {
-                                    setReplyOpen(true)
-                                    setcommentId(comment.commentID)
-                                    setAxiosComment(comment)
-                                    console.log(comment.replys);
 
-                                }}>reply</button>
                             </div>
-                            <div className="replyss">
-                                <p>replys:</p>
-                                {comment.replys && comment.replys.map((x: { reply: string, _id: string }) => {
-                                    const replyUser = users?.find((z) => z._id == x._id)
-                                    return <li>{replyUser?.username ? replyUser.username : LocalUser?.username}: {x.reply}</li>
-                                })}
-                            </div>
+                            <p className="more" style={{ cursor: "pointer" }} onClick={() => {
+                                setReplyOpen(true)
+                                setcommentId(comment.commentID)
+                                setAxiosComment(comment)
+                                console.log(comment.replys);
+
+                            }}>more...</p>
                         </div>
                     })}
                     {replyOpen ? <div className="reply_modal">
                         <FaX onClick={() => {
                             setReplyOpen(false)
                         }} className="x" />
+                        {AxiosComment.replys && AxiosComment.replys.map((x: { reply: string, _id: string }) => {
+                            const replyUser = users?.find((z) => z._id == x._id)
+                            return <>
+                                <div className="user">
+                                    <div className="user_picture">
+                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                    </div>
+                                    <div className="user_username">
+                                        <p>{replyUser?.username ? replyUser.username : LocalUser?.username}</p>
+                                    </div>
+
+
+                                </div>
+                                <div className="user_reply">
+                                    {x.reply}
+                                </div></>
+                        })}
                         <input value={reply} onChange={(e) => {
                             setreply(e.target.value)
                         }} type="text" />
@@ -141,8 +173,7 @@ const FollowingsPhotos = () => {
                                 console.log(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}/comments/${commentId}`);
                                 console.log(res.data);
                                 console.log(res.headers);
-
-
+                                setReplyOpen(false)
                             })
                         }}>send</button>
                     </div> : null}
@@ -175,8 +206,10 @@ const FollowingsPhotos = () => {
                 <div className="followings_photos">
                     <UsersStories />
                     <div className="followings_photos">
-                        {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [] }) => {
+                        {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [],title:string }) => {
                             const followingUser = users.find((u) => u._id === element.userId);
+
+
                             return followingUser ? (
                                 <div key={element.id} className="card" >
                                     <div className="card_up">
@@ -196,6 +229,10 @@ const FollowingsPhotos = () => {
                                         </div>
                                     </div>
                                     <div className="card_down">
+                                        <div className="title">
+                                            
+                                            <p style={{marginBottom:"20px"}}>{element.title =="Default Title"?null:<span>@{followingUser.username}:</span>} {element.title =="Default Title"? null:element.title}</p>
+                                        </div>
                                         <div className="card_like_comment_share">
                                             <div className="like">
                                                 {followingUser.posts[followingUser.posts.findIndex((x: { id: string }) => x.id == element.id)].likes.find((x: { _id: string }) => x._id == LocalUser?._id) == undefined ? <CiHeart className={`post-like ${heartCount > 0 ? 'hidden' : ''}`} onClick={() => {
@@ -204,12 +241,15 @@ const FollowingsPhotos = () => {
                                                     unLike(followingUser, element)
                                                 }} />
                                                 }
+
                                                 <div className="likes-count">
                                                     <span>
                                                         {followingUser.posts[followingUser.posts.findIndex((x: { id: string }) => x.id == element.id)].likes.length}
                                                     </span>
                                                 </div>
+
                                             </div>
+
                                             <div className="comment">
                                                 <FaRegComment style={{ cursor: 'pointer' }} onClick={() => {
                                                     setselectedUserId(followingUser._id)
@@ -225,6 +265,7 @@ const FollowingsPhotos = () => {
                                             <div className="share">
                                                 <FaRegShareSquare />
                                             </div>
+                                            <span style={{fontSize:"13px"}}>{calculateTimeElapsed(element.time)}</span>
                                         </div>
                                     </div>
                                 </div>

@@ -12,7 +12,8 @@ export interface Users {
             userId: string,
             comments: [
 
-            ]
+            ],
+            title:string 
         }
     ],
     followers: [],
@@ -20,7 +21,8 @@ export interface Users {
     requests: [],
     surname:string,
     bio:string,
-    blockList:[]
+    blockList:[],
+    backGroundPicture:string
 }
 export interface UsersState {
     users: Users[],

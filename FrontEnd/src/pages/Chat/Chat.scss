@@ -1,10 +1,12 @@
-.chat {
+.chat { 
   @media (max-width:992px) {
     display: none;
     
   }
   padding: 80px;
 .chat_border{
+  color: black;
+  backdrop-filter: blur(10px); 
   display: flex;
   justify-content: center;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
@@ -38,7 +40,7 @@ height: 100%;
       }
       .icon {
         color: white;
-        background-color: #30305b;
+        background-color: #3E6C7B;
         font-size: 40px;
         padding: 8px;
         border-radius: 50%;
@@ -94,7 +96,7 @@ height: 100%;
       gap: 20px;
       align-items: center;
       padding: 20px 20px;
-      background-color: #30305b;
+      background-color: #3E6C7B;
       p {
         color: lightgrey;
         span {
@@ -115,7 +117,7 @@ height: 100%;
           width: 100%;
           p {
             padding: 10px 12px;
-            background-color: #30305b;
+            background-color: #3E6C7B;
             color: white;
             word-break: break-all;
             border-radius: 10px;
@@ -166,7 +168,7 @@ height: 100%;
       }
       .message_send_button {
         padding: 10px 12px;
-        background-color: #30305b;
+        background-color: #3E6C7B;
         color: white;
         cursor: pointer;
         border-radius: 10px;

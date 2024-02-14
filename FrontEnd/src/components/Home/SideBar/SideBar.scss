@@ -40,7 +40,7 @@
         border-bottom: 1px solid lightgray;
         transition: 0.5s;
         &:hover {
-          background-color: #45456c;
+          background-color: #3E6C7B;
           color: white;
         }
       }
@@ -75,7 +75,7 @@
     align-items: center;
     gap: 15px;
     #section_menu {
-      background-color: #30305b;
+      background-color: #3E6C7B;
       .icon {
         color: white;
         font-size: 20px;
@@ -93,7 +93,7 @@
       border-radius: 50%;
       transition: 0.5s;
       &:hover {
-        background-color: #30305b;
+        background-color: #3E6C7B;
       }
       &:hover .icon {
         color: white;
@@ -105,20 +105,20 @@
         display: none;
         left: 55px;
         background-color: white;
-        border: 1px solid #30305b;
+        border: 1px solid #3E6C7B;
         p {
           transition: 0.5s;
           &:hover {
-            background-color: #30305b;
+            background-color: #3E6C7B;
             color: white;
           }
-          border-bottom: 1px solid #30305b;
+          border-bottom: 1px solid #3E6C7B;
           padding: 6px 10px;
         }
       }
       .icon {
         transition: 0.5s;
-        color: #30305b;
+        color: #3E6C7B;
         font-size: 15px;
       }
     }

@@ -13,16 +13,19 @@ import 'cookie-store';
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 import { FaComment } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
-import { BsHeart } from "react-icons/bs";
+import { BsHeart, BsX } from "react-icons/bs";
 import { Users } from "../../interfaces/UsersInterface";
+import { IoSettings } from "react-icons/io5";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
     const [comment, setcomment] = useState('')
+    const [backinput, setbackinput] = useState("")
     const [replyComment, setreplyComment] = useState("")
     const [replyCommentUsername, setreplyCommentUsername] = useState('')
     const [replyModal, setreplyModal] = useState(false)
+    const [blockListModal, setblockListModal] = useState(false)
     const [postId, setpostId] = useState('')
     const [reply, setreply] = useState('')
     const [CommentUser, setCommentUser] = useState<Users>()
@@ -30,6 +33,9 @@ const Profile = () => {
     const [postModal, setpostModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1);
     const postsPerPage = 8;
+    const [followersModal, setfollowersModal] = useState(false)
+    const [followingsModal, setFollowingsModal] = useState(false)
+    const [sett, setSett] = useState(false)
     const [AxiosComment, setAxiosComment] = useState<any>()
     const [file, setFile] = useState<File | undefined>()
     const dispatch = useDispatch<AppDispatch>()
@@ -86,8 +92,89 @@ const Profile = () => {
             <NavBar />
 
             <div id="user_profile">
+                {blockListModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>BlockList</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setblockListModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.blockList.map((x: { _id: string }) => {
 
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture} alt="" />
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username}</p>
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
+                {followersModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>My Followers</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setfollowersModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.followers.map((x: { _id: string }) => {
+
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture} alt="" />
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username}</p>
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
+                {followingsModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>My Followings</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setFollowingsModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.followings.map((x: { _id: string }) => {
+
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture} alt="" />
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username}</p>
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
                 {postModal ? <div className="post_modal">
+                    <BsX className="postx" style={{ cursor: "pointer" }} onClick={() => {
+                        setpostModal(false)
+
+                    }} />
                     <div className="post_modal_left">
                         <div className="post">
                             {detailPost?.img.toString().includes("mp4") ?
@@ -95,7 +182,12 @@ const Profile = () => {
                                     <source src={`http://localhost:3001/${detailPost?.img}`} type="video/mp4" />
                                 </video> : <img src={`http://localhost:3001/${detailPost?.img}`} alt="" />}
                         </div>
+                        <p style={{ marginTop: "20px" }}>
+                            {detailPost?.title != "Default Title" ? detailPost?.title : null}
+
+                        </p>
                         <div className="post_modal_down">
+
                             {detailPost?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
                                     likes: detailPost.likes.filter((x: { _id: string }) => x._id != LocalUserID)
@@ -120,12 +212,35 @@ const Profile = () => {
                     <div className="post_modal_right">
                         <div className="post_comments">
                             {replyModal ? <div className="reply">
+
                                 <div>
-                                    <span>{replyCommentUsername ? replyCommentUsername : user?.username}: </span>
+                                    <div style={{ textAlign: "end" }} className="user_comment">
+                                        <BsX style={{ cursor: "pointer" }} onClick={() => {
+                                            setreplyModal(false)
 
+                                        }} />
+
+                                        {AxiosComment.replys.map((x: { reply: string, _id: string }) => {
+                                            const replyUser = users.find((z) => z._id == x._id)
+                                            return <div style={{ textAlign: "start" }} className="user_replys">
+                                                <div className="user">
+                                                    <div className="user_picture">
+                                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : user?.profilePicture} alt="" />
+                                                    </div>
+                                                    <div className="user_name">
+                                                        <p>
+                                                            {replyUser?.username ? replyUser.username : user?.username}:
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <p className="replyy">{x.reply}</p>
+
+                                            </div>
+
+
+                                        })}
+                                    </div>
                                     <div>
-                                        <p>{replyComment} </p>
-
                                     </div>
                                 </div>
                                 <div>           <input value={reply} onChange={(e) => {
@@ -141,25 +256,34 @@ const Profile = () => {
                                         dispatch(getAllData())
                                         dispatch(getUserById(LocalUserID))
                                         setreply('')
+                                        setreplyModal(false)
                                     })
                                 }}>send</button></span></div>
                             </div> : null}
                             {detailPost?.comments.map((x: { comment: string, _id: string, replys: any }) => {
                                 const commentUser = users.find((z) => z._id == x._id)
-                                return <div>
-                                    <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment} <button onClick={() => {
+                                return <div className="user_comments">
+                                    <div className="user">
+                                        <div className="user_picture">
+                                            <img src={commentUser?.username ? commentUser?.profilePicture : user?.profilePicture} alt="" />
+
+                                        </div>
+                                        <div className="user_name">
+                                            <p> {commentUser?.username ? commentUser?.username : user?.username} :</p>
+                                        </div>
+
+                                    </div>
+                                    <div className="comment">
+                                        <p>{x.comment}</p>
+                                    </div>
+                                    <button onClick={() => {
                                         setreplyComment(x.comment)
                                         setreplyCommentUsername(commentUser?.username!)
                                         setreplyModal(true)
                                         setAxiosComment(x)
                                         setCommentUser(commentUser)
 
-                                    }}>reply</button></li>
-                                    <div className="replys">
-                                        {x.replys.map((elem: any) => {
-                                            return <li>{elem.reply}</li>
-                                        })}
-                                    </div>
+                                    }}>more...</button>
                                 </div>
                             })}
 
@@ -214,15 +338,38 @@ const Profile = () => {
                                 <div className="user_profile_picture">
                                     <img src={user?.profilePicture} alt="" />
                                 </div>
-                                <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
+                                <IoSettings onClick={() => {
+                                    setSett(sett === true ? false : true)
+                                }} style={{ position: "absolute", top: "20px", right: "20px", fontSize: "22px", color: "white", cursor: "pointer" }} />
+                                {sett ? <div className="backGroundSettings">
+                                    <input placeholder="Set new photo url" onChange={(e)=>{
+                                        setbackinput(e.target.value)
+                                    }} type="text" />
+                                    <button onClick={()=>{
+                                        axios.patch(`http://localhost:3001/api/users/${user?._id}`,{
+                                            backGroundPicture: backinput
+                                        }).then(()=>{
+                                            dispatch(getAllData())
+                                            dispatch(getUserById(LocalUserID))
+                                            setbackinput('')
+                                            setSett(false)
+                                        })
+                                    }} >set</button>
+                                </div> : null}
+                                <img src={user?.backGroundPicture} alt="" />
                             </div>
                             <ul className="user_profile_up_about">
                                 <li>{user?.username}</li>
-                                <li>Vidios</li>
-                                <li>Photos</li>
-                                <li>History</li>
-                                <li>Followers <sup>{user?.followers.length}</sup></li>
-                                <li>Followings <sup>{user?.followings.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setfollowersModal(true)
+                                }}>Followers <sup>{user?.followers.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setFollowingsModal(true)
+                                }}>Followings <sup>{user?.followings.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setblockListModal(true)
+                                }}>BlockList <sup>{user?.blockList.length}</sup></li>
+                                <li style={{ width: "400px" }}> <p style={{ fontWeight: "700", fontSize: "20px", backgroundColor: "lightgrey", width: "100%", padding: "5px", borderRadius: "6px", paddingLeft: "20px" }}>{user?.bio}</p></li>
                             </ul>
                         </div>
                         <div className="user_profile_down">

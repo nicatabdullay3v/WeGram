@@ -3,7 +3,7 @@ import NavBar from "../../components/NavBar/NavBar"
 import { AppDispatch, RootState } from "../../redux/store"
 import "./Settings.scss"
 import { useDispatch, useSelector } from "react-redux"
-import { getUserById } from "../../redux/Slices/usersSlice"
+import { getAllData, getUserById } from "../../redux/Slices/usersSlice"
 import axios from "axios"
 const Settings = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -21,7 +21,6 @@ const Settings = () => {
   const [bioInput, setBioInput] = useState(false)
   const [img, setImg] = useState<string>("");
   const [imgInput, setImgInput] = useState(false)
-
 
   return (
     <>
@@ -80,6 +79,20 @@ const Settings = () => {
                   <button onClick={() => {
                     setSurnameInput(false)
                   }} style={{ display: surnameInput ? "block" : "none" }}>close</button>
+                </div>
+                <div className="user_settings_bio edit">
+                  <p>isPublic: {LocalUser?.bio ? LocalUser.isPublic? "true":"false" : "empty"}</p>
+                  <button onClick={()=>{
+                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`,{
+                      isPublic: LocalUser?.isPublic=== true ? false:true
+                    }).then(()=>{
+                      dispatch(getUserById(LocalUserID))
+                      dispatch(getAllData())
+                    })
+                  }}>change</button>
+
+
+
                 </div>
                 <div className="user_settings_bio edit">
                   <p>Bio: {LocalUser?.bio ? LocalUser.bio : "empty"}</p>
