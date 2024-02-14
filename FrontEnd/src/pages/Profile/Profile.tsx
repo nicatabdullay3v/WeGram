@@ -5,7 +5,7 @@ import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react"
-import { AiOutlineClose } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from '@mui/material/Pagination';
@@ -15,7 +15,9 @@ import { FaComment } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
 import { BsHeart, BsX } from "react-icons/bs";
 import { Users } from "../../interfaces/UsersInterface";
+import Swal from 'sweetalert2'
 import { IoSettings } from "react-icons/io5";
+import { PiDotsThree } from "react-icons/pi";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
@@ -106,6 +108,8 @@ const Profile = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setblockListModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
@@ -132,6 +136,8 @@ const Profile = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setfollowersModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
@@ -158,6 +164,8 @@ const Profile = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setFollowingsModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
@@ -175,6 +183,31 @@ const Profile = () => {
                         setpostModal(false)
 
                     }} />
+                    <AiFillDelete onClick={() => {
+                        Swal.fire({
+                            title: "Are you sure?",
+                            text: "You won't be able to revert this!",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#3085d6",
+                            cancelButtonColor: "#d33",
+                            confirmButtonText: "Yes, delete it!"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                });
+                                axios.delete(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                    setpostModal(false)
+                                })
+                            }
+                        });
+
+                    }} style={{ color: "red", cursor: "pointer" }} className="post_dots" />
                     <div className="post_modal_left">
                         <div className="post">
                             {detailPost?.img.toString().includes("mp4") ?
@@ -342,13 +375,13 @@ const Profile = () => {
                                     setSett(sett === true ? false : true)
                                 }} style={{ position: "absolute", top: "20px", right: "20px", fontSize: "22px", color: "white", cursor: "pointer" }} />
                                 {sett ? <div className="backGroundSettings">
-                                    <input placeholder="Set new photo url" onChange={(e)=>{
+                                    <input placeholder="Set new photo url" onChange={(e) => {
                                         setbackinput(e.target.value)
                                     }} type="text" />
-                                    <button onClick={()=>{
-                                        axios.patch(`http://localhost:3001/api/users/${user?._id}`,{
+                                    <button onClick={() => {
+                                        axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
                                             backGroundPicture: backinput
-                                        }).then(()=>{
+                                        }).then(() => {
                                             dispatch(getAllData())
                                             dispatch(getUserById(LocalUserID))
                                             setbackinput('')

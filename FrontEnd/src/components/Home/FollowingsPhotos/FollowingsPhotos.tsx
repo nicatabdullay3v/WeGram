@@ -17,6 +17,7 @@ import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 import { FaX } from "react-icons/fa6";
 import MyFollowers from "../myFollowers/MyFollowers";
+import { useNavigate } from "react-router-dom";
 const calculateTimeElapsed = (postTime:any) => {
     const currentTime = new Date();
     const postDate = new Date(postTime);
@@ -37,7 +38,7 @@ const calculateTimeElapsed = (postTime:any) => {
     }
 };
 const FollowingsPhotos = () => {
-
+    const navigate = useNavigate()
     const [heartCount, setHeartCount] = useState(0);
     const [timeElapsed, setTimeElapsed] = useState('');
     const [reply, setreply] = useState("")
@@ -212,7 +213,9 @@ const FollowingsPhotos = () => {
 
                             return followingUser ? (
                                 <div key={element.id} className="card" >
-                                    <div className="card_up">
+                                    <div style={{cursor:"pointer"}} onClick={()=>{
+                                        navigate(`/home/${followingUser._id}`)
+                                    }} className="card_up">
                                         <div className="card_up_profile_img">
                                             <img src={followingUser.profilePicture} alt="" />
                                         </div>

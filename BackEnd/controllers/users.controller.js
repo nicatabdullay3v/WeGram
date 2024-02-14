@@ -112,6 +112,36 @@ export const getPostById = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
+
+export const deletePostById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const postId = req.params.postId;
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const postIndex = user.posts.findIndex((p) => p.id === postId);
+
+    if (postIndex === -1) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    // Remove the post from the user's posts array
+    user.posts.splice(postIndex, 1);
+
+    // Save the updated user document
+    await user.save();
+
+    res.status(200).send({ message: "Post deleted" });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
+
 // Comments=-=-=-===-=
 export const getCommentById = async (req, res) => {
   try {

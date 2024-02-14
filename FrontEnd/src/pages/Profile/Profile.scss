@@ -2,6 +2,12 @@
   margin-top: 100px;
   padding: 0px 30px;
   position: relative;
+  .post_dots{
+    position: absolute;
+    top: 8px;
+    font-size: 20px;
+    right: 40px;
+  }
   .MuiButtonBase-root {
     background-color: #3e6c7b;
   }

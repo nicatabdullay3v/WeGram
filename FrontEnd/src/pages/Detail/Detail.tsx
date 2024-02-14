@@ -42,16 +42,16 @@ const Detail = () => {
     const findBlockUser = LocalUser?.blockList.find((x: { _id: string }) => x._id == user?._id)
     const findIfIBlock = user?.blockList.find((x: { _id: string }) => x._id == LocalUserID)
 
-    if (id=="undefined") {
+    if (id == "undefined") {
         navigate("/profile")
-        
+
     }
 
     useEffect(() => {
         if (findIfIBlock) {
             navigate("/home")
         }
-    
+
         console.log("salam");
 
         dispatch(getAllData())
@@ -64,6 +64,11 @@ const Detail = () => {
             <NavBar />
             <div id="user_profile">
                 {openModal ? <div className="post_modal">
+                    <BsX className="postx" style={{ cursor: "pointer" }} onClick={() => {
+                        setopenModal(false)
+
+                    }} />
+
                     <div className="post_modal_left">
                         <div className="post">
                             {user?.posts.find((x) => x.id == DetailPost.id)?.img.toString().includes("mp4") ?
@@ -71,6 +76,10 @@ const Detail = () => {
                                     <source src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} type="video/mp4" />
                                 </video> : <img src={`http://localhost:3001/${user?.posts.find((x) => x.id == DetailPost.id)?.img}`} alt="" />}
                         </div>
+                        <p style={{ marginTop: "20px" }}>
+                            {DetailPost?.title != "Default Title" ? DetailPost?.title : null}
+
+                        </p>
                         <div className="post_modal_down">
                             {user?.posts.find((x) => x.id == DetailPost.id)?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
@@ -102,7 +111,32 @@ const Detail = () => {
                         <div className="post_comments">
                             {replyModal ? <div className="reply">
                                 <div>
+                                    <div style={{ textAlign: "end" }} className="user_comment">
+                                        <BsX style={{ cursor: "pointer" }} onClick={() => {
+                                            setreplyModal(false)
 
+                                        }} />
+
+                                        {commentAll.replys.map((x: { reply: string, _id: string }) => {
+                                            const replyUser = users.find((z) => z._id == x._id)
+                                            return <div style={{ textAlign: "start" }} className="user_replys">
+                                                <div className="user">
+                                                    <div className="user_picture">
+                                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                                    </div>
+                                                    <div className="user_name">
+                                                        <p>
+                                                            {replyUser?.username ? replyUser.username : LocalUser?.username}:
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <p className="replyy">{x.reply}</p>
+
+                                            </div>
+
+
+                                        })}
+                                    </div>
                                     <div>
                                     </div>
                                 </div>
@@ -119,6 +153,7 @@ const Detail = () => {
                                         dispatch(getAllData())
                                         dispatch(getUserById(LocalUserID))
                                         setreply('')
+                                        setreplyModal(false)
                                     })
                                 }}>send</button></span></div>
                             </div> : null}
@@ -126,22 +161,28 @@ const Detail = () => {
                             {user?.posts.find((x) => x.id == DetailPost.id)?.comments.map((x: { comment: string, _id: string, commentID: string, replys: any }) => {
                                 const commentUser = users.find((z) => z._id == x._id)
                                 return <div>
-                                    <li>{commentUser?.username ? commentUser?.username : user?.username}: {x.comment} <button onClick={() => {
+                                    <div className="user">
+                                        <div className="user_picture">
+                                            <img src={commentUser?.profilePicture ? commentUser.profilePicture : LocalUser?.profilePicture} alt="" />
+                                        </div>
+                                        <div className="user_name">
+                                            <p>{commentUser?.username ? commentUser?.username : LocalUser?.username}</p>
+                                        </div>
+
+                                    </div>
+                                    <div className="user_comment">
+                                        <p className="comment">{x.comment}</p>
+                                    </div>
+                                    <button style={{ marginBottom: "10px", color: "white", fontWeight: "700" }} onClick={() => {
                                         setcommentAll(x)
                                         setreplyModal(true)
-                                    }}>reply</button></li>
-
-                                    <div className="relpy">
-                                        {x.replys.map((elem: any) => {
-                                            return <li>{elem.reply}</li>
-                                        })}
-                                    </div>
+                                    }}>more...</button>
                                 </div>
                             })}
                         </div>
 
                         <div className="posts_comments_down">
-                            <input onChange={(e) => {
+                            <input value={comment} onChange={(e) => {
                                 setcomment(e.target.value)
                             }} type="text" />
                             <button onClick={() => {
@@ -151,6 +192,7 @@ const Detail = () => {
                                     dispatch(getAllData())
                                     dispatch(getUserById(LocalUserID))
                                     setcomment('')
+
                                 })
                             }}>send</button>
                         </div>
@@ -170,6 +212,8 @@ const Detail = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setblockListModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
@@ -198,6 +242,8 @@ const Detail = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setfollowersModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
@@ -224,6 +270,8 @@ const Detail = () => {
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
+                            setFollowingsModal(false)
+
                         }} className="following">
 
                             <div className="following_picture">
