@@ -15,13 +15,19 @@ import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUse
 import { GoBlocked } from "react-icons/go";
 import { FaComment, FaHeart } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
-import { BsHeart } from "react-icons/bs";
+import { BsHeart, BsX } from "react-icons/bs";
 import { v4 as uuidv4 } from 'uuid';
+import { IoSettings } from "react-icons/io5";
 const Detail = () => {
     const navigate = useNavigate()
     const [openModal, setopenModal] = useState(false)
     const [DetailPost, setDetailPost] = useState<any>()
+    const [sett, setSett] = useState(false)
+    const [backinput, setbackinput] = useState("")
     const [reply, setreply] = useState('')
+    const [followersModal, setfollowersModal] = useState(false)
+    const [blockListModal, setblockListModal] = useState(false)
+    const [followingsModal, setFollowingsModal] = useState(false)
     const [replyModal, setreplyModal] = useState(false)
     const [comment, setcomment] = useState('')
     const [commentAll, setcommentAll] = useState<any>()
@@ -36,12 +42,16 @@ const Detail = () => {
     const findBlockUser = LocalUser?.blockList.find((x: { _id: string }) => x._id == user?._id)
     const findIfIBlock = user?.blockList.find((x: { _id: string }) => x._id == LocalUserID)
 
-
+    if (id=="undefined") {
+        navigate("/profile")
+        
+    }
 
     useEffect(() => {
         if (findIfIBlock) {
             navigate("/home")
         }
+    
         console.log("salam");
 
         dispatch(getAllData())
@@ -65,7 +75,7 @@ const Detail = () => {
                             {user?.posts.find((x) => x.id == DetailPost.id)?.likes.find((x: { _id: string }) => x._id == LocalUserID) ? <div onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
                                     likes: user?.posts.find((x) => x.id == DetailPost.id)!.likes.filter((x: { _id: string }) => x._id != LocalUserID)
-                                }).then((res) => {
+                                }).then(() => {
 
                                     dispatch(getUserById(LocalUserID))
                                     dispatch(getAllData())
@@ -146,6 +156,88 @@ const Detail = () => {
                         </div>
                     </div>
                 </div> : null}
+                {blockListModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>BlockList</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setblockListModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.blockList.map((x: { _id: string }) => {
+
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username ? following.username : LocalUser?.username}</p>
+
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
+                {followersModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>Followers</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setfollowersModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.followers.map((x: { _id: string }) => {
+
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username ? following.username : LocalUser?.username}</p>
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
+                {followingsModal ? <div className="followings_modal">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <div className="title">
+                            <p>Followings</p>
+                        </div>
+                        <BsX onClick={() => {
+                            setFollowingsModal(false)
+                        }} style={{ fontSize: "22px", cursor: "pointer" }} />
+                    </div>
+                    {user?.followings.map((x: { _id: string }) => {
+
+                        const following = users.find((z) => z._id == x._id)
+                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                            navigate(`/home/${following?._id}`)
+                        }} className="following">
+
+                            <div className="following_picture">
+                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+
+                            </div>
+                            <div className="following_name">
+                                <p>{following?.username ? following.username : LocalUser?.username}</p>
+
+                            </div>
+
+                        </div>
+                    })}
+                </div> : null}
                 <div className="container">
                     <div className="user_profile">
                         <div className="user_profile_up">
@@ -154,15 +246,20 @@ const Detail = () => {
                                 <div className="user_profile_picture">
                                     <img src={user?.profilePicture} alt="" />
                                 </div>
-                                <img src="https://pitnik.wpkixx.com/pitnik/images/resources/profile-image.jpg" alt="" />
+                                <img src={user?.backGroundPicture} alt="" />
+
                             </div>
                             <ul className="user_profile_up_about">
                                 <li>{user?.username}</li>
-                                <li>Vidios</li>
-                                <li>Photos</li>
-                                <li>History</li>
-                                <li>Followers <sup>{user?.followers.length}</sup></li>
-                                <li>Followings <sup>{user?.followings.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setfollowersModal(true)
+                                }}>Followers <sup>{user?.followers.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setFollowingsModal(true)
+                                }}>Followings <sup>{user?.followings.length}</sup></li>
+                                <li style={{ cursor: "pointer" }} onClick={() => {
+                                    setblockListModal(true)
+                                }}>BlockList <sup>{user?.blockList.length}</sup></li>
 
                                 {!findBlockUser ? <div>
                                     {findID == undefined && findrequest == undefined ?
