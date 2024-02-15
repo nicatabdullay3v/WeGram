@@ -1,6 +1,6 @@
 import express from "express"
 import protectRoute from "../middleware/protetcRoute.js"
-import { addPostImage, deletePostById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
+import { addPostImage, deletePostById, deleteUserById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
 import multer from "multer"
 import path from "path"
 const router = express.Router()
@@ -23,6 +23,7 @@ const storage = multer.diskStorage({
 
 router.get("/",protectRoute,getUsers)
 router.get("/:id",protectRoute,getUsersById)
+router.delete("/:id",protectRoute,deleteUserById)
 router.patch("/:id",protectRoute,patchUsers)
 router.patch('/:id/addPostImage',protectRoute, upload.single('file'),addPostImage );
 router.get("/:id/posts/:postId",protectRoute, getPostById);

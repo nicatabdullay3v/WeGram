@@ -22,7 +22,8 @@ export interface Users {
     surname:string,
     bio:string,
     blockList:[],
-    backGroundPicture:string
+    backGroundPicture:string,
+    email:string
 }
 export interface UsersState {
     users: Users[],

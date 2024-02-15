@@ -23,6 +23,15 @@ export const getUsersById = async (req, res) => {
     res.status(500).json({ error: "Iternal Server Error" });
   }
 };
+export const deleteUserById = async (req, res) => {
+  try {
+    console.log(req.params.id);
+    const UserByID = await User.deleteOne({ _id: req.params.id })
+    return res.status(200).json(UserByID);
+  } catch (error) {
+    res.status(500).json({ error: "Iternal Server Error" });
+  }
+};
 export const patchUsers = async (req, res) => {
   try {
     console.log(req.params.id);

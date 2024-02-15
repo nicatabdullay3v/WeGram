@@ -1,0 +1,46 @@
+.admin_posts {
+  position: relative;
+  .comment_modal {
+    position: fixed;
+    max-width: 800px;
+    width: 100%;
+    height: 500px;
+    z-index: 2;
+    padding: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: whitesmoke;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+  .x{
+    position: absolute;
+    right: 20px;
+    cursor: pointer;
+    top: 20px;
+  }
+  .title{
+    text-align: center;
+    margin-bottom: 20px;
+    p{
+        font-size: 30px;
+        font-weight: 700;
+        font-family: "Salsa",cursive;
+    }
+  }
+  .container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .img {
+    width: 80px;
+    height: 50px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}

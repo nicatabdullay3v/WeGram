@@ -1,7 +1,171 @@
 import "./Admin.scss"
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { useEffect, useState } from "react";
+import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
+import { LuDelete } from "react-icons/lu";
+import { MdAutoDelete, MdDeleteForever } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
+import { PiPictureInPicture } from "react-icons/pi";
+import Swal from 'sweetalert2'
+import axios from "axios";
+import TextField from '@mui/material/TextField';
+import { FaX } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 const Admin = () => {
+  const navigate = useNavigate()
+  const dispacth = useDispatch<AppDispatch>()
+  const users = useSelector((state: RootState) => state.users.users)
+  const [username, setusername] = useState('')
+  const [email, setemail] = useState('')
+  const [isPublic, setisPublic] = useState<boolean>()
+  const [editModal, setEditModal] = useState(false)
+  const [userId, setuserId] = useState('')
+  const user = users.find((x) => x._id == userId)
+  useEffect(() => {
+    dispacth(getAllData())
+    setusername(user?.username!)
+    setemail(user?.email!)
+    setisPublic(user?.isPublic)
+  }, [editModal])
+  const columns: GridColDef[] = [
+    { field: '_id', headerName: 'ID', width: 230 },
+    { field: 'username', headerName: 'username', width: 170 },
+    { field: 'email', headerName: 'email', width: 200 },
+    {
+      field: 'isPublic',
+      headerName: 'isPublic',
+      width: 100,
+
+    },
+    {
+      field: 'delete',
+      headerName: 'delete',
+      width: 100,
+      renderCell: (params) => (
+        <MdDeleteForever onClick={() => {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success"
+              });
+              axios.delete(`http://localhost:3001/api/users/${params.row._id}`).then(() => {
+                dispacth(getAllData())
+              })
+            }
+          });
+
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'edit',
+      headerName: 'edit',
+      width: 70,
+      renderCell: (params) => (
+        <CiEdit onClick={() => {
+          setEditModal(true)
+          setuserId(params.row._id)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'posts',
+      headerName: 'posts',
+      width: 70,
+      renderCell: (params) => (
+        <PiPictureInPicture onClick={()=>{
+          navigate(`/admin/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+  ];
   return (
-    <div>Admin</div>
+    <>
+      <div className="admin">
+        {editModal ? <div className="edit_modal">
+          <FaX onClick={() => {
+            setEditModal(false)
+          }} className="close" />
+          <div className="title">
+            <p>Edit</p>
+          </div>
+          <div className="user_info">
+            <TextField onChange={(e) => {
+              setusername(e.target.value)
+            }} value={username} id="outlined-basic" label="username" variant="outlined" />
+            <TextField onChange={(e) => {
+              setemail(e.target.value)
+            }} value={email} id="outlined-basic" label="email" variant="outlined" />
+            <select onChange={(e) => {
+              setisPublic(e.target.value === 'true');
+              console.log(e.target.value);
+            }}>
+              <option value="select">select</option>
+              <option value="true">true</option>
+              <option value="false">false</option>
+            </select>
+          </div>
+          <CiEdit onClick={() => {
+            Swal.fire({
+              title: "Are you sure?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes, edit it!"
+            }).then((result) => {
+              if (result.isConfirmed) {
+                Swal.fire({
+                  title: "Edited!",
+                  text: "Your file has been edited.",
+                  icon: "success"
+                });
+                axios.patch(`http://localhost:3001/api/users/${userId}`, {
+                  username: username,
+                  email: email,
+                  isPublic: isPublic
+                }).then(() => {
+                  dispacth(getAllData())
+                  setEditModal(false)
+                })
+              }
+            });
+          }} className="edit" />
+        </div> : null}
+        <div className="container">
+          <div style={{ height: 600, width: '100%' }}>
+            <DataGrid
+              rows={users}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              pageSizeOptions={[5, 10, 50, 100]}
+              checkboxSelection
+              getRowId={(x) => x._id}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 

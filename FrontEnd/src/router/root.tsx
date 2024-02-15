@@ -10,6 +10,8 @@ import Profile from "../pages/Profile/Profile";
 import Chat from "../pages/Chat/Chat";
 import Settings from "../pages/settingsPage/Settings";
 import PostsDetail from "../pages/PostsDetail/PostsDetail";
+import Admin from "../pages/Admin/Admin";
+import AdminPosts from "../pages/AdminPosts/AdminPosts";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -44,6 +46,13 @@ const router = createBrowserRouter([
     path: "/user/:userId/posts/:id",
     element: <PostsDetail />
   },
-
+  {
+    path: "/admin",
+    element: <Admin />
+  },
+  {
+    path: "/admin/:id",
+    element: <AdminPosts/>
+  }
 ]);
 export default router 

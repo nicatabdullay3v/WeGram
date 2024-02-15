@@ -1,0 +1,51 @@
+.admin {
+  position: relative;
+  .edit_modal {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    height: 600px;
+    background-color: red;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+      rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    z-index: 2;
+    background-color: whitesmoke;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    .close{
+      position: absolute;
+      right: 20px;
+      cursor: pointer;
+    }
+    .title{
+      text-align: center;
+      margin-bottom: 20px;
+      p{
+        font-size: 30px;
+        font-weight: 700;
+        font-family: "Salsa",cursive;
+      }
+    }
+    .user_info{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+  
+    }
+    .edit{
+      padding: 5px;
+      background-color: yellowgreen;
+      font-size: 40px;
+      border-radius: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  }
+  .container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+}
