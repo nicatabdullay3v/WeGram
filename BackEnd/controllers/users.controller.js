@@ -175,6 +175,46 @@ export const getCommentById = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
+export const deleteCommentById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const postIndex = user.posts.findIndex((p) => p.id === postId);
+
+    if (postIndex === -1) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+
+    const commentIndex = user.posts[postIndex].comments.findIndex(
+      (c) => c.commentID === commentId
+    );
+
+    if (commentIndex === -1) {
+      return res.status(404).send({ error: "Comment not found" });
+    }
+
+    user.posts[postIndex].comments.splice(commentIndex, 1);
+
+    await user.save();
+
+    res.status(200).send({ message: "Comment deleted" });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
+
+
+
+
+
 export const patchComments = async (req, res) => {
   try {
     const userId = req.params.id;

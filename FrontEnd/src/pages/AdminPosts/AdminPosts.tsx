@@ -16,21 +16,28 @@ import { FaX } from "react-icons/fa6";
 const AdminPosts = () => {
     const dispacth = useDispatch<AppDispatch>()
     const navigate = useNavigate()
+    const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id
+    const LocalUser = useSelector((state: RootState) => state.users.user)
+
     const [post, setpost] = useState<any>()
     const [commentModal, setcommentModal] = useState(false)
     const users = useSelector((state: RootState) => state.users.users)
-
+    console.log(LocalUser?.Admin);
+    
+ 
     useEffect(() => {
         dispacth(getAllData())
+        dispacth(getUserById(LocalUserID))
 
     }, [])
     const { id } = useParams()
 
-
+    // if (!LocalUser?.Admin) {
+    //     navigate('/home')
+    //     }
 
 
     const user = users?.find((x) => x._id == id)
-    console.log(user);
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 330 },
         { field: 'title', headerName: 'title', width: 330 },
@@ -91,10 +98,35 @@ const AdminPosts = () => {
                     <FaX onClick={() => {
                         setcommentModal(false)
                     }} className="x" />
-                    {post.comments.map((x: { comment: string, _id: string }, i) => {
-                        return <li style={{ marginBottom: "20px" }}><div>from:{x._id}</div>{i}: {x.comment} <MdDeleteForever onClick={()=>{
-                            
-                        }} style={{ backgroundColor: "red", color: "white", borderRadius: "10px" }} /></li>
+                    {post.comments.map((x: { comment: string, _id: string, commentID: string, replys: [] }, i: number) => {
+                        return <li key={i} style={{ marginBottom: "20px" }}><div>from:{x._id}</div>{i}: {x.comment} <MdDeleteForever onClick={() => {
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Your file has been deleted.",
+                                        icon: "success"
+                                    });
+                                    axios.patch(`http://localhost:3001/api/users/${id}/posts/${post.id}/comments/${x.commentID}`, {
+                                        comment: "Deleted Comment",
+                                        commentID: x.commentID,
+                                        replys: x.replys,
+                                        _id: x._id
+
+                                    }).then(() => {
+                                        dispacth(getAllData())
+                                    })
+                                }
+                            });
+                        }} style={{ backgroundColor: "red", color: "white", borderRadius: "10px", cursor: "pointer" }} /></li>
                     })}
                 </div> : null}
                 <div style={{ height: 400, width: '100%' }}>

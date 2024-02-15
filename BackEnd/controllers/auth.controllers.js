@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       email,
       gender,
-      isPublic:"true"
+      isPublic: "true",
     });
     if (newUser) {
       generateTokenAndSetCookie(newUser._id, res);
@@ -47,7 +47,7 @@ export const signup = async (req, res) => {
         fullname: newUser.fullname,
         username: newUser.username,
         profilePicture: newUser.profilePicture,
-        email:newUser.email
+        email: newUser.email,
       });
     } else {
       res.status(400).json({ error: "invalid user data" });
@@ -75,7 +75,8 @@ export const login = async (req, res) => {
       fullname: user.fullname,
       username: user.username,
       profilePicture: user.profilePicture,
-      email:user.email
+      email: user.email,
+      Admin: user.Admin,
     });
   } catch (error) {
     res.status(500).json({ error: "Iternal Server Error" });

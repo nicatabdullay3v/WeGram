@@ -24,12 +24,20 @@ const Admin = () => {
   const [editModal, setEditModal] = useState(false)
   const [userId, setuserId] = useState('')
   const user = users.find((x) => x._id == userId)
+  const LocalUser:any = JSON.parse(localStorage.getItem("user-info") || "{}")
   useEffect(() => {
     dispacth(getAllData())
     setusername(user?.username!)
     setemail(user?.email!)
     setisPublic(user?.isPublic)
   }, [editModal])
+  if (LocalUser.Admin === true) {
+    
+  }
+  else{
+    navigate('/home')
+  }
+
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'ID', width: 230 },
     { field: 'username', headerName: 'username', width: 170 },
@@ -88,7 +96,7 @@ const Admin = () => {
       headerName: 'posts',
       width: 70,
       renderCell: (params) => (
-        <PiPictureInPicture onClick={()=>{
+        <PiPictureInPicture onClick={() => {
           navigate(`/admin/${params.row._id}`)
         }} style={{ cursor: "pointer" }} />
       )

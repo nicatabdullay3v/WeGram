@@ -19,7 +19,8 @@ const usersSchema = new mongoose.Schema(
     posts: Array,
     email: String,
     requests: Array,
-    backGroundPicture:String
+    backGroundPicture:String,
+    Admin:Boolean
   },
   { timestamps: true, strict: true }
 );
