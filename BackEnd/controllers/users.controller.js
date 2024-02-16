@@ -291,3 +291,30 @@ export const patchComments = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
+export const deleteStoryById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const storyId = req.params.storyId;
+
+    const user = await User.findOne({ _id: userId });
+
+    if (!user) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    const storyIndex = user.stories.findIndex((s) => s.id === storyId);
+
+    if (storyIndex === -1) {
+      return res.status(404).send({ error: "Story not found" });
+    }
+
+    user.stories.splice(storyIndex, 1);
+
+    await user.save();
+
+    res.status(200).send({ message: "Story deleted" });
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+};
+

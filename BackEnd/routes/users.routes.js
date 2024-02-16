@@ -1,6 +1,6 @@
 import express from "express"
 import protectRoute from "../middleware/protetcRoute.js"
-import { addPostImage, addStory, deleteCommentById, deletePostById, deleteUserById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
+import { addPostImage, addStory, deleteCommentById, deletePostById, deleteStoryById, deleteUserById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
 import multer from "multer"
 import path from "path"
 const router = express.Router()
@@ -46,6 +46,7 @@ router.get("/:id/posts/:postId/comments/:commentId",protectRoute, getCommentById
 router.delete("/:id/posts/:postId/comments/:commentId",protectRoute, deleteCommentById);
 router.patch("/:id/posts/:postId/comments/:commentId",protectRoute, patchComments);
 router.patch("/:id/posts/:postId",protectRoute, patchPost);
+router.delete('/:id/stories/:storyId', deleteStoryById);
 router.delete("/:id/posts/:postId",protectRoute, deletePostById);
 
 export default router

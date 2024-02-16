@@ -11,16 +11,18 @@ import axios from "axios";
 import Pagination from '@mui/material/Pagination';
 import 'cookie-store';
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
-import { FaComment } from "react-icons/fa";
+import { FaComment, FaTrash } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
 import { BsHeart, BsX } from "react-icons/bs";
 import { Users } from "../../interfaces/UsersInterface";
 import Swal from 'sweetalert2'
 import { IoSettings } from "react-icons/io5";
 import { PiDotsThree } from "react-icons/pi";
+import { FaDeleteLeft, FaX } from "react-icons/fa6";
 const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
+    const [stories, setstories] = useState(false)
     const [title, setTitle] = useState("")
     const [storiesModal, setstoriesModal] = useState(false)
     const [comment, setcomment] = useState('')
@@ -63,12 +65,12 @@ const Profile = () => {
             console.error("Please select a file");
             return;
         }
-    
+
         const formData = new FormData();
         formData.append('file', file);
         formData.append('id', uuidv4());
         formData.append('title', title);
-    
+
         axios.patch(`http://localhost:3001/api/users/${LocalUserID}/addStory`, formData)
             .then((res) => {
                 dispatch(getUserById(LocalUserID));
@@ -77,7 +79,7 @@ const Profile = () => {
             .catch((error) => {
                 console.error("Error uploading story:", error);
             });
-    
+
         setTitle("");
         setFile(undefined);
     };
@@ -261,7 +263,7 @@ const Profile = () => {
                                     dispatch(getUserById(LocalUserID))
                                 })
                             }} className="post_heart">
-                                <BsHeart  className="icon" /> <sub>{detailPost?.likes.length}</sub>
+                                <BsHeart className="icon" /> <sub>{detailPost?.likes.length}</sub>
                             </div>}
                         </div>
                     </div>
@@ -360,6 +362,25 @@ const Profile = () => {
                         </div>
                     </div>
                 </div> : null}
+                {stories ? <div className="stories">
+                    <FaX onClick={() => {
+                        setstories(false)
+                    }} className="icon" />
+                    {user?.stories.map((item: { img: string ,id:string}) => {
+                        return <div className="storie">
+                            <div className="storie_img">
+                                <img src={`http://localhost:3001/${item.img}`} alt="" />
+                            </div>
+                        <FaTrash onClick={()=>{
+                            axios.delete(`http://localhost:3001/api/users/${LocalUserID}/stories/${item.id}`).then(()=>{
+                                dispatch(getAllData())
+                                dispatch(getUserById(LocalUserID))
+                            })
+                        }} className="trash_icon"/>
+
+                        </div>
+                    })}
+                </div> : null}
                 {modal ? <div className="modal">
                     <div style={{ textAlign: 'end' }} className="close">
                         <AiOutlineClose onClick={() => {
@@ -451,6 +472,7 @@ const Profile = () => {
                                 <li style={{ cursor: "pointer" }} onClick={() => {
                                     setblockListModal(true)
                                 }}>BlockList <sup>{user?.blockList.length}</sup></li>
+
                                 <li style={{ width: "400px" }}> <p style={{ fontWeight: "700", fontSize: "20px", backgroundColor: "lightgrey", width: "100%", padding: "5px", borderRadius: "6px", paddingLeft: "20px" }}>{user?.bio}</p></li>
                             </ul>
                         </div>
@@ -459,13 +481,18 @@ const Profile = () => {
 
                             <div className="posts">
                                 <div className="posts_length">
+                                    <p style={{ cursor: "pointer" }} onClick={() => {
+                                        setstories(true)
+                                    }}>Stories <sup>
+                                            {user?.stories.length}
+                                        </sup></p>
                                     <p>Posts <sup>
                                         {user?.posts.length}
                                     </sup></p>
                                     <p className="add" onClick={() => {
                                         setModal(true)
                                     }}>add new post</p>
-                                         <p className="add" onClick={() => {
+                                    <p className="add" onClick={() => {
                                         setstoriesModal(true)
                                     }}>add new storie</p>
                                 </div>
