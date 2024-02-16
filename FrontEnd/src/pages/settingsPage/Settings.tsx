@@ -81,11 +81,11 @@ const Settings = () => {
                   }} style={{ display: surnameInput ? "block" : "none" }}>close</button>
                 </div>
                 <div className="user_settings_bio edit">
-                  <p>isPublic: {LocalUser?.bio ? LocalUser.isPublic? "true":"false" : "empty"}</p>
-                  <button onClick={()=>{
-                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`,{
-                      isPublic: LocalUser?.isPublic=== true ? false:true
-                    }).then(()=>{
+                  <p>isPublic: {LocalUser?.isPublic === true ? "true" : "false"}</p>
+                  <button onClick={() => {
+                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                      isPublic: LocalUser?.isPublic === true ? false : true
+                    }).then(() => {
                       dispatch(getUserById(LocalUserID))
                       dispatch(getAllData())
                     })

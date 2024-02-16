@@ -442,10 +442,9 @@ const Detail = () => {
                                         {user?.posts.length}
                                     </sup></p>
                                 </div>
-                                {user?.posts.length! <= 0 ? <div style={{ fontSize: "40px" }}>no picture yet</div> : null}
+                                {/* {user?.posts.length! <= 0 || !findID ? <div style={{ fontSize: "40px" }}>no picture yet</div> : null} */}
                                 <div className="post-cards">
                                     {user?.isPublic || findID ? user?.posts.map((elem: any) => {
-
                                         return <div key={elem._id} className="post_card">
                                             <div onClick={() => {
                                                 setopenModal(true)

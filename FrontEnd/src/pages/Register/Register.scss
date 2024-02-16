@@ -2,6 +2,11 @@
     background: whitesmoke;
     height: 100%;
     padding: 0px 30px;
+    .error-message{
+      font-size: 10px;
+      color: red;
+      margin: -10px;
+    }
     @media (max-width: 992px) {
       padding: 30px 30px;
     }
