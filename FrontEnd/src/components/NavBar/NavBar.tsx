@@ -5,7 +5,7 @@ import { BsSearch } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../redux/store";
-import { GrLanguage } from "react-icons/gr";
+import { GrLanguage, GrUserAdmin } from "react-icons/gr";
 import { Users } from "../../interfaces/UsersInterface";
 import { useNavigate } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
@@ -26,6 +26,7 @@ const NavBar: React.FC = () => {
     const user = useSelector((state: RootState) => state.users.user)
 
     const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
+    const CurrentLocalUser = JSON.parse(localStorage.getItem("user-info") || "{}")
 
 
     const navigate = useNavigate()
@@ -102,10 +103,14 @@ const NavBar: React.FC = () => {
                             </p>
                         </div>
                         <div className="sections">
-                            <IoHomeOutline className="icon" />
+                            <IoHomeOutline onClick={()=>{
+                                navigate('/home')
+                            }} className="icon" />
                         </div>
                         <div className="sections">
-                            <IoChatboxOutline className="icon" />
+                            <IoChatboxOutline onClick={()=>{
+                                navigate('/chat')
+                            }} className="icon" />
                         </div>
                         <div className="sections">
                             <FaRegBell style={{ cursor: "pointer" }} onClick={() => {
@@ -121,6 +126,11 @@ const NavBar: React.FC = () => {
                         <div className="sections">
                             <GrLanguage className="icon" />
                         </div>
+                        {CurrentLocalUser.Admin === true ? <div  style={{cursor:"pointer"}} className="sections">
+                            <GrUserAdmin onClick={()=>{
+                                navigate('/admin')
+                            }} className="icon" />
+                        </div> : null}
                     </div>
                     <ul className="nav_right">
                         <div className="profile">
@@ -137,32 +147,43 @@ const NavBar: React.FC = () => {
 
 
                                     return users.filter((elem) => elem._id == x._id).map((element) => {
-                                        return <li>{element.username} wanna be your friend <button onClick={() => {
-                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
-                                                followers: [...user.followers, { _id: element._id }],
-                                                requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
-                                            }).then(() => {
-                                                dispatch(getAllData())
-                                                dispatch(getUserById(LocalUserID))
-                                            })
-                                            axios.patch(`http://localhost:3001/api/users/${element._id}`, {
-                                                followings: [...element.followings, { _id: user._id }]
-                                            }).then(() => {
-                                                dispatch(getAllData())
-                                                dispatch(getUserById(LocalUserID))
-                                            })
-                                        }}>accept</button><button onClick={() => {
-                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
-                                                requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
-                                            }).then(() => {
-                                                dispatch(getAllData())
-                                                dispatch(getUserById(LocalUserID))
-                                            })
-                                        }}>delete</button> </li>
+                                        return <>
+                                            <div className="user">
+                                                <div className="user_picture">
+                                                    <img src={element.profilePicture} alt="" />
+                                                </div>
+                                                <div className="user_name">
+                                                    <p>{element.username}</p>
+                                                </div>
+
+
+                                            </div>
+                                            <li style={{ marginTop: "10px", marginBottom: "20px" }}>{element.username} wanna be your friend <button onClick={() => {
+                                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                    followers: [...user.followers, { _id: element._id }],
+                                                    requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                                }).then(() => {
+                                                    dispatch(getAllData())
+                                                    dispatch(getUserById(LocalUserID))
+                                                })
+                                                axios.patch(`http://localhost:3001/api/users/${element._id}`, {
+                                                    followings: [...element.followings, { _id: user._id }]
+                                                }).then(() => {
+                                                    dispatch(getAllData())
+                                                    dispatch(getUserById(LocalUserID))
+                                                })
+                                            }}>accept</button><button onClick={() => {
+                                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                    requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                                }).then(() => {
+                                                    dispatch(getAllData())
+                                                    dispatch(getUserById(LocalUserID))
+                                                })
+                                            }}>delete</button> </li>
+                                        </>
                                     })
                                 })}
                             </div> : null}
-                            <FaRegHeart className="heart_icon" style={{ width: "40px", cursor: "pointer" }} />
                         </div>
 
                         <p style={{ marginLeft: "40px" }}>

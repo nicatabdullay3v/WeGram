@@ -1,5 +1,6 @@
 #my_followers {
-    width: 300px;
+    max-width: 300px;
+    width: 100%;
     border-radius: 8px;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -48,7 +49,7 @@
     }
   }
   @media (max-width: 992px) {
-    #recomended_users {
+    #my_followers {
       display: none;
     }
   }

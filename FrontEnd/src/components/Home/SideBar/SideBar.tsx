@@ -63,8 +63,11 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                         }} className="profile_chat section">
                             <BsChat className="icon" /> <span>Chat</span>
                         </div>
-                        <div className="profile_notifications section">
-                            <IoNotificationsOutline className="icon" /> <span>Notifications</span>
+                        <div onClick={() => {
+                            navigate("/settings")
+                        }} className="profile_chat section">
+                            <IoSettingsOutline className="icon" />
+                            <span>Settings</span>
                         </div>
                         <div onClick={() => {
                             axios.post("http://localhost:3001/api/auth/logout")
@@ -102,36 +105,8 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                         navigate("/chat")
                     }} className="section">
                         <IoChatbubbleOutline className="icon" />
-
                     </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <FaRegUser className="icon" />
-
-                    </div>
-                    <div className="section">
-                        <GiPolarStar className="icon" />
-
-                    </div><div onClick={() => {
+                    <div onClick={() => {
                         setSettingsDropDown(settingsDropDown ? false : true)
                     }} className="section">
                         <IoSettingsOutline className="icon" />

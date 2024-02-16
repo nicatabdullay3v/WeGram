@@ -205,7 +205,8 @@ const FollowingsPhotos = () => {
                     <Followings />
                 </div>
                 <div className="followings_photos">
-                    <UsersStories />
+                <UsersStories />
+
                     <div className="followings_photos">
                         {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [],title:string }) => {
                             const followingUser = users.find((u) => u._id === element.userId);

@@ -26,7 +26,7 @@ export const getUsersById = async (req, res) => {
 export const deleteUserById = async (req, res) => {
   try {
     console.log(req.params.id);
-    const UserByID = await User.deleteOne({ _id: req.params.id })
+    const UserByID = await User.deleteOne({ _id: req.params.id });
     return res.status(200).json(UserByID);
   } catch (error) {
     res.status(500).json({ error: "Iternal Server Error" });
@@ -97,7 +97,33 @@ export const addPostImage = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+export const addStory = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { filename } = req.file;
+    const { title, id, time } = req.body;
 
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $push: {
+          stories: {
+            img: `stories/${filename}`,
+            id: id || uuidv4(),
+            title: title || "Default Title",
+            time: time || new Date(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 export const getPostById = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -210,10 +236,6 @@ export const deleteCommentById = async (req, res) => {
     res.status(400).send({ error: error.message });
   }
 };
-
-
-
-
 
 export const patchComments = async (req, res) => {
   try {

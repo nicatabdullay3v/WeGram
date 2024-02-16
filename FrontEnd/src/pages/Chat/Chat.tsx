@@ -199,7 +199,9 @@ const Chat: React.FC = () => {
                   </motion.span>
                 </div>
               ) : (
-                <p>Hello qaqa</p>
+                <p>1.Salam deyerli user adam sec yazismaq ucun.<br />
+                  2.Birinci mesaj catin yaradilmasi ucundu
+                </p>
               )}
             </div>
             <div className="chat_right_down">

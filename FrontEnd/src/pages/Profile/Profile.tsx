@@ -22,6 +22,7 @@ const Profile = () => {
     const navigate = useNavigate()
     const [modal, setModal] = useState(false)
     const [title, setTitle] = useState("")
+    const [storiesModal, setstoriesModal] = useState(false)
     const [comment, setcomment] = useState('')
     const [backinput, setbackinput] = useState("")
     const [replyComment, setreplyComment] = useState("")
@@ -57,7 +58,29 @@ const Profile = () => {
 
 
     console.log(user);
-
+    const handleStoryUpload = () => {
+        if (!file) {
+            console.error("Please select a file");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('id', uuidv4());
+        formData.append('title', title);
+    
+        axios.patch(`http://localhost:3001/api/users/${LocalUserID}/addStory`, formData)
+            .then((res) => {
+                dispatch(getUserById(LocalUserID));
+                setstoriesModal(false);
+            })
+            .catch((error) => {
+                console.error("Error uploading story:", error);
+            });
+    
+        setTitle("");
+        setFile(undefined);
+    };
 
     const handleUpload = () => {
         if (!file) {
@@ -238,7 +261,7 @@ const Profile = () => {
                                     dispatch(getUserById(LocalUserID))
                                 })
                             }} className="post_heart">
-                                <BsHeart className="icon" /> <sub>{detailPost?.likes.length}</sub>
+                                <BsHeart  className="icon" /> <sub>{detailPost?.likes.length}</sub>
                             </div>}
                         </div>
                     </div>
@@ -363,6 +386,32 @@ const Profile = () => {
                     </div>
                     <button onClick={handleUpload} className="add_button">Add Post</button>
                 </div> : null}
+                {storiesModal ? <div className="modal">
+                    <div style={{ textAlign: 'end' }} className="close">
+                        <AiOutlineClose onClick={() => {
+                            setstoriesModal(false)
+                        }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
+
+                    </div>
+                    <div className="file-input-container">
+                        <input
+                            onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                            type="file"
+                            id="fileInput"
+                            className="input-file"
+                        />
+                        <label htmlFor="fileInput" className="file-label">
+                            Choose a File
+                        </label>
+                        {file && <p>Selected File: {file.name}</p>}
+                    </div>
+                    <div className="file_title">
+                        <input onChange={(e) => {
+                            setTitle(e.target.value)
+                        }} type="text" className="file-input-text" placeholder="Enter file title" />
+                    </div>
+                    <button onClick={handleStoryUpload} className="add_button">Add story</button>
+                </div> : null}
                 <div className="container">
                     <div className="user_profile">
                         <div className="user_profile_up">
@@ -416,6 +465,9 @@ const Profile = () => {
                                     <p className="add" onClick={() => {
                                         setModal(true)
                                     }}>add new post</p>
+                                         <p className="add" onClick={() => {
+                                        setstoriesModal(true)
+                                    }}>add new storie</p>
                                 </div>
                                 <div className="post-cards">
                                     {currentPosts?.map((elem: any) => {

@@ -1,7 +1,72 @@
 #stories {
   margin-bottom: 50px;
+  .line-container {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    z-index: 12;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .line {
+    height: 3px;
+    width: 100px;
+
+    background-color: #ddd;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+  }
+
+  .line.active {
+    background-color: #3e6c7b;
+  }
+
+  .storie_modal {
+    span{
+      position: absolute;
+      bottom: 15px;z-index: 22;
+      color: white;
+      left: 430px;
+      font-size: 22px;
+    }
+    input {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 32px;
+      max-width: 300px;
+      width: 100%;
+      z-index: 12;
+      border-radius: 10px;
+    }
+    border-radius: 6px;
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    max-width: 500px;
+    width: 100%;
+    height: 600px;
+    background-color: whitesmoke;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px,
+      rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+    .x {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      color: white;
+      z-index: 1;
+    }
+  }
+
   .stories {
-    padding: 0px 40px 40px 40px;
+    padding: 0px 40px 0px 40px;
     background-color: white;
     border-radius: 6px;
     position: relative;
@@ -13,15 +78,14 @@
       height: 30px;
       background-color: rgb(255, 115, 0);
     }
+
     .stories_up {
-      max-width: 500px;
-      width: 100%;
       display: flex;
       align-items: center;
       gap: 10px;
       padding: 20px;
       border-bottom: 1px solid lightgrey;
-      margin-bottom: 20px;
+      margin-bottom: 60px;
       p {
         font-size: 17px;
       }

@@ -24,7 +24,8 @@ export interface Users {
     blockList:[],
     backGroundPicture:string,
     email:string,
-    Admin:boolean
+    Admin:boolean,
+    stories:[]
 }
 export interface UsersState {
     users: Users[],

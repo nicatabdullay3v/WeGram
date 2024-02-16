@@ -16,9 +16,11 @@ import { GoBlocked } from "react-icons/go";
 import { FaComment, FaHeart } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
 import { BsHeart, BsX } from "react-icons/bs";
+import { ToastContainer, toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { IoSettings } from "react-icons/io5";
 const Detail = () => {
+
     const navigate = useNavigate()
     const [openModal, setopenModal] = useState(false)
     const [DetailPost, setDetailPost] = useState<any>()
@@ -63,6 +65,8 @@ const Detail = () => {
         <>
             <NavBar />
             <div id="user_profile">
+                <ToastContainer />
+
                 {openModal ? <div className="post_modal">
                     <BsX className="postx" style={{ cursor: "pointer" }} onClick={() => {
                         setopenModal(false)
@@ -320,7 +324,16 @@ const Detail = () => {
                                                             withCredentials: true,
                                                             followers: [...user.followers, { _id: LocalUserID }]
                                                         }).then(() => {
-                                                            alert("artirildim ayqam ayqam")
+                                                            toast.success('artirildin', {
+                                                                position: "top-center",
+                                                                autoClose: 2000,
+                                                                hideProgressBar: false,
+                                                                closeOnClick: true,
+                                                                pauseOnHover: true,
+                                                                draggable: true,
+                                                                progress: undefined,
+                                                                theme: "light",
+                                                            });
 
                                                             dispatch(getAllData())
                                                         })
@@ -336,30 +349,58 @@ const Detail = () => {
                                                         requests: [...user?.requests!, { _id: LocalUserID }]
 
                                                     }).then(() => {
-                                                        alert("request gonderildi")
+                                                        toast.success('request gonderildi', {
+                                                            position: "top-center",
+                                                            autoClose: 2000,
+                                                            hideProgressBar: false,
+                                                            closeOnClick: true,
+                                                            pauseOnHover: true,
+                                                            draggable: true,
+                                                            progress: undefined,
+                                                            theme: "light",
+                                                        });
                                                         dispatch(getAllData())
                                                     })
                                                 }
-                                            }} className="add_icon" /></button> : findrequest != undefined ?
+                                            }} className="add_icon" />
+                                        </button> : findrequest != undefined ?
                                             <>
                                                 <button >
                                                     <WiTime9 onClick={() => {
                                                         axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
                                                             requests: user?.requests.filter((x: { _id: string }) => x._id != LocalUserID)
                                                         }).then(() => {
-                                                            alert("request qaytarildi")
+                                                            toast.success('request silindi', {
+                                                                position: "top-center",
+                                                                autoClose: 2000,
+                                                                hideProgressBar: false,
+                                                                closeOnClick: true,
+                                                                pauseOnHover: true,
+                                                                draggable: true,
+                                                                progress: undefined,
+                                                                theme: "light",
+                                                            });
                                                             dispatch(getAllData())
                                                         })
                                                     }} className="add_icon" />
                                                 </button>
-                                            </> : <button className="unfollow" >
-                                                <AiOutlineUserDelete style={{ backgroundColor: "red" }} className="add_icon" onClick={() => {
+                                            </> : <button style={{ backgroundColor: "red" }} className="unfollow" >
+                                                <AiOutlineUserDelete className="add_icon" onClick={() => {
                                                     axios.defaults.withCredentials = true;
                                                     axios.patch(`http://localhost:3001/api/users/${user?._id}`, {
                                                         withCredentials: true,
                                                         followers: user?.followers.filter((x: { _id: string }) => x._id != LocalUserID)
                                                     }).then(() => {
-                                                        alert("cixdian ayqam")
+                                                        toast.success('cixarildin', {
+                                                            position: "top-center",
+                                                            autoClose: 2000,
+                                                            hideProgressBar: false,
+                                                            closeOnClick: true,
+                                                            pauseOnHover: true,
+                                                            draggable: true,
+                                                            progress: undefined,
+                                                            theme: "light",
+                                                        });
                                                         dispatch(getAllData())
                                                     })
                                                     axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
@@ -443,7 +484,7 @@ const Detail = () => {
                                     </sup></p>
                                 </div>
                                 {/* {user?.posts.length! <= 0 || !findID ? <div style={{ fontSize: "40px" }}>no picture yet</div> : null} */}
-                                <div className="post-cards">
+                                {findBlockUser ? null : <div className="post-cards">
                                     {user?.isPublic || findID ? user?.posts.map((elem: any) => {
                                         return <div key={elem._id} className="post_card">
                                             <div onClick={() => {
@@ -470,7 +511,7 @@ const Detail = () => {
                                     }) : null}
                                     {user?.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div> : null}
 
-                                </div>
+                                </div>}
                             </div>
                         </div >
                     </div >

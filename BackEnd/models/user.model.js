@@ -20,7 +20,8 @@ const usersSchema = new mongoose.Schema(
     email: String,
     requests: Array,
     backGroundPicture:String,
-    Admin:Boolean
+    Admin:Boolean,
+    stories:Array
   },
   { timestamps: true, strict: true }
 );
