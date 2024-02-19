@@ -5,7 +5,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { useEffect, useState } from "react";
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { LuDelete } from "react-icons/lu";
-import { MdAutoDelete, MdDeleteForever } from "react-icons/md";
+import { MdAutoDelete, MdAutoStories, MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { PiPictureInPicture } from "react-icons/pi";
 import Swal from 'sweetalert2'
@@ -13,6 +13,7 @@ import axios from "axios";
 import TextField from '@mui/material/TextField';
 import { FaX } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
+import { FaBookmark } from "react-icons/fa";
 
 const Admin = () => {
   const navigate = useNavigate()
@@ -97,7 +98,29 @@ const Admin = () => {
       width: 70,
       renderCell: (params) => (
         <PiPictureInPicture onClick={() => {
-          navigate(`/admin/${params.row._id}`)
+          navigate(`/admin/posts/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    }, 
+    {
+      field: 'stories',
+      headerName: 'stories',
+      width: 70,
+      renderCell: (params) => (
+        <MdAutoStories onClick={() => {
+          navigate(`/admin/stories/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'wishList',
+      headerName: 'WishList',
+      width: 70,
+      renderCell: (params) => (
+        <FaBookmark onClick={() => {
+          navigate(`/admin/wishList/${params.row._id}`)
         }} style={{ cursor: "pointer" }} />
       )
       ,

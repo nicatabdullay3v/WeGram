@@ -13,6 +13,8 @@ import { FaRegBell, FaRegHeart } from "react-icons/fa";
 import { HiOutlineUsers } from "react-icons/hi2";
 import { IoChatboxOutline } from "react-icons/io5";
 import SideBar from "../Home/SideBar/SideBar";
+import { FiBookmark } from "react-icons/fi";
+
 import axios from "axios";
 const NavBar: React.FC = () => {
     const [close, setClose] = useState<boolean>(false)
@@ -103,12 +105,12 @@ const NavBar: React.FC = () => {
                             </p>
                         </div>
                         <div className="sections">
-                            <IoHomeOutline onClick={()=>{
+                            <IoHomeOutline onClick={() => {
                                 navigate('/home')
                             }} className="icon" />
                         </div>
                         <div className="sections">
-                            <IoChatboxOutline onClick={()=>{
+                            <IoChatboxOutline onClick={() => {
                                 navigate('/chat')
                             }} className="icon" />
                         </div>
@@ -118,7 +120,11 @@ const NavBar: React.FC = () => {
                             }} className="icon" />
 
                         </div>
-
+                        <div className="sections">
+                            <FiBookmark onClick={() => {
+                                navigate('/savedposts')
+                            }} className="icon" />
+                        </div>
                         <div className="sections">
                             <HiOutlineUsers className="icon" />
                         </div>
@@ -126,8 +132,8 @@ const NavBar: React.FC = () => {
                         <div className="sections">
                             <GrLanguage className="icon" />
                         </div>
-                        {CurrentLocalUser.Admin === true ? <div  style={{cursor:"pointer"}} className="sections">
-                            <GrUserAdmin onClick={()=>{
+                        {CurrentLocalUser.Admin === true ? <div style={{ cursor: "pointer" }} className="sections">
+                            <GrUserAdmin onClick={() => {
                                 navigate('/admin')
                             }} className="icon" />
                         </div> : null}

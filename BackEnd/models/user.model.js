@@ -21,7 +21,8 @@ const usersSchema = new mongoose.Schema(
     requests: Array,
     backGroundPicture:String,
     Admin:Boolean,
-    stories:Array
+    stories:Array,
+    wishList:Array
   },
   { timestamps: true, strict: true }
 );

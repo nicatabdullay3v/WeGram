@@ -480,7 +480,7 @@ const Profile = () => {
                             <RecomendedUsers />
 
                             <div className="posts">
-                                <div className="posts_length">
+                                <div style={{display:"flex",flexWrap:"wrap"}} className="posts_length">
                                     <p style={{ cursor: "pointer" }} onClick={() => {
                                         setstories(true)
                                     }}>Stories <sup>

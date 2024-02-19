@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "../../../redux/store"
 import { CiHeart } from "react-icons/ci";
 import { useEffect, useState } from "react"
 import { Users } from "../../../interfaces/UsersInterface";
-import { FaRegComment } from "react-icons/fa";
+import { FaBookmark, FaRegComment } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegShareSquare } from "react-icons/fa";
 import RecomendedUsers from "../RecomendedUsers/RecomendedUsers"
@@ -16,9 +16,10 @@ import UsersStories from "../UsersStories/UsersStories"
 import Weather from "../Weather/Weather"
 import Followings from "../Followings/Followings"
 import { FaX } from "react-icons/fa6";
+import { FiBookmark } from "react-icons/fi";
 import MyFollowers from "../myFollowers/MyFollowers";
 import { useNavigate } from "react-router-dom";
-const calculateTimeElapsed = (postTime:any) => {
+const calculateTimeElapsed = (postTime: any) => {
     const currentTime = new Date();
     const postDate = new Date(postTime);
     const timeDifference = Number(currentTime) - Number(postDate);
@@ -61,11 +62,11 @@ const FollowingsPhotos = () => {
     }, [])
 
     // SortAll Posts-=-=-=-==-=-=--=-=-=
-    const allPosts: { img: File; time: string; userId: string; comments: [], id: string; likes: [],title:string  }[] = [];
+    const allPosts: { img: File; time: string; userId: string; comments: [], id: string; likes: [], title: string }[] = [];
     users.forEach((followingUser) => {
         if (LocalUser?.followings.find((elem: { _id: string }) => elem._id === followingUser._id)) {
             allPosts.push(
-                ...followingUser.posts.map((post: { img: File; time: string; comments: []; id: string, likes: [],title:string  }) => ({
+                ...followingUser.posts.map((post: { img: File; time: string; comments: []; id: string, likes: [], title: string }) => ({
                     ...post,
                     userId: followingUser._id,
                 }))
@@ -205,16 +206,16 @@ const FollowingsPhotos = () => {
                     <Followings />
                 </div>
                 <div className="followings_photos">
-                <UsersStories />
+                    <UsersStories />
 
                     <div className="followings_photos">
-                        {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [],title:string }) => {
+                        {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [], title: string }) => {
                             const followingUser = users.find((u) => u._id === element.userId);
 
 
                             return followingUser ? (
                                 <div key={element.id} className="card" >
-                                    <div style={{cursor:"pointer"}} onClick={()=>{
+                                    <div style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/home/${followingUser._id}`)
                                     }} className="card_up">
                                         <div className="card_up_profile_img">
@@ -234,8 +235,8 @@ const FollowingsPhotos = () => {
                                     </div>
                                     <div className="card_down">
                                         <div className="title">
-                                            
-                                            <p style={{marginBottom:"20px"}}>{element.title =="Default Title"?null:<span>@{followingUser.username}:</span>} {element.title =="Default Title"? null:element.title}</p>
+
+                                            <p style={{ marginBottom: "20px" }}>{element.title == "Default Title" ? null : <span>@{followingUser.username}:</span>} {element.title == "Default Title" ? null : element.title}</p>
                                         </div>
                                         <div className="card_like_comment_share">
                                             <div className="like">
@@ -267,9 +268,31 @@ const FollowingsPhotos = () => {
                                                 </sub>
                                             </div>
                                             <div className="share">
-                                                <FaRegShareSquare />
+                                                {
+                                                    LocalUser?.wishList.find((x: { postId: string }) => x.postId == element.id) ?
+                                                        <FaBookmark style={{cursor:"pointer",fontSize:"18px"}} onClick={() => {
+                                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                                wishList: LocalUser.wishList.filter((x: { postId: string }) => x.postId != element.id)
+                                                            }).then(() => {
+                                                                dispatch(getAllData())
+                                                                dispatch(getUserById(LocalUserID))
+                                                            })
+                                                        }} /> :
+                                                        <FiBookmark style={{cursor:"pointer",fontSize:"18px"}} onClick={() => {
+                                                            axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                                wishList: [...LocalUser?.wishList!, {
+                                                                    postId: element.id,
+                                                                    userId: followingUser._id
+                                                                }]
+                                                            }).then(() => {
+                                                                dispatch(getAllData())
+                                                                dispatch(getUserById(LocalUserID))
+                                                            })
+                                                        }} />
+                                                }
+
                                             </div>
-                                            <span style={{fontSize:"13px"}}>{calculateTimeElapsed(element.time)}</span>
+                                            <span style={{ fontSize: "13px" }}>{calculateTimeElapsed(element.time)}</span>
                                         </div>
                                     </div>
                                 </div>

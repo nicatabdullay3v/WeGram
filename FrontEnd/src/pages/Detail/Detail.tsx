@@ -13,12 +13,13 @@ import axios from "axios"
 import { useNavigate, useParams } from "react-router-dom"
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 import { GoBlocked } from "react-icons/go";
-import { FaComment, FaHeart } from "react-icons/fa";
+import { FaBookmark, FaComment, FaHeart } from "react-icons/fa";
 import { HiHeart } from "react-icons/hi2";
 import { BsHeart, BsX } from "react-icons/bs";
 import { ToastContainer, toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { IoSettings } from "react-icons/io5";
+import { FiBookmark } from "react-icons/fi";
 const Detail = () => {
 
     const navigate = useNavigate()
@@ -110,6 +111,27 @@ const Detail = () => {
                             }} className="post_heart">
                                 <BsHeart className="icon" /> <sub>{user?.posts.find((x) => x.id == DetailPost.id)?.likes.length}</sub>
                             </div>}
+                            {LocalUser?.wishList.find((x: { postId: string }) => x.postId == DetailPost.id) ?
+                                <FaBookmark style={{ marginBottom: "15px", fontSize: "20px",cursor:"pointer" }} onClick={() => {
+                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                        wishList: LocalUser?.wishList.filter((x: { postId: string }) => x.postId != DetailPost.id)
+                                    }).then(() => {
+                                        dispatch(getAllData())
+                                        dispatch(getUserById(LocalUserID))
+                                    })
+                                }} /> : <FiBookmark onClick={() => {
+                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                        wishList: [...LocalUser?.wishList!, {
+                                            postId: DetailPost.id,
+                                            userId: id
+                                        }]
+                                    }).then(() => {
+                                        dispatch(getAllData())
+                                        dispatch(getUserById(LocalUserID))
+                                    })
+                                }} style={{ marginBottom: "15px", fontSize: "20px",cursor:"pointer" }} />}
+
+
                         </div>
                     </div>     <div className="post_modal_right">
                         <div className="post_comments">

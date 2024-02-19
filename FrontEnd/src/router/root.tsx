@@ -12,6 +12,9 @@ import Settings from "../pages/settingsPage/Settings";
 import PostsDetail from "../pages/PostsDetail/PostsDetail";
 import Admin from "../pages/Admin/Admin";
 import AdminPosts from "../pages/AdminPosts/AdminPosts";
+import SavedPosts from "../pages/SavedPosts/SavedPosts";
+import AdminStories from "../pages/AdminStories/AdminStories";
+import AdminWishList from "../pages/AdminWishList/AdminWishList";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,8 +54,20 @@ const router = createBrowserRouter([
     element: <Admin />
   },
   {
-    path: "/admin/:id",
-    element: <AdminPosts/>
+    path: "/admin/posts/:id",
+    element: <AdminPosts />
+  },
+  {
+    path: "/savedposts",
+    element: <SavedPosts />
+  },
+  {
+    path: "/admin/stories/:id",
+    element: <AdminStories />
+  },
+  {
+    path: "/admin/wishList/:id",
+    element: <AdminWishList />
   }
 ]);
 export default router 

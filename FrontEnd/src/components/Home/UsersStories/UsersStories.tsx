@@ -37,9 +37,9 @@ const UsersStories = () => {
         const storyTimestamp = new Date(storyTime).getTime();
         const currentTimestamp = new Date().getTime();
         const timeDifferenceInHours = (currentTimestamp - storyTimestamp) / (1000 * 60 * 60);
-        return timeDifferenceInHours <= 24; // Change 1 to the desired time limit in hours
+        return timeDifferenceInHours <= 24; 
     };
-    const validStories = storieUser?.stories.filter(story => isStoryWithinTimeLimit(story.time));
+    const validStories = storieUser?.stories.filter((story:{time:string}) => isStoryWithinTimeLimit(story.time));
 
     return (
         <section id='stories'>
@@ -80,7 +80,7 @@ const UsersStories = () => {
                             )
                         ))}
                     </Swiper>
-                    <input placeholder='type...' type="text" />
+                    {/* <input placeholder='type...' type="text" /> */}
                     <FaX className='x' onClick={() => setstorieModal(false)} />
                 </div>
             ) : null}
