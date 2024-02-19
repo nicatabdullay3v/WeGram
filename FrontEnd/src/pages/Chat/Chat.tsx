@@ -28,7 +28,7 @@ const Chat: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   console.log(onlineUsers);
   const { socket } = useSocketContext() || {}
-
+const [searchInput, setsearchInput] = useState('')
   const [isTyping, setIsTyping] = useState(false);
   console.log(screenX);
 
@@ -124,7 +124,9 @@ const Chat: React.FC = () => {
         <div className="chat_border">
           <div className="chat_left">
             <div className="chat_left_up">
-              <input placeholder="search" type="text" />
+              <input onChange={(e)=>{
+                  setsearchInput(e.target.value)
+              }} placeholder="search" type="text" />
               <GoSearch onClick={() => { }} className="icon" />
             </div>
             <div className="chat_left_down">
@@ -133,23 +135,26 @@ const Chat: React.FC = () => {
                   user.followings.map((elem: { _id: string }) => {
                     const userElement = users.find((x) => x._id === elem._id);
                     const isOnline = onlineUsers.includes(elem._id);
-                    return (
-                      userElement && (
-                        <div
-                          key={userElement._id}
-                          className={`chat_user ${selectedUserId === userElement._id ? "selected" : ""}`}
-                          onClick={() => handleUserClick(userElement._id)}
-                        >
-                          <div className="user_profile_pic">
-                            <img src={userElement.profilePicture} alt="" />
-                            <p className={isOnline ? "online" : "xexe"}></p>
+                    if (userElement?.username.toLowerCase().trim().includes(searchInput.toLowerCase().trim())) {
+                      return (
+                        userElement && (
+                          <div
+                            key={userElement._id}
+                            className={`chat_user ${selectedUserId === userElement._id ? "selected" : ""}`}
+                            onClick={() => handleUserClick(userElement._id)}
+                          >
+                            <div className="user_profile_pic">
+                              <img src={`http://localhost:3001/profilePictures/${userElement?.profilePicture}`} alt="" />
+                              <p className={isOnline ? "online" : "xexe"}></p>
+                            </div>
+                            <div className="user_name">
+                              <p >{userElement.username}</p>
+                            </div>
                           </div>
-                          <div className="user_name">
-                            <p >{userElement.username}</p>
-                          </div>
-                        </div>
-                      )
-                    );
+                        )
+                      );
+                    }
+                
                   })}
               </div>
             </div>
@@ -244,10 +249,28 @@ const Chat: React.FC = () => {
           </div>
         </div>
       </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
       <div className="chat_res">
         <div style={{ display: display ? "block" : "none" }} className="chat_left">
           <div className="chat_left_up">
-            <input placeholder="search" type="text" />
+            <input onChange={(e)=>{
+              setsearchInput(e.target.value)
+            }} placeholder="search" type="text" />
             <GoSearch onClick={() => { }} className="icon" />
           </div>
           <div className="chat_left_down">
@@ -256,23 +279,25 @@ const Chat: React.FC = () => {
                 user.followings.map((elem: { _id: string }) => {
                   const userElement = users.find((x) => x._id === elem._id);
                   const isOnline = onlineUsers.includes(elem._id);
-                  return (
-                    userElement && (
-                      <div
-                        key={userElement._id}
-                        className={`chat_user ${selectedUserId === userElement._id ? "selected" : ""}`}
-                        onClick={() => handleUserClick(userElement._id)}
-                      >
-                        <div className="user_profile_pic">
-                          <img src={userElement.profilePicture} alt="" />
-                          <p className={isOnline ? "online" : "xexe"}></p>
+                  if (userElement?.username.toLowerCase().trim().includes(searchInput.toLowerCase().trim())) {
+                    return (
+                      userElement && (
+                        <div
+                          key={userElement._id}
+                          className={`chat_user ${selectedUserId === userElement._id ? "selected" : ""}`}
+                          onClick={() => handleUserClick(userElement._id)}
+                        >
+                          <div className="user_profile_pic">
+                            <img src={`http://localhost:3001/profilePictures/${userElement?.profilePicture}`} alt="" />
+                            <p className={isOnline ? "online" : "xexe"}></p>
+                          </div>
+                          <div className="user_name">
+                            <p >{userElement.username}</p>
+                          </div>
                         </div>
-                        <div className="user_name">
-                          <p >{userElement.username}</p>
-                        </div>
-                      </div>
-                    )
-                  );
+                      )
+                    );
+                  }
                 })}
             </div>
           </div>

@@ -39,7 +39,7 @@ const SavedPosts = () => {
                                     navigate(`/home/${post_user?._id}`)
                                 }} className="post_user">
                                     <div className="post_user_img">
-                                        <img src={post_user?.profilePicture} alt="" />
+                                        <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${post_user?.profilePicture}`} alt="" />
                                     </div>
                                     <div className="post_user_name">
                                         <p>{post_user?.username}</p>

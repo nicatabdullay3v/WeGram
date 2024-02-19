@@ -115,7 +115,7 @@ const FollowingsPhotos = () => {
                         return <div className="comments">
                             <div style={{ display: 'flex', alignItems: "center", gap: "10px" }}>
                                 <div className="user_profile_picture">
-                                    <img src={CommentUser ? CommentUser.profilePicture : LocalUser?.profilePicture} alt="" />
+                                    <img src={CommentUser ? `http://localhost:3001/profilePictures/${CommentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                 </div>
                                 <div className="user_name">
                                     <p> {CommentUser ? CommentUser.username : LocalUser?.username}</p>
@@ -145,7 +145,7 @@ const FollowingsPhotos = () => {
                             return <>
                                 <div className="user">
                                     <div className="user_picture">
-                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                        <img src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                     </div>
                                     <div className="user_username">
                                         <p>{replyUser?.username ? replyUser.username : LocalUser?.username}</p>
@@ -219,7 +219,7 @@ const FollowingsPhotos = () => {
                                         navigate(`/home/${followingUser._id}`)
                                     }} className="card_up">
                                         <div className="card_up_profile_img">
-                                            <img src={followingUser.profilePicture} alt="" />
+                                            <img src={`http://localhost:3001/profilePictures/${followingUser?.profilePicture}`} alt="" />
                                         </div>
                                         <div className="card_up_name">
                                             <span>{followingUser.username}</span>

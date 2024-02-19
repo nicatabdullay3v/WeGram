@@ -147,8 +147,8 @@ const Detail = () => {
                                             const replyUser = users.find((z) => z._id == x._id)
                                             return <div style={{ textAlign: "start" }} className="user_replys">
                                                 <div className="user">
-                                                    <div className="user_picture">
-                                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                                    <div style={{marginRight:'10px'}} className="user_picture">
+                                                        <img style={{borderRadius:"50%"}} src={replyUser?.profilePicture ?`http://localhost:3001/profilePictures/${replyUser?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                                     </div>
                                                     <div className="user_name">
                                                         <p>
@@ -188,8 +188,8 @@ const Detail = () => {
                                 const commentUser = users.find((z) => z._id == x._id)
                                 return <div>
                                     <div className="user">
-                                        <div className="user_picture">
-                                            <img src={commentUser?.profilePicture ? commentUser.profilePicture : LocalUser?.profilePicture} alt="" />
+                                        <div style={{marginRight:"10px"}} className="user_picture">
+                                            <img style={{borderRadius:"50%"}} src={commentUser?.profilePicture ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                         </div>
                                         <div className="user_name">
                                             <p>{commentUser?.username ? commentUser?.username : LocalUser?.username}</p>
@@ -243,7 +243,7 @@ const Detail = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
 
                             </div>
                             <div className="following_name">
@@ -272,8 +272,8 @@ const Detail = () => {
 
                         }} className="following">
 
-                            <div className="following_picture">
-                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+                            <div  className="following_picture">
+                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username ? following.username : LocalUser?.username}</p>
@@ -301,7 +301,7 @@ const Detail = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={following?.profilePicture ? following?.profilePicture : LocalUser?.profilePicture} alt="" />
+                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
 
                             </div>
                             <div className="following_name">
@@ -318,7 +318,7 @@ const Detail = () => {
 
                             <div className="user_profile_back_img">
                                 <div className="user_profile_picture">
-                                    <img src={user?.profilePicture} alt="" />
+                                    <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                 </div>
                                 <img src={user?.backGroundPicture} alt="" />
 

@@ -27,8 +27,8 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // https://avatar.iran.liara.run/
-    const boyProfilePicture = `https://avatar.iran.liara.run/public/boy?username=${email}`;
-    const girlProfilePicture = `https://avatar.iran.liara.run/public/girl?username=${email}`;
+    const boyProfilePicture = `blank-profile-picture-973460_640.webp`;
+    const girlProfilePicture = `02-1User_14-512.webp`;
 
     const newUser = new User({
       username,

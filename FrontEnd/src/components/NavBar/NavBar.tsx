@@ -88,7 +88,7 @@ const NavBar: React.FC = () => {
                                             navigate(`/home/${elem._id}`)
                                         }} className="user">
                                             <div className="users_profile_img">
-                                                <img src={elem.profilePicture} alt="" />
+                                                <img src={`http://localhost:3001/profilePictures/${elem?.profilePicture}`} alt="" />
                                             </div>
                                             <div className="users_name">
                                                 {elem.username}
@@ -141,7 +141,7 @@ const NavBar: React.FC = () => {
                     <ul className="nav_right">
                         <div className="profile">
                             <div className="profile_picture">
-                                <img src={user?.profilePicture} alt="" />
+                                <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                             </div>
                             <div className="profile_name">
                                 <p>{user?.username}</p>
@@ -156,7 +156,7 @@ const NavBar: React.FC = () => {
                                         return <>
                                             <div className="user">
                                                 <div className="user_picture">
-                                                    <img src={element.profilePicture} alt="" />
+                                                    <img src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
                                                 </div>
                                                 <div className="user_name">
                                                     <p>{element.username}</p>

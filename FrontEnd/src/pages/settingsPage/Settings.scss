@@ -8,6 +8,65 @@
   height: 100vh;
   backdrop-filter: blur(10px); /* Adjust the blur amount as needed */
   background-color: rgba(255, 255, 255, 0.065);
+  .modal {
+    position: fixed;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 10px;
+    top: 100px;
+    height: 400px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px,
+      rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    left: 50%;
+    z-index: 2;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 50px;
+    .add_button {
+      background-color: #3e6c7b;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .file-input-text {
+      margin-top: 50px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-right: 10px;
+      flex-grow: 1;
+    }
+
+    .file-input-container {
+      position: relative;
+    }
+
+    .input-file {
+      display: none;
+    }
+
+    .file-label {
+      background-color: #3e6c7b;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-block;
+      transition: 0.5s;
+    }
+
+    .file-label:hover {
+      background-color: #7ba1ad;
+    }
+
+    /* Additional styles for selected file display */
+    p {
+      margin-top: 10px;
+    }
+  }
   .user_settings {
     .user_name_profile_picture {
       display: flex;

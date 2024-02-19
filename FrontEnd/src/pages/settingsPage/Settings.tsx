@@ -5,7 +5,10 @@ import "./Settings.scss"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice"
 import axios from "axios"
+import { AiOutlineClose } from "react-icons/ai"
 const Settings = () => {
+  const [modal, setModal] = useState(false)
+
   const dispatch = useDispatch<AppDispatch>()
   const LocalUser = useSelector((state: RootState) => state.users.user)
   const LocalUserID = JSON.parse(localStorage.getItem("user-info") || "{}")._id
@@ -20,13 +23,56 @@ const Settings = () => {
   const [bio, setBio] = useState<string>("");
   const [bioInput, setBioInput] = useState(false)
   const [img, setImg] = useState<string>("");
+  const [file, setFile] = useState<File | undefined>()
   const [imgInput, setImgInput] = useState(false)
+  const handelProfilePicture = () => {
+    if (!file) {
+      console.error("Please select a file");
+      return;
+    }
 
+    const formData = new FormData();
+    formData.append('file', file);
+
+    axios.patch(`http://localhost:3001/api/users/${LocalUserID}/addProfilePicture`, formData)
+      .then((res) => {
+        dispatch(getUserById(LocalUserID));
+      })
+      .catch((error) => {
+        console.error("Error uploading story:", error);
+      });
+
+    setFile(undefined);
+  };
   return (
     <>
       <NavBar />
+
       <div className="container">
         <div className="settings">
+          {modal ? <div className="modal">
+            <div style={{ textAlign: 'end' }} className="close">
+              <AiOutlineClose onClick={() => {
+                setModal(false)
+              }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
+
+            </div>
+            <div className="file-input-container">
+              <input
+                onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                type="file"
+                id="fileInput"
+                className="input-file"
+              />
+              <label htmlFor="fileInput" className="file-label">
+                Choose a File
+              </label>
+              {file && <p>Selected File: {file.name}</p>}
+            </div>
+            <div className="file_title">
+            </div>
+            <button onClick={handelProfilePicture} className="add_button">Add Post</button>
+          </div> : null}
           <div className="user_settings">
             <div className="user_name_profile_picture">
               <div className="user_settings_name_surname">
@@ -121,7 +167,7 @@ const Settings = () => {
               </div>
 
               <div className="user_settings_profile_picture">
-                <img src={LocalUser?.profilePicture} alt="" />
+                <img src={`http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                 <div className="user_settings_bio edit">
                   <p style={{ marginLeft: "40px" }}>img</p>
                   <input onChange={(e) => {
@@ -129,9 +175,7 @@ const Settings = () => {
                   }} style={{ display: imgInput ? "block" : "none" }} value={img} type="text" />
 
                   <button style={{ display: imgInput ? "none" : "block" }} onClick={() => {
-                    setImg(LocalUser?.profilePicture!)
-                    setImgInput(true)
-                    console.log(name);
+                    setModal(true)
 
                   }}>Edit</button>
                   <button style={{ display: imgInput ? "block" : "none" }} onClick={() => {

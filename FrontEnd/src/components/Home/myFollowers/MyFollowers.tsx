@@ -29,7 +29,7 @@ const MyFollowers = () => {
                     }} className="user" key={elem._id}>
                         <div className="user-info">
                             <div className="user_picture">
-                                <img src={myfollower?.profilePicture} alt="" />
+                                <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${myfollower?.profilePicture}`} alt="" />
                             </div>
                             <div className="user_username">
                                 {myfollower?.username}

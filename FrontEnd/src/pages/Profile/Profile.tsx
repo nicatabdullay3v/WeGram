@@ -138,7 +138,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={following?.profilePicture} alt="" />
+                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -166,7 +166,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={following?.profilePicture} alt="" />
+                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -194,7 +194,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={following?.profilePicture} alt="" />
+                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -282,8 +282,9 @@ const Profile = () => {
                                             const replyUser = users.find((z) => z._id == x._id)
                                             return <div style={{ textAlign: "start" }} className="user_replys">
                                                 <div className="user">
-                                                    <div className="user_picture">
-                                                        <img src={replyUser?.profilePicture ? replyUser?.profilePicture : user?.profilePicture} alt="" />
+                                                    <div style={{marginRight:"10px"}} className="user_picture">
+                                                        
+                                                        <img style={{borderRadius:"50%"}} src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}`: `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                                     </div>
                                                     <div className="user_name">
                                                         <p>
@@ -323,7 +324,7 @@ const Profile = () => {
                                 return <div className="user_comments">
                                     <div className="user">
                                         <div className="user_picture">
-                                            <img src={commentUser?.username ? commentUser?.profilePicture : user?.profilePicture} alt="" />
+                                            <img style={{borderRadius:"50%"}} src={commentUser?.username ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}`: `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
 
                                         </div>
                                         <div className="user_name">
@@ -439,7 +440,7 @@ const Profile = () => {
 
                             <div className="user_profile_back_img">
                                 <div className="user_profile_picture">
-                                    <img src={user?.profilePicture} alt="" />
+                                    <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                 </div>
                                 <IoSettings onClick={() => {
                                     setSett(sett === true ? false : true)

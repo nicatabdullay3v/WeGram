@@ -53,7 +53,7 @@ const RecomendedUsers = () => {
                         }} className="user" key={userId}>
                             <div className="user-info">
                                 <div className="user_picture">
-                                    <img src={recUser?.profilePicture} alt="" />
+                                    <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${recUser?.profilePicture}`} alt="" />
                                 </div>
                                 <div className="user_username">
                                     {recUser?.username}
