@@ -21,6 +21,7 @@ import { PiDotsThree } from "react-icons/pi";
 import { FaDeleteLeft, FaX } from "react-icons/fa6";
 const Profile = () => {
     const navigate = useNavigate()
+    const [backModal, setbackModal] = useState(false)
     const [modal, setModal] = useState(false)
     const [stories, setstories] = useState(false)
     const [title, setTitle] = useState("")
@@ -60,6 +61,25 @@ const Profile = () => {
 
 
     console.log(user);
+    const handleBackGroundPicture = () => {
+        if (!file) {
+            console.error("Please select a file");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        axios.patch(`http://localhost:3001/api/users/${LocalUserID}/addBackGround`, formData)
+            .then((res) => {
+                dispatch(getUserById(LocalUserID));
+            })
+            .catch((error) => {
+                console.error("Error uploading story:", error);
+            });
+        setbackModal(false)
+        setFile(undefined);
+    };
     const handleStoryUpload = () => {
         if (!file) {
             console.error("Please select a file");
@@ -282,9 +302,9 @@ const Profile = () => {
                                             const replyUser = users.find((z) => z._id == x._id)
                                             return <div style={{ textAlign: "start" }} className="user_replys">
                                                 <div className="user">
-                                                    <div style={{marginRight:"10px"}} className="user_picture">
-                                                        
-                                                        <img style={{borderRadius:"50%"}} src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}`: `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
+                                                    <div style={{ marginRight: "10px" }} className="user_picture">
+
+                                                        <img style={{ borderRadius: "50%" }} src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}` : `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                                     </div>
                                                     <div className="user_name">
                                                         <p>
@@ -324,7 +344,7 @@ const Profile = () => {
                                 return <div className="user_comments">
                                     <div className="user">
                                         <div className="user_picture">
-                                            <img style={{borderRadius:"50%"}} src={commentUser?.username ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}`: `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
+                                            <img style={{ borderRadius: "50%" }} src={commentUser?.username ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
 
                                         </div>
                                         <div className="user_name">
@@ -367,17 +387,17 @@ const Profile = () => {
                     <FaX onClick={() => {
                         setstories(false)
                     }} className="icon" />
-                    {user?.stories.map((item: { img: string ,id:string}) => {
+                    {user?.stories.map((item: { img: string, id: string }) => {
                         return <div className="storie">
                             <div className="storie_img">
                                 <img src={`http://localhost:3001/${item.img}`} alt="" />
                             </div>
-                        <FaTrash onClick={()=>{
-                            axios.delete(`http://localhost:3001/api/users/${LocalUserID}/stories/${item.id}`).then(()=>{
-                                dispatch(getAllData())
-                                dispatch(getUserById(LocalUserID))
-                            })
-                        }} className="trash_icon"/>
+                            <FaTrash onClick={() => {
+                                axios.delete(`http://localhost:3001/api/users/${LocalUserID}/stories/${item.id}`).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                })
+                            }} className="trash_icon" />
 
                         </div>
                     })}
@@ -434,6 +454,30 @@ const Profile = () => {
                     </div>
                     <button onClick={handleStoryUpload} className="add_button">Add story</button>
                 </div> : null}
+                {backModal ? <div className="modal">
+                    <div style={{ textAlign: 'end' }} className="close">
+                        <AiOutlineClose onClick={() => {
+                            setbackModal(false)
+
+                        }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
+
+                    </div>
+                    <div className="file-input-container">
+                        <input
+                            onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                            type="file"
+                            id="fileInput"
+                            className="input-file"
+                        />
+                        <label htmlFor="fileInput" className="file-label">
+                            Choose a File
+                        </label>
+                        {file && <p>Selected File: {file.name}</p>}
+                    </div>
+                    <div className="file_title">
+                    </div>
+                    <button onClick={handleBackGroundPicture} className="add_button">Add backGroundPiscture</button>
+                </div> : null}
                 <div className="container">
                     <div className="user_profile">
                         <div className="user_profile_up">
@@ -443,7 +487,7 @@ const Profile = () => {
                                     <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                 </div>
                                 <IoSettings onClick={() => {
-                                    setSett(sett === true ? false : true)
+                                    setbackModal(true)
                                 }} style={{ position: "absolute", top: "20px", right: "20px", fontSize: "22px", color: "white", cursor: "pointer" }} />
                                 {sett ? <div className="backGroundSettings">
                                     <input placeholder="Set new photo url" onChange={(e) => {
@@ -460,7 +504,7 @@ const Profile = () => {
                                         })
                                     }} >set</button>
                                 </div> : null}
-                                <img src={user?.backGroundPicture} alt="" />
+                                <img src={`http://localhost:3001/backGroundPictures/${user?.backGroundPicture}`} alt="" />
                             </div>
                             <ul className="user_profile_up_about">
                                 <li>{user?.username}</li>
@@ -481,7 +525,7 @@ const Profile = () => {
                             <RecomendedUsers />
 
                             <div className="posts">
-                                <div style={{display:"flex",flexWrap:"wrap"}} className="posts_length">
+                                <div style={{ display: "flex", flexWrap: "wrap" }} className="posts_length">
                                     <p style={{ cursor: "pointer" }} onClick={() => {
                                         setstories(true)
                                     }}>Stories <sup>

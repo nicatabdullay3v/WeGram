@@ -1,6 +1,6 @@
 import express from "express"
 import protectRoute from "../middleware/protetcRoute.js"
-import { addPostImage, addProfilePicture, addStory, deleteCommentById, deletePostById, deleteStoryById, deleteUserById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
+import { addBackgroundPicture, addPostImage, addProfilePicture, addStory, deleteCommentById, deletePostById, deleteStoryById, deleteUserById, getCommentById, getPostById, getUsers, getUsersById, patchComments, patchPost, patchUsers } from "../controllers/users.controller.js"
 import multer from "multer"
 import path from "path"
 const router = express.Router()
@@ -51,6 +51,22 @@ const storage = multer.diskStorage({
     storage: profilePictureStorage,
   });
 
+  const backGroundPictureStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, "public/backGroundPictures/");
+    },
+    filename: (req, file, cb) => {
+      cb(
+        null,
+        file.fieldname + "_" + Date.now() + path.extname(file.originalname)
+      );
+    },
+  });
+  
+  const backGroundPictureUpload = multer({
+    storage: backGroundPictureStorage,
+  });
+
 router.get("/",protectRoute,getUsers)
 router.get("/:id",protectRoute,getUsersById)
 router.delete("/:id",protectRoute,deleteUserById)
@@ -58,6 +74,7 @@ router.patch("/:id",protectRoute,patchUsers)
 router.patch('/:id/addPostImage',protectRoute, upload.single('file'),addPostImage );
 router.patch('/:id/addStory', protectRoute, storyUpload.single('file'), addStory);
 router.patch('/:id/addProfilePicture', protectRoute, profilePictureUpload.single('file'), addProfilePicture);
+router.patch('/:id/addBackGround', protectRoute, backGroundPictureUpload.single('file'), addBackgroundPicture);
 router.get("/:id/posts/:postId",protectRoute, getPostById);
 router.get("/:id/posts/:postId/comments/:commentId",protectRoute, getCommentById);
 router.delete("/:id/posts/:postId/comments/:commentId",protectRoute, deleteCommentById);

@@ -71,7 +71,7 @@ const Settings = () => {
             </div>
             <div className="file_title">
             </div>
-            <button onClick={handelProfilePicture} className="add_button">Add Post</button>
+            <button onClick={handelProfilePicture} className="add_button">Add ProfilePicture</button>
           </div> : null}
           <div className="user_settings">
             <div className="user_name_profile_picture">

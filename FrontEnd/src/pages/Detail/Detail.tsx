@@ -320,7 +320,7 @@ const Detail = () => {
                                 <div className="user_profile_picture">
                                     <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                                 </div>
-                                <img src={user?.backGroundPicture} alt="" />
+                                <img src={`http://localhost:3001/backGroundPictures/${user?.backGroundPicture}`} alt="" />
 
                             </div>
                             <ul className="user_profile_up_about">
