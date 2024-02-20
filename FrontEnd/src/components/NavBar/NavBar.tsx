@@ -114,12 +114,56 @@ const NavBar: React.FC = () => {
                                 navigate('/chat')
                             }} className="icon" />
                         </div>
-                        <div className="sections">
+                        <div style={{display:"block"}} className="sections">
                             <FaRegBell style={{ cursor: "pointer" }} onClick={() => {
                                 setOpenRequest(openRequest == false ? true : false)
                             }} className="icon" />
                             <div className="length">
-                        <p>{user?.requests.length}</p>
+                                <p>{user?.requests.length}</p>
+                            </div>
+                            <div className="requets">
+                                {openRequest ? <div className="requests_box">
+                                    {user?.requests.map((x: { _id: string }) => {
+
+
+                                        return users.filter((elem) => elem._id == x._id).map((element) => {
+                                            return <>
+                                                <div className="user">
+                                                    <div className="user_picture">
+                                                        <img style={{ borderRadius: "50%" }} src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
+                                                    </div>
+                                                    <div className="user_name">
+                                                        <p>{element.username}</p>
+                                                    </div>
+
+
+                                                </div>
+                                                <li style={{ marginTop: "10px", marginBottom: "20px" }}>{element.username} wanna be your friend <br /> <button onClick={() => {
+                                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                        followers: [...user.followers, { _id: element._id }],
+                                                        requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                                    }).then(() => {
+                                                        dispatch(getAllData())
+                                                        dispatch(getUserById(LocalUserID))
+                                                    })
+                                                    axios.patch(`http://localhost:3001/api/users/${element._id}`, {
+                                                        followings: [...element.followings, { _id: user._id }]
+                                                    }).then(() => {
+                                                        dispatch(getAllData())
+                                                        dispatch(getUserById(LocalUserID))
+                                                    })
+                                                }}>accept</button><button onClick={() => {
+                                                    axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                                        requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
+                                                    }).then(() => {
+                                                        dispatch(getAllData())
+                                                        dispatch(getUserById(LocalUserID))
+                                                    })
+                                                }}>delete</button> </li>
+                                            </>
+                                        })
+                                    })}
+                                </div> : null}
                             </div>
                         </div>
                         <div className="sections">
@@ -143,50 +187,7 @@ const NavBar: React.FC = () => {
                                 <p>{user?.username}</p>
                             </div>
                         </div>
-                        <div className="requets">
-                            {openRequest ? <div className="requests_box">
-                                {user?.requests.map((x: { _id: string }) => {
 
-
-                                    return users.filter((elem) => elem._id == x._id).map((element) => {
-                                        return <>
-                                            <div className="user">
-                                                <div className="user_picture">
-                                                    <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
-                                                </div>
-                                                <div className="user_name">
-                                                    <p>{element.username}</p>
-                                                </div>
-
-
-                                            </div>
-                                            <li style={{ marginTop: "10px", marginBottom: "20px" }}>{element.username} wanna be your friend <button onClick={() => {
-                                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
-                                                    followers: [...user.followers, { _id: element._id }],
-                                                    requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
-                                                }).then(() => {
-                                                    dispatch(getAllData())
-                                                    dispatch(getUserById(LocalUserID))
-                                                })
-                                                axios.patch(`http://localhost:3001/api/users/${element._id}`, {
-                                                    followings: [...element.followings, { _id: user._id }]
-                                                }).then(() => {
-                                                    dispatch(getAllData())
-                                                    dispatch(getUserById(LocalUserID))
-                                                })
-                                            }}>accept</button><button onClick={() => {
-                                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
-                                                    requests: user.requests.filter((x: { _id: string }) => x._id != element._id)
-                                                }).then(() => {
-                                                    dispatch(getAllData())
-                                                    dispatch(getUserById(LocalUserID))
-                                                })
-                                            }}>delete</button> </li>
-                                        </>
-                                    })
-                                })}
-                            </div> : null}
-                        </div>
 
                         <p style={{ marginLeft: "40px" }}>
                             <GiHamburgerMenu className="responsive_side_bar" onClick={() => {

@@ -165,10 +165,8 @@ export const deletePostById = async (req, res) => {
       return res.status(404).send({ error: "Post not found" });
     }
 
-    // Remove the post from the user's posts array
     user.posts.splice(postIndex, 1);
 
-    // Save the updated user document
     await user.save();
 
     res.status(200).send({ message: "Post deleted" });

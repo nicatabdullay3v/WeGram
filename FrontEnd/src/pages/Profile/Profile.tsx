@@ -324,7 +324,7 @@ const Profile = () => {
                                 </div>
                                 <div>           <input value={reply} onChange={(e) => {
                                     setreply(e.target.value)
-                                }} type="text" /><span><button onClick={() => {
+                                }} type="text" /><span><button style={{ color: "white", marginTop: "10px" }} onClick={() => {
                                     axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}/comments/${AxiosComment.commentID}`, {
                                         comment: AxiosComment.comment,
                                         commentID: AxiosComment.commentID,
@@ -371,7 +371,7 @@ const Profile = () => {
                             <input value={comment} onChange={(e) => {
                                 setcomment(e.target.value)
                             }} type="text" />
-                            <button onClick={() => {
+                            <button style={{ color: "white" }} onClick={() => {
                                 axios.patch(`http://localhost:3001/api/users/${LocalUserID}/posts/${postId}`, {
                                     comments: [...detailPost?.comments!, { _id: LocalUserID, commentID: uuidv4(), replys: [], comment: comment }]
                                 }).then(() => {

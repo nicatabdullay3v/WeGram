@@ -116,7 +116,7 @@ const FollowingsPhotos = () => {
                         return <div className="comments">
                             <div style={{ display: 'flex', alignItems: "center", gap: "10px" }}>
                                 <div className="user_profile_picture">
-                                    <img src={CommentUser ? `http://localhost:3001/profilePictures/${CommentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                    <img style={{ borderRadius: "50%" }} src={CommentUser ? `http://localhost:3001/profilePictures/${CommentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                 </div>
                                 <div className="user_name">
                                     <p> {CommentUser ? CommentUser.username : LocalUser?.username}</p>
@@ -146,7 +146,7 @@ const FollowingsPhotos = () => {
                             return <>
                                 <div className="user">
                                     <div className="user_picture">
-                                        <img src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                        <img style={{ borderRadius: "50%" }} src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                     </div>
                                     <div className="user_username">
                                         <p>{replyUser?.username ? replyUser.username : LocalUser?.username}</p>
@@ -161,7 +161,7 @@ const FollowingsPhotos = () => {
                         <input value={reply} onChange={(e) => {
                             setreply(e.target.value)
                         }} type="text" />
-                        <button onClick={() => {
+                        <button style={{ backgroundColor: "#3E6C7B" }} onClick={() => {
                             axios.patch(`http://localhost:3001/api/users/${FollowingUserForComments._id}/posts/${postID}/comments/${commentId}`, {
                                 comment: AxiosComment.comment,
                                 commentID: AxiosComment.commentID,
@@ -182,10 +182,10 @@ const FollowingsPhotos = () => {
                     </div> : null}
                 </div>
                 <div className="modal_end">
-                    <textarea value={comment} onChange={(e) => {
+                    <textarea style={{ paddingLeft: "10px", paddingTop: "5px", marginRight: "10px" }} value={comment} onChange={(e) => {
                         setcomment(e.target.value)
                     }} />
-                    <button onClick={() => {
+                    <button style={{ backgroundColor: '#3E6C7B' }} onClick={() => {
                         const FollowingUserComments = FollowingUserForComments?.posts.find((x: { id: string }) => x.id == postID)?.comments
                         const findIndex = FollowingUserForComments?.posts.findIndex((x: { id: string }) => x.id == postID)
 
@@ -261,7 +261,7 @@ const FollowingsPhotos = () => {
 
                                             </div>
 
-                                            <div className="comment">
+                                            <div style={{ width: "250px" }} className="comment">
                                                 <FaRegComment style={{ cursor: 'pointer' }} onClick={() => {
                                                     setselectedUserId(followingUser._id)
                                                     setpostID(element.id)
