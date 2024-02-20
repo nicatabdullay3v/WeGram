@@ -52,9 +52,9 @@ const Settings = () => {
         <div className="settings">
           {modal ? <div className="modal">
             <div style={{ textAlign: 'end' }} className="close">
-              <AiOutlineClose onClick={() => {
+              <AiOutlineClose  onClick={() => {
                 setModal(false)
-              }} style={{ fontSize: "25px", cursor: "pointer", color: "purple" }} />
+              }} style={{ fontSize: "25px", cursor: "pointer", color: "#3e6c7b" }} />
 
             </div>
             <div className="file-input-container">
@@ -71,7 +71,7 @@ const Settings = () => {
             </div>
             <div className="file_title">
             </div>
-            <button onClick={handelProfilePicture} className="add_button">Add ProfilePicture</button>
+            <button onClick={handelProfilePicture} style={{padding:"10px 12px"}} className="add_button">Add ProfilePicture</button>
           </div> : null}
           <div className="user_settings">
             <div className="user_name_profile_picture">

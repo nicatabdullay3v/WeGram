@@ -19,6 +19,7 @@ import { FaX } from "react-icons/fa6";
 import { FiBookmark } from "react-icons/fi";
 import MyFollowers from "../myFollowers/MyFollowers";
 import { useNavigate } from "react-router-dom";
+import { AiOutlinePicture } from "react-icons/ai";
 const calculateTimeElapsed = (postTime: any) => {
     const currentTime = new Date();
     const postDate = new Date(postTime);
@@ -209,10 +210,15 @@ const FollowingsPhotos = () => {
                     <UsersStories />
 
                     <div className="followings_photos">
-                        {sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [], title: string }) => {
+
+                        {sortedPosts?.length == 0 ? <div className="no_picture">
+                            <div className="icon">
+
+                                <AiOutlinePicture style={{ fontSize: "70px" }} />
+                                <p style={{ fontSize: "40px" }}>No pictures yet</p>
+                            </div>
+                        </div> : sortedPosts.map((element: { img: File; time: string; userId: string, id: string; likes: [], title: string }) => {
                             const followingUser = users.find((u) => u._id === element.userId);
-
-
                             return followingUser ? (
                                 <div key={element.id} className="card" >
                                     <div style={{ cursor: "pointer" }} onClick={() => {
@@ -270,7 +276,7 @@ const FollowingsPhotos = () => {
                                             <div className="share">
                                                 {
                                                     LocalUser?.wishList.find((x: { postId: string }) => x.postId == element.id) ?
-                                                        <FaBookmark style={{cursor:"pointer",fontSize:"18px"}} onClick={() => {
+                                                        <FaBookmark style={{ cursor: "pointer", fontSize: "18px" }} onClick={() => {
                                                             axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
                                                                 wishList: LocalUser.wishList.filter((x: { postId: string }) => x.postId != element.id)
                                                             }).then(() => {
@@ -278,7 +284,7 @@ const FollowingsPhotos = () => {
                                                                 dispatch(getUserById(LocalUserID))
                                                             })
                                                         }} /> :
-                                                        <FiBookmark style={{cursor:"pointer",fontSize:"18px"}} onClick={() => {
+                                                        <FiBookmark style={{ cursor: "pointer", fontSize: "18px" }} onClick={() => {
                                                             axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
                                                                 wishList: [...LocalUser?.wishList!, {
                                                                     postId: element.id,

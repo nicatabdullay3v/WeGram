@@ -118,20 +118,16 @@ const NavBar: React.FC = () => {
                             <FaRegBell style={{ cursor: "pointer" }} onClick={() => {
                                 setOpenRequest(openRequest == false ? true : false)
                             }} className="icon" />
-
+                            <div className="length">
+                        <p>{user?.requests.length}</p>
+                            </div>
                         </div>
                         <div className="sections">
                             <FiBookmark onClick={() => {
                                 navigate('/savedposts')
                             }} className="icon" />
                         </div>
-                        <div className="sections">
-                            <HiOutlineUsers className="icon" />
-                        </div>
 
-                        <div className="sections">
-                            <GrLanguage className="icon" />
-                        </div>
                         {CurrentLocalUser.Admin === true ? <div style={{ cursor: "pointer" }} className="sections">
                             <GrUserAdmin onClick={() => {
                                 navigate('/admin')
@@ -156,7 +152,7 @@ const NavBar: React.FC = () => {
                                         return <>
                                             <div className="user">
                                                 <div className="user_picture">
-                                                    <img src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
+                                                    <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
                                                 </div>
                                                 <div className="user_name">
                                                     <p>{element.username}</p>

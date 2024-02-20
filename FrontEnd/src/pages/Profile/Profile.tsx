@@ -5,7 +5,7 @@ import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
 import { AppDispatch, RootState } from "../../redux/store";
 import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from "react"
-import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose, AiOutlinePicture } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Pagination from '@mui/material/Pagination';
@@ -158,7 +158,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
+                                <img style={{ borderRadius: "50%" }} src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -186,7 +186,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
+                                <img style={{ borderRadius: "50%" }} src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -214,7 +214,7 @@ const Profile = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
+                                <img style={{ borderRadius: "50%" }} src={`http://localhost:3001/profilePictures/${following?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username}</p>
@@ -541,7 +541,15 @@ const Profile = () => {
                                         setstoriesModal(true)
                                     }}>add new storie</p>
                                 </div>
+                                {((user?.posts?.length ?? 0) === 0) ? <div className="no_picture">
+                                    <div className="icon">
+
+                                        <AiOutlinePicture style={{ fontSize: "70px" }} />
+                                        <p style={{ fontSize: "40px" }}>No pictures yet</p>
+                                    </div>
+                                </div> : null}
                                 <div className="post-cards">
+
                                     {currentPosts?.map((elem: any) => {
                                         return <div onClick={() => {
                                             setpostModal(true)

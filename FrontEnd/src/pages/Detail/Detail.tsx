@@ -6,10 +6,11 @@ import { IoMdPersonAdd } from "react-icons/io";
 import "./Detail.scss"
 import Swal from 'sweetalert2'
 import { TbLock } from "react-icons/tb";
-import { AiOutlineUserDelete } from "react-icons/ai";
+import { AiOutlinePicture, AiOutlineUserDelete } from "react-icons/ai";
 import NavBar from "../../components/NavBar/NavBar"
 import { WiTime9 } from "react-icons/wi";
 import axios from "axios"
+import Pagination from '@mui/material/Pagination';
 import { useNavigate, useParams } from "react-router-dom"
 import RecomendedUsers from "../../components/Home/RecomendedUsers/RecomendedUsers";
 import { GoBlocked } from "react-icons/go";
@@ -61,7 +62,14 @@ const Detail = () => {
         dispatch(getUserById(LocalUserID))
 
     }, [])
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const postsPerPage = 8;
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = user?.posts.slice(indexOfFirstPost, indexOfLastPost);
+    const paginate = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
     return (
         <>
             <NavBar />
@@ -112,7 +120,7 @@ const Detail = () => {
                                 <BsHeart className="icon" /> <sub>{user?.posts.find((x) => x.id == DetailPost.id)?.likes.length}</sub>
                             </div>}
                             {LocalUser?.wishList.find((x: { postId: string }) => x.postId == DetailPost.id) ?
-                                <FaBookmark style={{ marginBottom: "15px", fontSize: "20px",cursor:"pointer" }} onClick={() => {
+                                <FaBookmark style={{ marginBottom: "15px", fontSize: "20px", cursor: "pointer" }} onClick={() => {
                                     axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
                                         wishList: LocalUser?.wishList.filter((x: { postId: string }) => x.postId != DetailPost.id)
                                     }).then(() => {
@@ -129,7 +137,7 @@ const Detail = () => {
                                         dispatch(getAllData())
                                         dispatch(getUserById(LocalUserID))
                                     })
-                                }} style={{ marginBottom: "15px", fontSize: "20px",cursor:"pointer" }} />}
+                                }} style={{ marginBottom: "15px", fontSize: "20px", cursor: "pointer" }} />}
 
 
                         </div>
@@ -147,8 +155,8 @@ const Detail = () => {
                                             const replyUser = users.find((z) => z._id == x._id)
                                             return <div style={{ textAlign: "start" }} className="user_replys">
                                                 <div className="user">
-                                                    <div style={{marginRight:'10px'}} className="user_picture">
-                                                        <img style={{borderRadius:"50%"}} src={replyUser?.profilePicture ?`http://localhost:3001/profilePictures/${replyUser?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                                    <div style={{ marginRight: '10px' }} className="user_picture">
+                                                        <img style={{ borderRadius: "50%" }} src={replyUser?.profilePicture ? `http://localhost:3001/profilePictures/${replyUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                                     </div>
                                                     <div className="user_name">
                                                         <p>
@@ -188,8 +196,8 @@ const Detail = () => {
                                 const commentUser = users.find((z) => z._id == x._id)
                                 return <div>
                                     <div className="user">
-                                        <div style={{marginRight:"10px"}} className="user_picture">
-                                            <img style={{borderRadius:"50%"}} src={commentUser?.profilePicture ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                        <div style={{ marginRight: "10px" }} className="user_picture">
+                                            <img style={{ borderRadius: "50%" }} src={commentUser?.profilePicture ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                                         </div>
                                         <div className="user_name">
                                             <p>{commentUser?.username ? commentUser?.username : LocalUser?.username}</p>
@@ -243,7 +251,7 @@ const Detail = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                <img style={{ borderRadius: "50%" }} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
 
                             </div>
                             <div className="following_name">
@@ -272,8 +280,8 @@ const Detail = () => {
 
                         }} className="following">
 
-                            <div  className="following_picture">
-                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                            <div className="following_picture">
+                                <img style={{ borderRadius: "50%" }} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
                             </div>
                             <div className="following_name">
                                 <p>{following?.username ? following.username : LocalUser?.username}</p>
@@ -301,7 +309,7 @@ const Detail = () => {
                         }} className="following">
 
                             <div className="following_picture">
-                                <img style={{borderRadius:"50%"}} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}`: `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
+                                <img style={{ borderRadius: "50%" }} src={following?.profilePicture ? `http://localhost:3001/profilePictures/${following?.profilePicture}` : `http://localhost:3001/profilePictures/${LocalUser?.profilePicture}`} alt="" />
 
                             </div>
                             <div className="following_name">
@@ -506,34 +514,52 @@ const Detail = () => {
                                     </sup></p>
                                 </div>
                                 {/* {user?.posts.length! <= 0 || !findID ? <div style={{ fontSize: "40px" }}>no picture yet</div> : null} */}
-                                {findBlockUser ? null : <div className="post-cards">
-                                    {user?.isPublic || findID ? user?.posts.map((elem: any) => {
-                                        return <div key={elem._id} className="post_card">
-                                            <div onClick={() => {
-                                                setopenModal(true)
-                                                setDetailPost(elem)
-                                            }} className="post">
-                                                <div className="icons">
-                                                    <FaHeart className="icon" />
+                                <div>
+                                    {((user?.posts?.length ?? 0) === 0) ? <div className="no_picture">
+                                        <div className="icon">
 
-                                                    <span>{elem.likes.length}</span>
-
-                                                    <FaComment className="icon" />
-
-                                                    <span>{elem.comments.length}</span>
-
-                                                </div>
-                                                {elem.img.includes("mp4") ?
-                                                    <video width="100%" >
-                                                        <source src={`http://localhost:3001/${elem.img}`} type="video/mp4" />
-                                                    </video> : <img src={`http://localhost:3001/${elem.img}`} alt="" />}
-                                            </div>
+                                            <AiOutlinePicture style={{ fontSize: "70px" }} />
+                                            <p style={{ fontSize: "40px" }}>No pictures yet</p>
                                         </div>
+                                    </div> : null}
 
-                                    }) : null}
-                                    {user?.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div> : null}
 
-                                </div>}
+                                    {findBlockUser ? null : <div className="post-cards">
+                                        {user?.isPublic || findID ? currentPosts?.map((elem: any) => {
+                                            return <div key={elem._id} className="post_card">
+                                                <div onClick={() => {
+                                                    setopenModal(true)
+                                                    setDetailPost(elem)
+                                                }} className="post">
+                                                    <div className="icons">
+                                                        <FaHeart className="icon" />
+
+                                                        <span>{elem.likes.length}</span>
+
+                                                        <FaComment className="icon" />
+
+                                                        <span>{elem.comments.length}</span>
+
+                                                    </div>
+                                                    {elem.img.includes("mp4") ?
+                                                        <video width="100%" >
+                                                            <source src={`http://localhost:3001/${elem.img}`} type="video/mp4" />
+                                                        </video> : <img src={`http://localhost:3001/${elem.img}`} alt="" />}
+                                                </div>
+                                            </div>
+
+                                        }) : null}
+                                        {user?.isPublic == false && findID == undefined ? <div className="private"><TbLock className="icon" /><p>PRIVATE</p></div> : null}
+                                    </div>}
+                                    <Pagination
+                                        style={{ position: "static", backgroundColor: "white" }}
+                                        count={Math.ceil(user?.posts.length! / postsPerPage)}
+                                        page={currentPage}
+                                        onChange={(_, page) => paginate(page)}
+                                        variant="outlined"
+                                        shape="rounded"
+                                    />
+                                </div>
                             </div>
                         </div >
                     </div >

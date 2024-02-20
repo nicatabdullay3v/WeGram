@@ -28,7 +28,7 @@ const Chat: React.FC = () => {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   console.log(onlineUsers);
   const { socket } = useSocketContext() || {}
-const [searchInput, setsearchInput] = useState('')
+  const [searchInput, setsearchInput] = useState('')
   const [isTyping, setIsTyping] = useState(false);
   console.log(screenX);
 
@@ -124,8 +124,8 @@ const [searchInput, setsearchInput] = useState('')
         <div className="chat_border">
           <div className="chat_left">
             <div className="chat_left_up">
-              <input onChange={(e)=>{
-                  setsearchInput(e.target.value)
+              <input onChange={(e) => {
+                setsearchInput(e.target.value)
               }} placeholder="search" type="text" />
               <GoSearch onClick={() => { }} className="icon" />
             </div>
@@ -154,7 +154,7 @@ const [searchInput, setsearchInput] = useState('')
                         )
                       );
                     }
-                
+
                   })}
               </div>
             </div>
@@ -177,7 +177,6 @@ const [searchInput, setsearchInput] = useState('')
                         minute: "2-digit",
                         timeZone: "Asia/Baku",
                       });
-                      console.log("sal");
 
                       return (
                         <div key={message._id} className={message.senderId === LocalUserID ? "my" : "his"}>
@@ -204,9 +203,18 @@ const [searchInput, setsearchInput] = useState('')
                   </motion.span>
                 </div>
               ) : (
-                <p>1.Salam deyerli user adam sec yazismaq ucun.<br />
-                  2.Birinci mesaj catin yaradilmasi ucundu
-                </p>
+
+                <>
+                  <div style={{ textAlign: "center" }}>
+                    <img style={{ maxWidth: "300px", width: "100%" }} src="https://gifdb.com/images/high/waving-hand-black-and-white-erox5pacbap4ac1l.gif" alt="" />
+                    <p style={{ fontSize: "30px" }}>1.Hello {user?.username}, choose a person to chat with.
+                    </p>
+                    <p style={{ fontSize: "30px" }}>
+                      2.The first message was to create a chat
+
+                    </p>
+                  </div>
+                </>
               )}
             </div>
             <div className="chat_right_down">
@@ -264,11 +272,11 @@ const [searchInput, setsearchInput] = useState('')
 
 
 
-      
+
       <div className="chat_res">
         <div style={{ display: display ? "block" : "none" }} className="chat_left">
           <div className="chat_left_up">
-            <input onChange={(e)=>{
+            <input onChange={(e) => {
               setsearchInput(e.target.value)
             }} placeholder="search" type="text" />
             <GoSearch onClick={() => { }} className="icon" />
@@ -324,7 +332,6 @@ const [searchInput, setsearchInput] = useState('')
                       minute: "2-digit",
                       timeZone: "Asia/Baku",
                     });
-                    console.log("sal");
 
                     return (
                       <div key={message._id} className={message.senderId === LocalUserID ? "my" : "his"}>
@@ -351,7 +358,17 @@ const [searchInput, setsearchInput] = useState('')
                 </motion.span>
               </div>
             ) : (
-              <p>Hello qaqa</p>
+              <>
+                <div style={{ textAlign: "center" }}>
+                  <img style={{ maxWidth: "300px", width: "100%" }} src="https://gifdb.com/images/high/waving-hand-black-and-white-erox5pacbap4ac1l.gif" alt="" />
+                  <p style={{ fontSize: "30px" }}>1.Hello {user?.username}, choose a person to chat with.
+                  </p>
+                  <p style={{ fontSize: "30px" }}>
+                    2.The first message was to create a chat
+
+                  </p>
+                </div>
+              </>
             )}
           </div>
           <div className="chat_right_down">
