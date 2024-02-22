@@ -20,22 +20,28 @@ const Admin = () => {
   const dispacth = useDispatch<AppDispatch>()
   const users = useSelector((state: RootState) => state.users.users)
   const [username, setusername] = useState('')
+  const [isAdmin, setisAdmin] = useState<boolean>()
+  const [backGroundImage, setBackGround] = useState('')
   const [email, setemail] = useState('')
+  const [profilePicture, setprofilePicture] = useState('')
+  const [gender, setgender] = useState('')
   const [isPublic, setisPublic] = useState<boolean>()
   const [editModal, setEditModal] = useState(false)
   const [userId, setuserId] = useState('')
   const user = users.find((x) => x._id == userId)
-  const LocalUser:any = JSON.parse(localStorage.getItem("user-info") || "{}")
+  const LocalUser: any = JSON.parse(localStorage.getItem("user-info") || "{}")
   useEffect(() => {
     dispacth(getAllData())
     setusername(user?.username!)
     setemail(user?.email!)
     setisPublic(user?.isPublic)
+    setBackGround(user?.backGroundPicture!)
+    setprofilePicture(user?.profilePicture!)
   }, [editModal])
   if (LocalUser.Admin === true) {
-    
+
   }
-  else{
+  else {
     navigate('/home')
   }
 
@@ -102,7 +108,7 @@ const Admin = () => {
         }} style={{ cursor: "pointer" }} />
       )
       ,
-    }, 
+    },
     {
       field: 'stories',
       headerName: 'stories',
@@ -143,14 +149,46 @@ const Admin = () => {
             <TextField onChange={(e) => {
               setemail(e.target.value)
             }} value={email} id="outlined-basic" label="email" variant="outlined" />
-            <select onChange={(e) => {
-              setisPublic(e.target.value === 'true');
-              console.log(e.target.value);
-            }}>
-              <option value="select">select</option>
-              <option value="true">true</option>
-              <option value="false">false</option>
-            </select>
+            <TextField onChange={(e) => {
+              setBackGround(e.target.value)
+            }} value={backGroundImage} id="outlined-basic" label="backGroundImage" variant="outlined" />
+            <div>
+            <TextField onChange={(e) => {
+              setprofilePicture(e.target.value)
+            }} value={profilePicture} id="outlined-basic" label="profilePicture" variant="outlined" />
+              
+              <p>Select isPrivate</p>
+              <select onChange={(e) => {
+                setisPublic(e.target.value === 'true');
+                console.log(e.target.value);
+              }}>
+                <option value="select">select</option>
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </div>
+            <div>
+              <p>Select isAdmin</p>
+              <select onChange={(e) => {
+                setisAdmin(e.target.value === 'true');
+                console.log(e.target.value);
+              }}>
+                <option value="select">select</option>
+                <option value="true">true</option>
+                <option value="false">false</option>
+              </select>
+            </div>
+            <div>
+              <p>Select gender</p>
+              <select onChange={(e) => {
+                setgender(e.target.value);
+                console.log(e.target.value);
+              }}>
+                <option value="select">select</option>
+                <option value="male">male</option>
+                <option value="female">female</option>
+              </select>
+            </div>
           </div>
           <CiEdit onClick={() => {
             Swal.fire({
@@ -170,7 +208,12 @@ const Admin = () => {
                 axios.patch(`http://localhost:3001/api/users/${userId}`, {
                   username: username,
                   email: email,
-                  isPublic: isPublic
+                  isPublic: isPublic,
+                  Admin: isAdmin,
+                  backGroundPicture:backGroundImage,
+                  gender:gender,
+                  profilePicture:profilePicture
+
                 }).then(() => {
                   dispacth(getAllData())
                   setEditModal(false)

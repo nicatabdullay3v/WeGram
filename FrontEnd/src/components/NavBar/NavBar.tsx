@@ -179,7 +179,9 @@ const NavBar: React.FC = () => {
                         </div> : null}
                     </div>
                     <ul className="nav_right">
-                        <div className="profile">
+                        <div onClick={()=>{
+                            navigate('/profile')
+                        }} className="profile">
                             <div className="profile_picture">
                                 <img src={`http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
                             </div>

@@ -16,6 +16,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../../redux/Slices/usersSlice";
 import { AppDispatch } from "../../../redux/store";
+import { GoHome } from "react-icons/go";
 interface SettingsBarProps {
     setClose: React.Dispatch<React.SetStateAction<boolean>>;
     close: boolean;
@@ -64,6 +65,11 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                             <BsChat className="icon" /> <span>Chat</span>
                         </div>
                         <div onClick={() => {
+                            navigate("/home")
+                        }} className="profile_chat section">
+                            <GoHome className="icon" /> <span>home</span>
+                        </div>
+                        <div onClick={() => {
                             navigate("/settings")
                         }} className="profile_chat section">
                             <IoSettingsOutline className="icon" />
@@ -105,6 +111,11 @@ const SideBar: React.FC<SettingsBarProps> = ({ setClose, close }) => {
                         navigate("/chat")
                     }} className="section">
                         <IoChatbubbleOutline className="icon" />
+                    </div>
+                    <div onClick={() => {
+                        navigate("/home")
+                    }} className="section">
+                        <GoHome className="icon" />
                     </div>
                     <div onClick={() => {
                         setSettingsDropDown(settingsDropDown ? false : true)
