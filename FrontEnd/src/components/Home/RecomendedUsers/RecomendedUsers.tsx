@@ -33,7 +33,6 @@ const RecomendedUsers = () => {
     const filteredSecondLevelFollowings = uniqueSecondLevelFollowings.filter(
         (userId) => !LocalUser?.followings.some((following: { _id: string }) => following._id === userId)
     );
-    console.log(filteredSecondLevelFollowings);
 
 
 

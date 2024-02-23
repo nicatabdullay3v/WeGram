@@ -30,12 +30,9 @@ const Chat: React.FC = () => {
   const { onlineUsers } = useSocketContext()!
   const [display, setDisplay] = useState(true)
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  console.log(onlineUsers);
   const { socket } = useSocketContext() || {}
   const [searchInput, setsearchInput] = useState('')
   const [isTyping, setIsTyping] = useState(false);
-  console.log(screenX);
-
   useEffect(() => {
     const handleTyping = (senderId: string) => {
       if (senderId === selectedUserId) {
@@ -78,7 +75,6 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     socket?.on("newMessage", (newMessage: Message) => {
-      console.log("salm");
 
       newMessage.shouldShake = true;
 
@@ -118,7 +114,6 @@ const Chat: React.FC = () => {
     dispatch(getAllMessages(userId));
     const sound = new Audio("/sounds/click-21156.mp3");
     sound.play()
-    console.log(messages);
   };
 
   return (
@@ -263,7 +258,6 @@ const Chat: React.FC = () => {
                       console.error("Error sending message:", error);
                     });
                   setInputValue("");
-                  console.log(messages);
                 }}
                 className="message_send_button"
               >
@@ -427,7 +421,6 @@ const Chat: React.FC = () => {
                     console.error("Error sending message:", error);
                   });
                 setInputValue("");
-                console.log(messages);
               }}
               className="message_send_button"
             >

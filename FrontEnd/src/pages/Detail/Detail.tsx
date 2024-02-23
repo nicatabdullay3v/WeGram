@@ -56,7 +56,8 @@ const Detail = () => {
             navigate("/home")
         }
 
-        console.log("salam");
+
+
 
         dispatch(getAllData())
         dispatch(getUserById(LocalUserID))
@@ -105,7 +106,7 @@ const Detail = () => {
                             }} className="post_heart">
                                 <HiHeart style={{ color: "red", fontSize: "26px" }} className="icon" /> <sub>{user?.posts.find((x) => x.id == DetailPost.id)?.likes.length}</sub>
                             </div> : <div onClick={() => {
-                                console.log(DetailPost);
+
 
                                 axios.patch(`http://localhost:3001/api/users/${user?._id}/posts/${DetailPost.id}`, {
                                     likes: [...user?.posts.find((x) => x.id == DetailPost.id)?.likes!, { _id: LocalUserID }]

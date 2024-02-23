@@ -59,8 +59,6 @@ const Profile = () => {
         dispatch(getUserById(LocalUserID))
     }, [])
 
-
-    console.log(user);
     const handleBackGroundPicture = () => {
         if (!file) {
             console.error("Please select a file");
@@ -224,7 +222,7 @@ const Profile = () => {
                     {user?.followings.map((x: { _id: string }) => {
 
                         const following = users.find((z) => z._id == x._id)
-                        return <div style={{ cursor: "pointer" }} onClick={() => {
+                        return <div key={x._id} style={{ cursor: "pointer" }} onClick={() => {
                             navigate(`/home/${following?._id}`)
                             setFollowingsModal(false)
 
@@ -317,7 +315,7 @@ const Profile = () => {
 
                                         {AxiosComment.replys.map((x: { reply: string, _id: string }) => {
                                             const replyUser = users.find((z) => z._id == x._id)
-                                            return <div style={{ textAlign: "start" }} className="user_replys">
+                                            return <div key={x._id} style={{ textAlign: "start" }} className="user_replys">
                                                 <div className="user">
                                                     <div style={{ marginRight: "10px" }} className="user_picture">
 
@@ -358,7 +356,7 @@ const Profile = () => {
                             </div> : null}
                             {detailPost?.comments.map((x: { comment: string, _id: string, replys: any }) => {
                                 const commentUser = users.find((z) => z._id == x._id)
-                                return <div className="user_comments">
+                                return <div key={x._id} className="user_comments">
                                     <div className="user">
                                         <div className="user_picture">
                                             <img style={{ borderRadius: "50%" }} src={commentUser?.username ? `http://localhost:3001/profilePictures/${commentUser?.profilePicture}` : `http://localhost:3001/profilePictures/${user?.profilePicture}`} alt="" />
@@ -405,7 +403,7 @@ const Profile = () => {
                         setstories(false)
                     }} className="icon" />
                     {user?.stories.map((item: { img: string, id: string }) => {
-                        return <div className="storie">
+                        return <div key={uuidv4()} className="storie">
                             <div className="storie_img">
                                 <img src={`http://localhost:3001/${item.img}`} alt="" />
                             </div>
@@ -565,14 +563,14 @@ const Profile = () => {
                                         <p style={{ fontSize: "40px" }}>No pictures yet</p>
                                     </div>
                                 </div> : null}
-                                <div className="post-cards">
+                                <div  className="post-cards">
 
                                     {currentPosts?.map((elem: any) => {
                                         return <div onClick={() => {
                                             setpostModal(true)
                                             setpostId(elem.id)
 
-                                        }} key={elem._id} className="post_card">
+                                        }} key={uuidv4()} className="post_card">
                                             <div className="post">
                                                 {elem.img.includes("mp4") ?
                                                     <video width="100%" >
