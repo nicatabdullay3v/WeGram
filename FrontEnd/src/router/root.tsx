@@ -16,6 +16,9 @@ import SavedPosts from "../pages/SavedPosts/SavedPosts";
 import AdminStories from "../pages/AdminStories/AdminStories";
 import AdminWishList from "../pages/AdminWishList/AdminWishList";
 import Error from "../pages/Error/Error";
+import AdminFollowers from "../pages/AdminFollowers/AdminFollowers";
+import AdminFollowings from "../pages/AdminFollowings/AdminFollowings";
+import AdminBlockList from "../pages/AdminBlockList/AdminBlockList";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -69,6 +72,18 @@ const router = createBrowserRouter([
   {
     path: "/admin/wishList/:id",
     element: <AdminWishList />
+  },
+  {
+    path: "/admin/followers/:id",
+    element: <AdminFollowers />
+  },
+  {
+    path: "/admin/followings/:id",
+    element: <AdminFollowings />
+  },
+  {
+    path: "/admin/blockList/:id",
+    element: <AdminBlockList />
   },
   {
     path: "*",

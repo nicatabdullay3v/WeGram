@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import NavBar from "../../components/NavBar/NavBar";
 import { AppDispatch, RootState } from "../../redux/store";
 import "./Chat.scss";
+import EmojiPicker from 'emoji-picker-react';
 import { GoSearch } from "react-icons/go";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllData, getUserById } from "../../redux/Slices/usersSlice";
@@ -9,8 +10,9 @@ import axios from "axios";
 import { motion } from "framer-motion"
 import { getAllMessages, setMessages } from "../../redux/Slices/MessagesSLice";
 import { useSocketContext } from "../../context/SocketContext";
-import { BsSend } from "react-icons/bs";
+import { BsEmojiSmile, BsSend } from "react-icons/bs";
 import { GrReturn } from "react-icons/gr";
+import { current } from "@reduxjs/toolkit";
 
 interface Message {
   _id: string;
@@ -22,6 +24,8 @@ interface Message {
 
 const Chat: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [emoji, setemoji] = useState('')
+  const [emojiModal, setemojiModal] = useState<boolean>(false)
   const LocalUserID: string = JSON.parse(localStorage.getItem("user-info") || "{}")._id;
   const { onlineUsers } = useSocketContext()!
   const [display, setDisplay] = useState(true)
@@ -218,7 +222,13 @@ const Chat: React.FC = () => {
               )}
             </div>
             <div className="chat_right_down">
+              <div>
+                <BsEmojiSmile style={{ cursor: "pointer" }} onClick={() => {
+                  setemojiModal(current => current ? false : true)
+                }} />
+              </div>
               <div className="message_input">
+
                 <textarea
                   onFocus={handleTyping}
                   onBlur={handleStopTyping}
@@ -228,6 +238,12 @@ const Chat: React.FC = () => {
                   }}
                   placeholder="type"
                 />
+                {emojiModal ? <EmojiPicker
+                  onEmojiClick={(e) => {
+                    setInputValue(current => current + e.emoji)
+
+                  }} /> : null}
+
               </div>
               <div
                 onClick={() => {
@@ -372,6 +388,11 @@ const Chat: React.FC = () => {
             )}
           </div>
           <div className="chat_right_down">
+            <div>
+              <BsEmojiSmile style={{ cursor: "pointer" }} onClick={() => {
+                setemojiModal(current => current ? false : true)
+              }} />
+            </div>
             <div className="message_input">
               <textarea
                 onFocus={handleTyping}
@@ -382,6 +403,11 @@ const Chat: React.FC = () => {
                 }}
                 placeholder="type"
               />
+                  {emojiModal ? <EmojiPicker
+                  onEmojiClick={(e) => {
+                    setInputValue(current => current + e.emoji)
+
+                  }} /> : null}
             </div>
             <div
               onClick={() => {

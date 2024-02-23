@@ -47,7 +47,7 @@ const UsersStories = () => {
                 <div className="storie_modal">
                     <div className="storie_user">
                         <div className="user_picture">
-                            <img src={`http://localhost:3001/profilePictures/${storieUser?.profilePicture}`} alt="" />
+                            <img style={{borderRadius:"50%"}} src={`http://localhost:3001/profilePictures/${storieUser?.profilePicture}`} alt="" />
                         </div>
                         <div className="user_name">
                             <p>{storieUser?.username}</p>
@@ -110,7 +110,7 @@ const UsersStories = () => {
                                             key={element._id}
                                         >
                                             <div className="storie">
-                                                <img src={`http://localhost:3001/profilePictures/${elem?.profilePicture}`} alt="" />
+                                            <img src={`http://localhost:3001/profilePictures/${element?.profilePicture}`} alt="" />
                                             </div>
                                         </SwiperSlide>
                                     );

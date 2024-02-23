@@ -176,7 +176,7 @@ const Profile = () => {
                             setfollowersModal(false)
                         }} style={{ fontSize: "22px", cursor: "pointer" }} />
                     </div>
-                    {user?.followers.map((x: { _id: string }) => {
+                    {user?.followers.map((x: { _id: string, followings: any }) => {
 
                         const following = users.find((z) => z._id == x._id)
                         return <div style={{ cursor: "pointer" }} onClick={() => {
@@ -191,7 +191,24 @@ const Profile = () => {
                             <div className="following_name">
                                 <p>{following?.username}</p>
                             </div>
-
+                            <button onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                axios.patch(`http://localhost:3001/api/users/${LocalUserID}`, {
+                                    followers: user.followers.filter((z: { _id: string }) => z._id != x._id)
+                                }).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                })
+                                axios.patch(`http://localhost:3001/api/users/${x._id}`, {
+                                    followings: users.find((c) => c._id == x._id)?.followings.filter((z: { _id: string }) => z._id != LocalUserID)
+                                }).then(() => {
+                                    dispatch(getAllData())
+                                    dispatch(getUserById(LocalUserID))
+                                })
+                            }} style={{ width: "140px", color: "white" }} className="following_name">
+                                delete from followers
+                            </button>
                         </div>
                     })}
                 </div> : null}

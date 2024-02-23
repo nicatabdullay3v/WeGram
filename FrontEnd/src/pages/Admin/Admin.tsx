@@ -13,7 +13,8 @@ import axios from "axios";
 import TextField from '@mui/material/TextField';
 import { FaX } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark, FaUser } from "react-icons/fa";
+import { BsLock } from "react-icons/bs";
 
 const Admin = () => {
   const navigate = useNavigate()
@@ -47,18 +48,18 @@ const Admin = () => {
 
   const columns: GridColDef[] = [
     { field: '_id', headerName: 'ID', width: 230 },
-    { field: 'username', headerName: 'username', width: 170 },
-    { field: 'email', headerName: 'email', width: 200 },
+    { field: 'username', headerName: 'username', width: 100 },
+    { field: 'email', headerName: 'email', width: 150 },
     {
       field: 'isPublic',
       headerName: 'isPublic',
-      width: 100,
+      width: 70,
 
     },
     {
       field: 'delete',
       headerName: 'delete',
-      width: 100,
+      width: 70,
       renderCell: (params) => (
         <MdDeleteForever onClick={() => {
           Swal.fire({
@@ -89,7 +90,7 @@ const Admin = () => {
     {
       field: 'edit',
       headerName: 'edit',
-      width: 70,
+      width: 50,
       renderCell: (params) => (
         <CiEdit onClick={() => {
           setEditModal(true)
@@ -127,6 +128,39 @@ const Admin = () => {
       renderCell: (params) => (
         <FaBookmark onClick={() => {
           navigate(`/admin/wishList/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'followers',
+      headerName: 'followers',
+      width: 90,
+      renderCell: (params) => (
+        <FaUser onClick={() => {
+          navigate(`/admin/followers/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'followings',
+      headerName: 'followings',
+      width: 90,
+      renderCell: (params) => (
+        <FaUser onClick={() => {
+          navigate(`/admin/followings/${params.row._id}`)
+        }} style={{ cursor: "pointer" }} />
+      )
+      ,
+    },
+    {
+      field: 'blocks',
+      headerName: 'blocks',
+      width: 70,
+      renderCell: (params) => (
+        <BsLock onClick={() => {
+          navigate(`/admin/blockList/${params.row._id}`)
         }} style={{ cursor: "pointer" }} />
       )
       ,
